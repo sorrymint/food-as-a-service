@@ -2,6 +2,7 @@ import { stripe } from '../payments/stripe';
 import { db } from './drizzle';
 import { users, teams, teamMembers } from './schema';
 import { hashPassword } from '@/lib/auth/session';
+import { eq } from 'drizzle-orm';
 
 async function createStripeProducts() {
   console.log('Creating Stripe products and prices...');
@@ -44,7 +45,19 @@ async function seed() {
   const password = 'admin123';
   const passwordHash = await hashPassword(password);
 
-  const [user] = await db
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .then(res => res[0]);
+
+  let user;
+
+  if (existingUser) {
+    user = existingUser;
+    console.log('User already exists.');
+  } else {
+    [user] = await db
     .insert(users)
     .values([
       {
@@ -54,6 +67,8 @@ async function seed() {
       },
     ])
     .returning();
+    console.log('Initial user created.');
+  }
 
   console.log('Initial user created.');
 
