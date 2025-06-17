@@ -7,9 +7,7 @@ import { Terminal } from './terminal';
 export default function HomePage() {
   return (
     <main className='flex flex-col'>
-      <section>
-        <SearchInput />
-      </section>
+      <SearchInput />
       <BodyAndAvartar/>
       <PopularPickSection/>
     </main>
