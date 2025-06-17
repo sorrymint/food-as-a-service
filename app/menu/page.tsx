@@ -1,7 +1,10 @@
+import Header from 'components/ui/header'
+
 export default function menu() {
   return (
-    <div className='flex justify-center items-center'>
+    <section>
+        <Header></Header>
         <h1>Menu</h1>
-    </div>
+    </section>
   )
 }
