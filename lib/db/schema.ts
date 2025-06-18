@@ -114,39 +114,37 @@ export const ingredients = pgTable('ingredients',{
 });
 
 //dish_ingredients
-// export const dish_ingredients = pgTable('dish_ingredients', {
-//   dishName: varchar('dish_name', {length: 100})
-//     .notNull()
-//     .references(() => dishes.name),
-//   dishId: serial('dish_id')
-//     .notNull()
-//     .references(() => dishes.id)
-//     .primaryKey(),
-//   ingredientName: varchar('ingredient_name', {length: 100})
-//     .notNull()
-//     .references(() => ingredients.name),
-//   ingredientId: serial('ingredient_id')
-//     .notNull()
-//     .references(() => ingredients.id)
-//     .primaryKey(),
-//   quantity: numeric('quantity')
-//     .notNull,
-//   unit: varchar('unit', {length: 20})
-//     .notNull(),
-// });
+export const dish_ingredients = pgTable('dish_ingredients',{
+  dishName: varchar('dish_name', {length: 100})
+    .notNull()
+    .references(() => dishes.name),
+  dishId: serial('dish_id')
+    .notNull()
+    .references(() => dishes.id)
+    .primaryKey(),
+  ingredientName: varchar('ingredient_name', {length: 100})
+    .notNull()
+    .references(() => ingredients.name),
+  ingredientId: serial('ingredient_id')
+    .notNull()
+    .references(() => ingredients.id)
+    .primaryKey(),
+  quantity: numeric('quantity'),
+  unit: varchar('unit', {length: 20})
+    .notNull(),
+});
 
-// export const customer = pgTable('customer', {
-//   id: serial('id').primaryKey(),
-//   username: varchar('username', {length: 20})
-//     .notNull(),
-//   name: varchar('name', {length: 100})
-//     .notNull()
-//     .references(() => users.name),
-//   email: varchar('email', { length: 20 }).notNull(),
-//   phone: varchar('phone', {length: 14}),
-//   active: boolean('active').notNull(),
-//   createdAt: timestamp('created_at').notNull().defaultNow(),
-// });
+export const customer = pgTable('customer', {
+  id: serial('id').primaryKey(),
+  username: varchar('username', {length: 20})
+    .notNull(),
+  name: varchar('name', {length: 100})
+    .notNull(),
+  email: varchar('email', { length: 20 }).notNull(),
+  phone: varchar('phone', {length: 14}),
+  active: boolean('active').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
 
 //
 

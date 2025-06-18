@@ -1,6 +1,6 @@
 import{ stripe } from '../payments/stripe';
 import { db } from './drizzle';
-import { users, teams, teamMembers, businesses, dishes, ingredients, customer} from './schema';
+import { users, teams, teamMembers, businesses, dishes, ingredients, customer, dish_ingredients} from './schema';
 import { hashPassword } from '@/lib/auth/session';
 import { eq } from 'drizzle-orm';
 
@@ -124,18 +124,17 @@ async function seed() {
     updatedAt: new Date(+2), 
   });
 
-
   // dish_ingredients
-  // await db
-  // .insert(dish_ingredients)
-  // .values({
-  //   dishName: dishes.name,
-  //   dishId: dishes.id,
-  //   ingredientsName: ingredients.name,
-  //   ingredientsId: ingredients.id,
-  //   quantity: 1.0,
-  //   unit: '12oz Bag'
-  // });
+  await db
+  .insert(dish_ingredients)
+  .values({
+    dishName: dishes.name,
+    dishId: dishes.id,
+    ingredientsName: ingredients.name,
+    ingredientsId: ingredients.id,
+    quantity: 1.0,
+    unit: '12oz Bag'
+  });
 
   // customer
   // await db

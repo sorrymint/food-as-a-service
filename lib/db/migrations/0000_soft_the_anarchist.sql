@@ -80,10 +80,10 @@ CREATE TABLE IF NOT EXISTS "website_review_log" (
     "reviewed_at" TIMESTAMP DEFAULT now() NOT NULL
 );
 
-CREATE TABLE "customer" (
+CREATE TABLE "customer" IF NOT EXISTS(
 	"id" serial PRIMARY KEY NOT NULL,
 	"username" varchar(20) NOT NULL,
-	"name" varchar(100) NOT NULL REFERENCES "users"("name"),
+	"name" varchar(100) NOT NULL,
 	"email" varchar(20) NOT NULL,
 	"phone" varchar(14),
 	"active" boolean NOT NULL,
