@@ -25,49 +25,50 @@ CREATE TYPE "review_action" AS ENUM ('APPROVE', 'REJECT');
 
 CREATE TABLE IF NOT EXISTS "user" (
     "id" SERIAL PRIMARY KEY,
-    "email" VARCHAR,
-    "password_hash" VARCHAR,
-    "name" VARCHAR,
+    "email" VARCHAR(30),
+    "password_hash" VARCHAR(225),
+    "name" VARCHAR(30),
     "role" "user_role",
-    "created_at" TIMESTAMP DEFAULT now() NOT NULL,
+    "created_at" TIMESTAMP DEFAULT now() NOT NULL
 );
 COMMENT ON COLUMN "user"."role" IS 'Defines user type';
 
 CREATE TABLE IF NOT EXISTS "admin" (
     "id" INTEGER PRIMARY KEY REFERENCES "user"("id"),
     "access_level" "admin_access_level",
-    "created_at" TIMESTAMP,
+    "created_at" TIMESTAMP
 );
 COMMENT ON COLUMN "admin"."access_level" IS 'Optional role tiers';
 
-CREATE TABLE IF NOT EXISTS "business" (
-    "id" VARCHAR PRIMARY KEY,
-    "name" VARCHAR,
-    "num_of_customers" INT,
-    "active" BOOLEAN,
-    "created_at" TIMESTAMP DEFAULT now() NOT NULL
+CREATE TABLE "businesses" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(225) NOT NULL,
+	"num_customers" integer NOT NULL,
+	"active" boolean NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS "admin_business_action" (
     "id" SERIAL PRIMARY KEY,
     "admin_id" INTEGER REFERENCES "admin"("id"),
-    "business_id" VARCHAR REFERENCES "business"("id"),
+    "business_id" SERIAL REFERENCES "businesses"("id"),
     "action" "admin_action",
     "reason" TEXT,
-    "timestamp" TIMESTAMP DEFAULT now() NOT NULL,
+    "timestamp" TIMESTAMP DEFAULT now() NOT NULL
 );
 COMMENT ON COLUMN "admin_business_action"."action" IS 'What the admin did';
 COMMENT ON COLUMN "admin_business_action"."reason" IS 'Optional reason or comment';
 
 CREATE TABLE IF NOT EXISTS "business_website" (
     "id" SERIAL PRIMARY KEY,
-    "business_id" VARCHAR REFERENCES "business"("id"),
+    "business_id" VARCHAR(120) REFERENCES "businesses"("id"),
     "title" VARCHAR,
     "description" TEXT,
     "content" TEXT,
     "status" "website_status" DEFAULT 'DRAFT',
     "created_at" TIMESTAMP DEFAULT now() NOT NULL,
-    "updated_at" TIMESTAMP DEFAULT now() NOT NULL
+    "updated_at" TIMESTAMP DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS "website_review_log" (
@@ -79,69 +80,73 @@ CREATE TABLE IF NOT EXISTS "website_review_log" (
     "reviewed_at" TIMESTAMP DEFAULT now() NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "customer" (
-    "id" SERIAL PRIMARY KEY,
-    "username" VARCHAR,
-    "name" VARCHAR,
-    "email" VARCHAR,
-    "phone" VARCHAR,
-    "active" BOOLEAN,
-    "created_at" TIMESTAMP DEFAULT now() NOT NULL
+CREATE TABLE "customer" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"username" varchar(20) NOT NULL,
+	"name" varchar(100) NOT NULL REFERENCES "users"("name"),
+	"email" varchar(20) NOT NULL,
+	"phone" varchar(14),
+	"active" boolean NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "customer_of_business" (
     "customer_id" INTEGER REFERENCES "customer"("id"),
-    "business_id" VARCHAR REFERENCES "business"("id"),
+    "business_id" VARCHAR(20) REFERENCES "businesses"("id"),
     "joined_at" TIMESTAMP DEFAULT now() NOT NULL,
     PRIMARY KEY ("customer_id", "business_id")
 );
 
-CREATE TABLE IF NOT EXISTS "food" (
-    "id" SERIAL PRIMARY KEY,
-    "business_id" VARCHAR REFERENCES "business"("id"),
-    "name" VARCHAR,
-    "description" TEXT,
-    "active" BOOLEAN,
-    "created_at" TIMESTAMP DEFAULT now() NOT NULL
+CREATE TABLE "dishes" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"businesses_id" serial NOT NULL REFERENCES "businesses"("id"),
+	"name" varchar(100) NOT NULL,
+	"description" varchar(500) NOT NULL,
+	"active" boolean NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS "ingredient" (
-    "id" SERIAL PRIMARY KEY,
-    "name" VARCHAR,
-    "description" TEXT,
-    "is_optional" BOOLEAN,
-    "created_at" TIMESTAMP DEFAULT now() NOT NULL
+CREATE TABLE "ingredients" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(50),
+	"description" varchar(500) NOT NULL,
+	"is_optional" boolean NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS "food_ingredient" (
-    "food_id" INTEGER REFERENCES "food"("id"),
-    "ingredient_id" INTEGER REFERENCES "ingredient"("id"),
-    "default_quantity" DECIMAL,
-    "unit" VARCHAR,
-    PRIMARY KEY ("food_id", "ingredient_id")
+CREATE TABLE IF NOT EXISTS "dish_ingredients" (
+    "dish_name" VARCHAR(100) REFERENCES "dishes"("name"),
+    "dish_id" SERIAL REFERENCES "dishes"("id"),
+    "ingredient_name" VARCHAR(100) REFERENCES "ingredients"("name"),
+    "ingredient_id" SERIAL REFERENCES "ingredients"("id"),
+    "quantity" NUMERIC,
+    "unit" VARCHAR(20),
+    PRIMARY KEY ("dish_id", "ingredient_id")
 );
 
 CREATE TABLE IF NOT EXISTS "order" (
     "id" SERIAL PRIMARY KEY,
-    "business_id" VARCHAR REFERENCES "business"("id"),
-    "customer_id" INTEGER REFERENCES "customer"("id"),
+    "business_id" SERIAL REFERENCES "businesses"("id"),
+    "customer_id" SERIAL REFERENCES "customer"("id"),
     "quantity" INT,
     "created_at" TIMESTAMP DEFAULT now() NOT NULL,
-    "delivery_status" VARCHAR,
+    "delivery_status" VARCHAR(20),
     "special_instructions" TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "driver" (
     "id" SERIAL PRIMARY KEY,
-    "first_name" VARCHAR,
-    "last_name" VARCHAR
+    "first_name" VARCHAR(20),
+    "last_name" VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS "delivery" (
     "id" SERIAL PRIMARY KEY,
     "driver_id" INTEGER REFERENCES "driver"("id"),
     "customer_id" INTEGER REFERENCES "customer"("id"),
-    "status" VARCHAR,
+    "status" VARCHAR(20),
     "created_at" TIMESTAMP DEFAULT now() NOT NULL
 );
 
@@ -155,9 +160,9 @@ CREATE TABLE IF NOT EXISTS "order_item" (
 
 CREATE TABLE IF NOT EXISTS "order_item_ingredient" (
     "order_item_id" INTEGER REFERENCES "order_item"("id"),
-    "ingredient_id" INTEGER REFERENCES "ingredient"("id"),
+    "ingredient_id" INTEGER REFERENCES "ingredients"("id"),
     "quantity" DECIMAL,
-    "unit" VARCHAR,
+    "unit" VARCHAR(20),
     PRIMARY KEY ("order_item_id", "ingredient_id")
 );
 
@@ -237,3 +242,8 @@ EXCEPTION WHEN duplicate_object THEN null; END $$;
 DO $$ BEGIN
  ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+ALTER TABLE "dishes" ADD CONSTRAINT "dish_business_id_business_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+

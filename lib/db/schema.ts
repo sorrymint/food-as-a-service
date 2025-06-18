@@ -5,6 +5,8 @@ import {
   text,
   timestamp,
   integer,
+  boolean,
+  numeric,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -67,6 +69,87 @@ export const invitations = pgTable('invitations', {
   invitedAt: timestamp('invited_at').notNull().defaultNow(),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
+
+// New Tables Area - Shimea Gbetsi
+
+// business table
+export const businesses = pgTable('businesses', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', {length: 225}).notNull(),
+  num_of_customers: integer('num_customers').notNull(),
+  active: boolean('active').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+//dish table
+export const dishes = pgTable('dishes', {
+  id: serial('id').primaryKey(),
+  businessId: serial('business_id')
+    .notNull()
+    .references(() => businesses.id),
+  name: varchar('name', {length: 100})
+    .notNull(),
+  description: varchar('description', {length: 500})
+    .notNull(),
+  active: boolean('active')
+    .notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow()
+});
+
+//ingredient
+export const ingredients = pgTable('ingredients',{
+  id: serial('id').primaryKey(),
+  name: varchar('name', {length: 50})
+    .notNull(),
+  description: varchar('description', {length: 500}),
+  is_optional: boolean('is_optional')
+    .notNull(),
+  createdAt: timestamp('created_at')
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+});
+
+//dish_ingredients
+// export const dish_ingredients = pgTable('dish_ingredients', {
+//   dishName: varchar('dish_name', {length: 100})
+//     .notNull()
+//     .references(() => dishes.name),
+//   dishId: serial('dish_id')
+//     .notNull()
+//     .references(() => dishes.id)
+//     .primaryKey(),
+//   ingredientName: varchar('ingredient_name', {length: 100})
+//     .notNull()
+//     .references(() => ingredients.name),
+//   ingredientId: serial('ingredient_id')
+//     .notNull()
+//     .references(() => ingredients.id)
+//     .primaryKey(),
+//   quantity: numeric('quantity')
+//     .notNull,
+//   unit: varchar('unit', {length: 20})
+//     .notNull(),
+// });
+
+// export const customer = pgTable('customer', {
+//   id: serial('id').primaryKey(),
+//   username: varchar('username', {length: 20})
+//     .notNull(),
+//   name: varchar('name', {length: 100})
+//     .notNull()
+//     .references(() => users.name),
+//   email: varchar('email', { length: 20 }).notNull(),
+//   phone: varchar('phone', {length: 14}),
+//   active: boolean('active').notNull(),
+//   createdAt: timestamp('created_at').notNull().defaultNow(),
+// });
+
+//
+
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
