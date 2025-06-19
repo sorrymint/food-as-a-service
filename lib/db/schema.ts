@@ -7,8 +7,10 @@ import {
   integer,
   boolean,
   numeric,
+  primaryKey
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+import { url } from 'node:inspector';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -89,28 +91,15 @@ export const dishes = pgTable('dishes', {
     .notNull()
     .references(() => businesses.id),
   name: varchar('name', {length: 100})
-    .notNull(),
+    .notNull()
+    .unique(),
   description: varchar('description', {length: 500})
     .notNull(),
   active: boolean('active')
     .notNull(),
+  image: varchar('image_url', {length: 100}),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
-});
-
-//ingredient
-export const ingredients = pgTable('ingredients',{
-  id: serial('id').primaryKey(),
-  name: varchar('name', {length: 50})
-    .notNull(),
-  description: varchar('description', {length: 500}),
-  is_optional: boolean('is_optional')
-    .notNull(),
-  createdAt: timestamp('created_at')
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
 });
 
 //dish_ingredients
@@ -120,18 +109,37 @@ export const dish_ingredients = pgTable('dish_ingredients',{
     .references(() => dishes.name),
   dishId: serial('dish_id')
     .notNull()
-    .references(() => dishes.id)
-    .primaryKey(),
+    .references(() => dishes.id),
   ingredientName: varchar('ingredient_name', {length: 100})
     .notNull()
     .references(() => ingredients.name),
   ingredientId: serial('ingredient_id')
     .notNull()
-    .references(() => ingredients.id)
-    .primaryKey(),
+    .references(() => ingredients.id),
   quantity: numeric('quantity'),
   unit: varchar('unit', {length: 20})
     .notNull(),
+}, (dish_ingredients) =>[
+   primaryKey({columns: [dish_ingredients.dishId, dish_ingredients.ingredientId]})
+]
+);
+
+//ingredient
+export const ingredients = pgTable('ingredients',{
+  id: serial('id').primaryKey(),
+  name: varchar('name', {length: 50})
+    .notNull()
+    .unique(),
+  description: varchar('description', {length: 500}),
+  is_optional: boolean('is_optional')
+    .notNull(),
+  is_allogenic: boolean('is_allogenic')
+    .notNull(),
+  createdAt: timestamp('created_at')
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
 });
 
 export const customer = pgTable('customer', {
@@ -147,7 +155,6 @@ export const customer = pgTable('customer', {
 });
 
 //
-
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),

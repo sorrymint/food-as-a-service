@@ -70,8 +70,6 @@ async function seed() {
     console.log('Initial user created.');
   }
 
-  console.log('Initial user created.');
-
   const [team] = await db
     .insert(teams)
     .values({
@@ -89,52 +87,47 @@ async function seed() {
 
   await createStripeProducts();
 
-  const [newBusiness] = await db
-    .insert(businesses)
-    .values({
-      name: 'Thai Delight',
-      num_of_customers: 1,
-      active: true,
-      createdAt: new Date(),
-      updatedAt: new Date(+2)
-    })
-    .returning();
+  await db
+  .insert(businesses)
+  .values({
+    name: 'African Wonders',
+    num_of_customers: 2,
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(+2)
+  })
 
-  console.log('Business seeded', newBusiness);
-
-  // dish
+  // dish table
   await db
   .insert(dishes)
   .values({
-    name: 'Spicy Pad Thai', 
-    description: 'A very spicy pad thai version',
+    name: 'Peanut Stew', 
+    description: 'A spicy aromatic peanut stew. Add your choice of meat.',
     active: true,
+    image: '',
     createdAt: new Date(),
-    updatedAt: new Date(),    
+    updatedAt: new Date(+3),    
   });
 
   // ingredients
   await db
   .insert(ingredients)
   .values({
-    name: 'Noodles', 
+    name: 'Peanuts', 
     description: '',
     is_optional: true,
+    is_allogenic: true,
     createdAt: new Date(),
     updatedAt: new Date(+2), 
   });
 
   // dish_ingredients
-  await db
-  .insert(dish_ingredients)
-  .values({
-    dishName: dishes.name,
-    dishId: dishes.id,
-    ingredientsName: ingredients.name,
-    ingredientsId: ingredients.id,
-    quantity: 1.0,
-    unit: '12oz Bag'
-  });
+  // await db
+  // .insert(dish_ingredients)
+  // .values({
+  //   quantity: 1.0,
+  //   unit: '12oz Bag'
+  // });
 
   // customer
   // await db
