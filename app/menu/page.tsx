@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { MenuItem } from '@radix-ui/react-menu';
+import { useParams } from 'next/navigation';
+
 interface MenuItem {
     id: number;
     name: string;
@@ -9,50 +10,42 @@ interface MenuItem {
     imageUrl?: string;
 }
 
-export default function MenuPage() {
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+export default function ProductDetailPage() {
+    const { item } = useParams();
+    const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/menu-items')
+        if (!item) return;
+
+        fetch(`/api/menu-items/${item}`)
             .then(res => res.json())
             .then(data => {
-                setMenuItems(data);
+                setMenuItem(data);
                 setLoading(false);
             })
             .catch(err => {
-                console.error('Error fetching menu:', err);
+                console.error('Error loading item:', err);
                 setLoading(false);
             });
-    }, []);
+    }, [item]);
+
+    if (loading) return <p className="text-center p-4">Loading...</p>;
+
+    if (!menuItem) return <p className="text-center p-4">Item not found.</p>;
 
     return (
-        <div className='p-8'>
-            <h1 className='text-3xl font-bold text-center mb-6'>Menu</h1>
-
-            {loading ? (
-                <p className='text-center'>Loading...</p>
-            ) : menuItems.length === 0 ? (
-                <p className='text-center'>No menu items found.</p>
-            ) : (
-                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-                    {menuItems.map(item => (
-                        <div key={item.id} className='border rounded-lg p-4 shadow-md'>
-                            {item.imageUrl && (
-                                <img
-                                    src={item.imageUrl}
-                                    alt={item.name}
-                                    className='w-full h-40 object-cover mb-4 rounded'
-                                />
-                            )}
-                            <h2 className='text-xl font-semibold'>{item.name}</h2>
-                            <p className='text-sm text-gray-600'>{item.description}</p>
-                            <p className='mt-2 text-green-600 font-bold'>${item.price.toFixed(2)}</p>
-                        </div>
-                    ))}
-                </div>
+        <div className="p-8 max-w-xl mx-auto">
+            <h1 className="text-3xl font-bold mb-4">{menuItem.name}</h1>
+            {menuItem.imageUrl && (
+                <img
+                    src={menuItem.imageUrl}
+                    alt={menuItem.name}
+                    className="w-full h-64 object-cover rounded mb-4"
+                />
             )}
+            <p className="text-lg mb-2 text-gray-700">{menuItem.description}</p>
+            <p className="text-xl font-bold text-green-600">${menuItem.price.toFixed(2)}</p>
         </div>
     );
 }
-

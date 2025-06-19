@@ -1,58 +1,25 @@
+import { notFound } from 'next/navigation';
 
-'use client';
-import {MenuItem} from "@radix-ui/react-menu";
-
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-
-interface MenuItem {
-    id: number;
-    name: string;
-    description?: string;
-    price: number;
-    imageUrl?: string;
+async function getItem(id: number) {
+    const res = await fetch('http://localhost:3000/api/menu-items'); // or 3001
+    const items = await res.json();
+    return items.find((item: any) => item.id === id);
 }
 
-export default function ProductDetailPage() {
-    const { item } = useParams();
-    const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
-    const [loading, setLoading] = useState(true);
+export default async function MenuItemPage({ params }: { params: { item: string } }) {
+    const id = parseInt(params.item);
+    const item = await getItem(id);
 
-    useEffect(() => {
-        if (!item) return;
-
-        fetch(`/api/menu-items/${item}`)
-            .then(res => res.json())
-            .then(data => {
-                setMenuItem(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error loading item:', err);
-                setLoading(false);
-            });
-    }, [item]);
-
-    if (loading) {
-        return <p className="text-center p-4">Loading...</p>;
-    }
-
-    if (!menuItem) {
-        return <p className="text-center p-4">Item not found.</p>;
-    }
+    if (!item) return notFound();
 
     return (
-        <div className="p-8 max-w-xl mx-auto">
-            <h1 className="text-3xl font-bold mb-4">{menuItem.name}</h1>
-            {menuItem.imageUrl && (
-                <img
-                    src={menuItem.imageUrl}
-                    alt={menuItem.name}
-                    className="w-full h-64 object-cover rounded mb-4"
-                />
-            )}
-            <p className="text-lg mb-2 text-gray-700">{menuItem.description}</p>
-            <p className="text-xl font-bold text-green-600">${menuItem.price.toFixed(2)}</p>
-        </div>
+        <main className="p-6">
+            <h1 className="text-3xl font-bold">{item.name}</h1>
+            <p>{item.description}</p>
+            <p className="text-gray-600">${item.price.toFixed(2)}</p>
+            <p>⭐ {item.rating}</p>
+            <p>Category: {item.category}</p>
+            {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="mt-4 max-w-sm rounded-xl" />}
+        </main>
     );
 }
