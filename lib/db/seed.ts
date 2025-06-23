@@ -125,18 +125,13 @@ async function seed() {
   // await db
   // .insert(dish_ingredients)
   // .values({
+  //   // dishName: 'Peanut Stew',
+  //   // dishId: 2,
+  //   // ingredientName: 'Peanut',
+  //   // ingredientId: 2,
   //   quantity: 1.0,
   //   unit: '12oz Bag'
   // });
-
-  // customer
-  // await db
-  // .insert(customer)
-  // .values({
-    
-  // });
-
-
 
 
 }

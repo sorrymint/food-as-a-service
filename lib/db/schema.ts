@@ -7,10 +7,9 @@ import {
   integer,
   boolean,
   numeric,
-  primaryKey
+  primaryKey,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { url } from 'node:inspector';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -97,7 +96,7 @@ export const dishes = pgTable('dishes', {
     .notNull(),
   active: boolean('active')
     .notNull(),
-  image: varchar('image_url', {length: 100}),
+  image: text('image_url'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
