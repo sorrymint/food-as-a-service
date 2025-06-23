@@ -1,5 +1,5 @@
 {
-  "id": "37c8080b-895e-4b30-a7b1-3438455a163f",
+  "id": "42c312dd-b2b3-475d-9b0f-86ee35b1b2e5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -81,6 +81,77 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.business_website": {
+      "name": "business_website",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "business_website_business_id_businesses_id_fk": {
+          "name": "business_website_business_id_businesses_id_fk",
+          "tableFrom": "business_website",
+          "tableTo": "businesses",
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.businesses": {
       "name": "businesses",
       "schema": "",
@@ -108,6 +179,12 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -140,6 +217,12 @@
           "name": "id",
           "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "serial",
+          "primaryKey": false,
           "notNull": true
         },
         "username": {
@@ -181,7 +264,201 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "customer_business_id_businesses_id_fk": {
+          "name": "customer_business_id_businesses_id_fk",
+          "tableFrom": "customer",
+          "tableTo": "businesses",
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.customer_order": {
+      "name": "customer_order",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "orders_id": {
+          "name": "orders_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "menu_item": {
+          "name": "menu_item",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "delivery_status": {
+          "name": "delivery_status",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "customer_order_orders_id_website_reviews_id_fk": {
+          "name": "customer_order_orders_id_website_reviews_id_fk",
+          "tableFrom": "customer_order",
+          "tableTo": "website_reviews",
+          "columnsFrom": [
+            "orders_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "customer_order_customer_id_customer_id_fk": {
+          "name": "customer_order_customer_id_customer_id_fk",
+          "tableFrom": "customer_order",
+          "tableTo": "customer",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "customer_order_menu_item_dishes_id_fk": {
+          "name": "customer_order_menu_item_dishes_id_fk",
+          "tableFrom": "customer_order",
+          "tableTo": "dishes",
+          "columnsFrom": [
+            "menu_item"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "customer_order_delivery_status_delivery_id_fk": {
+          "name": "customer_order_delivery_status_delivery_id_fk",
+          "tableFrom": "customer_order",
+          "tableTo": "delivery",
+          "columnsFrom": [
+            "delivery_status"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.delivery": {
+      "name": "delivery",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "orders_id": {
+          "name": "orders_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "driver_id": {
+          "name": "driver_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "delivery_orders_id_website_reviews_id_fk": {
+          "name": "delivery_orders_id_website_reviews_id_fk",
+          "tableFrom": "delivery",
+          "tableTo": "website_reviews",
+          "columnsFrom": [
+            "orders_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "delivery_driver_id_drivers_id_fk": {
+          "name": "delivery_driver_id_drivers_id_fk",
+          "tableFrom": "delivery",
+          "tableTo": "drivers",
+          "columnsFrom": [
+            "driver_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -334,7 +611,7 @@
         },
         "image_url": {
           "name": "image_url",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -383,6 +660,37 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.drivers": {
+      "name": "drivers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.ingredients": {
       "name": "ingredients",
       "schema": "",
@@ -407,6 +715,12 @@
         },
         "is_optional": {
           "name": "is_optional",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_allogenic": {
+          "name": "is_allogenic",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
@@ -512,6 +826,51 @@
           "tableTo": "users",
           "columnsFrom": [
             "invited_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.website_reviews": {
+      "name": "website_reviews",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "website_reviews_business_id_businesses_id_fk": {
+          "name": "website_reviews_business_id_businesses_id_fk",
+          "tableFrom": "website_reviews",
+          "tableTo": "businesses",
+          "columnsFrom": [
+            "business_id"
           ],
           "columnsTo": [
             "id"
