@@ -53,6 +53,7 @@ CREATE TABLE "ingredients" (
 	"name" varchar(50) NOT NULL,
 	"description" varchar(500),
 	"is_optional" boolean NOT NULL,
+	"is_allogenic" boolean NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "ingredients_name_unique" UNIQUE("name")
