@@ -1,5 +1,5 @@
 // components/DineDirectHeader/DineDirectHeader.tsx
-
+//This is the DineDirectHeader
 import Link from "next/link";
 
 const DineDirectHeader = () => {
