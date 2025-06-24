@@ -1,5 +1,5 @@
 // components/DineDirectHeader/DineDirectHeader.tsx
-//This is the DineDirectHeader
+//This is the DineDirectHeader, that is already styled
 import Link from "next/link";
 
 const DineDirectHeader = () => {
