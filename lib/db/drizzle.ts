@@ -1,13 +1,22 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schema';
-import dotenv from 'dotenv';
+export const db = {
+  users: [] as { id: number; email: string; passwordHash: string; name: string | null; role: string; createdAt: Date; updatedAt: Date; deletedAt: Date | null; }[],
+  // ... other tables here
 
-dotenv.config();
+  _ids: { users: 1, /* ... */ },
 
-if (!process.env.POSTGRES_URL) {
-  throw new Error('POSTGRES_URL environment variable is not set');
-}
+  insert(table, values) {
+    // create in-memory row
+  },
 
-export const client = postgres(process.env.POSTGRES_URL);
-export const db = drizzle(client, { schema });
+  select(table) {
+    return [...this[table]];
+  },
+
+  update(table, filterFn, updateFn) {
+    // update matching records
+  },
+
+  delete(table, filterFn) {
+    // delete matching records
+  }
+};
