@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6dfd44f8-aff6-4853-9229-269dce9a2b04" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/public/DineDirectFavicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(login)/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/(login)/actions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/menu-items/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/menu-items/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/menu/[item]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/menu/[item]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/menu/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/menu/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +60,8 @@
     "Docker.docker-compose.yml: Compose Deployment (1).executor": "Run",
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Display-List-Menu",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#17 on Display-List-Menu",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -77,12 +79,6 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Docker.docker-compose.yml: Compose Deployment (1)" />
-        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -93,6 +89,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750078876280</updated>
       <workItem from="1750078880316" duration="5288000" />
+      <workItem from="1750964917612" duration="4717000" />
     </task>
     <servers />
   </component>
