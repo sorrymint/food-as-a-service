@@ -17,7 +17,7 @@ const item =
 
 export default function ProductsPage () {
   return (
-    <div className='container mx-auto p-4'>
+    <div>
       <Link href={"/menu"} className="text-blue-500 mb-4 inline-block">
       <span className="text-xl mr-2">←</span>
        Menu </Link>

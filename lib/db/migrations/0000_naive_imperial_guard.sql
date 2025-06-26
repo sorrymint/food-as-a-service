@@ -1,5 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS "public";
-
 CREATE TABLE "activity_logs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"team_id" integer NOT NULL,
@@ -75,6 +73,7 @@ CREATE TABLE "dishes" (
 	"description" varchar(500) NOT NULL,
 	"active" boolean NOT NULL,
 	"image_url" text,
+	"price" numeric,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "dishes_name_unique" UNIQUE("name")

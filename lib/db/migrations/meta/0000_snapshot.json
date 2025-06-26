@@ -1,5 +1,5 @@
 {
-  "id": "42c312dd-b2b3-475d-9b0f-86ee35b1b2e5",
+  "id": "59b94269-5c6f-48f9-a6e8-f421d341b8e4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -612,6 +612,12 @@
         "image_url": {
           "name": "image_url",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },

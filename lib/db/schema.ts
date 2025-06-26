@@ -1,3 +1,4 @@
+
 import {
   pgTable,
   serial,
@@ -8,8 +9,10 @@ import {
   boolean,
   numeric,
   primaryKey,
+  PgNumeric
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+
 
 
 export const users = pgTable('users', {
@@ -99,6 +102,7 @@ export const dishes = pgTable('dishes', {
   active: boolean('active')
     .notNull(),
   image: text('image_url'),
+  price: numeric('price'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });

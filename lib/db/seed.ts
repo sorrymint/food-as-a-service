@@ -104,7 +104,8 @@ async function seed() {
     name: 'Peanut Stew', 
     description: 'A spicy aromatic peanut stew. Add your choice of meat.',
     active: true,
-    image: '',
+    image: '/Burger-newspaper.png',
+    price: 12.93,
     createdAt: new Date(),
     updatedAt: new Date(+3),    
   });
