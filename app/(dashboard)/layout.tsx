@@ -1,17 +1,16 @@
 'use client';
 
 import { use, useState, Suspense } from 'react';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-
-import Header from '@/components/ui/header';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar'
+import Header from '@/components/header';
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   return (
     <section className="flex flex-col min-h-screen">
-      <SidebarProvider defaultOpen={false} open={open}>
+       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <main className='w-full'>
           <Header />

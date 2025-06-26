@@ -1,7 +1,8 @@
-import { stripe } from '../payments/stripe';
+import{ stripe } from '../payments/stripe';
 import { db } from './drizzle';
-import { users, teams, teamMembers } from './schema';
+import { users, teams, teamMembers, businesses, dishes, ingredients, customer, dish_ingredients} from './schema';
 import { hashPassword } from '@/lib/auth/session';
+import { eq } from 'drizzle-orm';
 
 async function createStripeProducts() {
   console.log('Creating Stripe products and prices...');
@@ -44,7 +45,19 @@ async function seed() {
   const password = 'admin123';
   const passwordHash = await hashPassword(password);
 
-  const [user] = await db
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .then(res => res[0]);
+
+  let user;
+
+  if (existingUser) {
+    user = existingUser;
+    console.log('User already exists.');
+  } else {
+    [user] = await db
     .insert(users)
     .values([
       {
@@ -54,8 +67,8 @@ async function seed() {
       },
     ])
     .returning();
-
-  console.log('Initial user created.');
+    console.log('Initial user created.');
+  }
 
   const [team] = await db
     .insert(teams)
@@ -64,13 +77,63 @@ async function seed() {
     })
     .returning();
 
-  await db.insert(teamMembers).values({
+  await db
+  .insert(teamMembers)
+  .values({
     teamId: team.id,
     userId: user.id,
     role: 'owner',
   });
 
   await createStripeProducts();
+
+  await db
+  .insert(businesses)
+  .values({
+    name: 'African Wonders',
+    num_of_customers: 2,
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(+2)
+  })
+
+  // dish table
+  await db
+  .insert(dishes)
+  .values({
+    name: 'Peanut Stew', 
+    description: 'A spicy aromatic peanut stew. Add your choice of meat.',
+    active: true,
+    image: '',
+    createdAt: new Date(),
+    updatedAt: new Date(+3),    
+  });
+
+  // ingredients
+  await db
+  .insert(ingredients)
+  .values({
+    name: 'Peanuts', 
+    description: '',
+    is_optional: true,
+    is_allogenic: true,
+    createdAt: new Date(),
+    updatedAt: new Date(+2), 
+  });
+
+  // dish_ingredients
+  // await db
+  // .insert(dish_ingredients)
+  // .values({
+  //   // dishName: 'Peanut Stew',
+  //   // dishId: 2,
+  //   // ingredientName: 'Peanut',
+  //   // ingredientId: 2,
+  //   quantity: 1.0,
+  //   unit: '12oz Bag'
+  // });
+
+
 }
 
 seed()

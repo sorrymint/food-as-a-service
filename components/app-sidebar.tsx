@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -10,24 +10,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useState } from "react"
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Menu",
+    url: "/menu",
+    icon: BookOpenCheck,
   },
   {
-    title: "Calendar",
+    title: "Location",
     url: "#",
-    icon: Calendar,
+    icon: MapPin,
   },
   {
     title: "Search",
@@ -42,14 +41,10 @@ const items = [
 ]
 
 export function AppSidebar() {
-
-const [open, setOpen] = useState(false);
-
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
