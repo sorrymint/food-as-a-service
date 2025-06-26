@@ -119,27 +119,27 @@ export async function signOut() {
 
 // Placeholder implementations for missing exports to fix build errors
 
-export async function updateAccount() {
-    // TODO: Implement updateAccount logic
+export async function updateAccount(_userId?: number, _data?: any) {
     console.log('updateAccount called');
+    throw new Error('updateAccount not implemented yet');
 }
 
-export async function removeTeamMember() {
-    // TODO: Implement removeTeamMember logic
+export async function removeTeamMember(_teamMemberId?: number) {
     console.log('removeTeamMember called');
+    throw new Error('removeTeamMember not implemented yet');
 }
 
-export async function inviteTeamMember() {
-    // TODO: Implement inviteTeamMember logic
+export async function inviteTeamMember(_email?: string, _teamId?: number) {
     console.log('inviteTeamMember called');
+    throw new Error('inviteTeamMember not implemented yet');
 }
 
-export async function updatePassword() {
-    // TODO: Implement updatePassword logic
+export async function updatePassword(_userId?: number, _newPassword?: string) {
     console.log('updatePassword called');
+    throw new Error('updatePassword not implemented yet');
 }
 
-export async function deleteAccount() {
-    // TODO: Implement deleteAccount logic
+export async function deleteAccount(_userId?: number) {
     console.log('deleteAccount called');
+    throw new Error('deleteAccount not implemented yet');
 }

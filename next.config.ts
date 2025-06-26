@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
     //ppr: true,
     clientSegmentCache: true,
-    //nodeMiddleware: true
+    nodeMiddleware: true
   }
 };
 
