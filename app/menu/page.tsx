@@ -29,6 +29,7 @@ export default function MenuPage() {
     const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
     const [deliveryMode, setDeliveryMode] = useState<'Delivery' | 'Pickup'>('Delivery');
     const [searchQuery, setSearchQuery] = useState('');
+    const [userRatings, setUserRatings] = useState<Record<number, number>>({});
     const cartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -98,7 +99,7 @@ export default function MenuPage() {
     return (
         <div className="flex bg-black min-h-screen text-white">
             {/* Sidebar */}
-            <aside className="w-48  p-4 space-y-4 text-sm font-medium">
+            <aside className="w-48 p-4 space-y-4 text-sm font-medium">
                 <Link href="/" className="hover:text-green-400 block">Home</Link>
                 <Link href="/sign-in" className="hover:text-green-400 block">Log In</Link>
                 <Link href="/sign-up" className="hover:text-green-400 block">Sign Up</Link>
@@ -110,11 +111,9 @@ export default function MenuPage() {
             {/* Main content */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <header className="flex justify-between items-center px-6 py-4 ">
+                <header className="flex justify-between items-center px-6 py-4">
                     <div className="flex items-center gap-4">
                         <img src="/DineDirectFavicon.png" alt="Logo" className="h-10" />
-
-                        {/* Delivery / Pickup toggle */}
                         <div className="flex rounded-full overflow-hidden border border-green-700">
                             <Button
                                 variant={deliveryMode === 'Delivery' ? 'default' : 'ghost'}
@@ -139,7 +138,6 @@ export default function MenuPage() {
                                 Pickup
                             </Button>
                         </div>
-
                         <Button className="bg-white text-green-700 hover:bg-gray-100">Address</Button>
                     </div>
 
@@ -151,16 +149,14 @@ export default function MenuPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-
                         <Button onClick={() => setCartOpen(!cartOpen)} className="relative bg-transparent hover:bg-transparent">
                             <ShoppingCart className="w-6 h-6 text-white" />
                             {totalQuantity > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-red-500 text-xs text-white w-5 h-5 flex items-center justify-center rounded-full">
-                  {totalQuantity}
-                </span>
+                                    {totalQuantity}
+                                </span>
                             )}
                         </Button>
-
                         <Link href="/sign-in" className="hover:underline text-sm">Log In</Link>
                         <Link href="/sign-up" className="hover:underline text-sm">Sign Up</Link>
 
@@ -235,11 +231,37 @@ export default function MenuPage() {
                                     <h3 className="text-lg font-semibold">{item.name}</h3>
                                     <p className="text-gray-600 text-sm">{item.description}</p>
                                     <div className="flex items-center justify-center mt-1">
-                                        <div className="text-yellow-500 mr-2">
-                                            {'★'.repeat(Math.floor(item.rating || 0))}
-                                            {'☆'.repeat(5 - Math.floor(item.rating || 0))}
+                                        <div className="flex text-yellow-500 mr-2">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    onClick={async () => {
+                                                        setUserRatings((prev) => ({ ...prev, [item.id]: star }));
+                                                        try {
+                                                            await fetch('/api/menu-items', {
+                                                                method: 'PATCH',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                },
+                                                                body: JSON.stringify({ id: item.id, rating: star }),
+                                                            });
+                                                        } catch (err) {
+                                                            console.error('Rating update failed', err);
+                                                        }
+                                                    }}
+                                                    className={`cursor-pointer text-xl ${
+                                                        (userRatings[item.id] ?? Math.floor(item.rating || 0)) >= star
+                                                            ? 'text-yellow-500'
+                                                            : 'text-gray-300'
+                                                    }`}
+                                                >
+                                                    ★
+                                                </span>
+                                            ))}
                                         </div>
-                                        <span className="text-sm text-gray-700">{item.rating?.toFixed(1)}</span>
+                                        <span className="text-sm text-gray-700">
+                                            {(userRatings[item.id] ?? item.rating)?.toFixed(1)}
+                                        </span>
                                     </div>
                                     <p className="font-bold mt-1">${item.price.toFixed(2)}</p>
                                     <Button
@@ -257,3 +279,4 @@ export default function MenuPage() {
         </div>
     );
 }
+
