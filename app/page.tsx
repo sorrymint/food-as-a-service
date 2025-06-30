@@ -1,5 +1,6 @@
 //This will be the homepage for restaurants
 // following the main page layout on figma
+import { TrafficChart } from "@/components/TrafficChart";
 
 export default function HomePage() {
     return (
@@ -28,15 +29,15 @@ export default function HomePage() {
             </div>
 
             <div className="flex justify-between"> {/* Bottom half div */}
-                <div className="bg-white p-30 rounded-lg shadow"> {/* Card 1 div */}
-                    <h1>Card 1</h1>
+                <div className="bg-white p-3 rounded-lg shadow"> 
+                    <TrafficChart />
                 </div>
-                <div className="bg-white p-30 rounded-lg shadow"> {/* Card 2 div */}
+                {/* <div className="bg-white p-30 rounded-lg shadow">
                     <h1>Card 2</h1>
                 </div>
-                <div className="bg-white p-30 rounded-lg shadow"> {/* Card 3 div */}
+                <div className="bg-white p-30 rounded-lg shadow">
                     <h1>Card 3</h1>
-                </div>
+                </div> */}
             </div>
         </main>
     );

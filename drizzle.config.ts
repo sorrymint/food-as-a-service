@@ -8,3 +8,4 @@ export default {
     url: process.env.POSTGRES_URL!,
   },
 } satisfies Config;
+
