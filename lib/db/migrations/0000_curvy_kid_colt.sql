@@ -46,6 +46,7 @@ CREATE TABLE "customer_order" (
 	"name" varchar(100) NOT NULL,
 	"customer_id" serial NOT NULL,
 	"menu_item" serial NOT NULL,
+	"quantity" integer DEFAULT 1 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"delivery_status" serial NOT NULL
 );
@@ -145,6 +146,15 @@ CREATE TABLE "users" (
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
+);
+CREATE TABLE "orders" (
+	"id" SERIAL PRIMARY KEY,
+	"business_id" INTEGER REFERENCES businesses(id),
+	"customer_id" INTEGER REFERENCES customer(id),
+	"quantity" integer,
+	"created_at" TIMESTAMP DEFAULT now(),
+	"delivery_status" VARCHAR(255),
+	"special_instructions" TEXT
 );
 --> statement-breakpoint
 ALTER TABLE "activity_logs" ADD CONSTRAINT "activity_logs_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

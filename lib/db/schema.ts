@@ -179,13 +179,24 @@ export const business_website = pgTable('business_website', {
 });
 
 //orders
-export const orders = pgTable('website_reviews', {
+export const website_reviews = pgTable('website_reviews', {
   id: serial('id').primaryKey(),
-  businessId: serial('business_id')
+  businessId: integer('business_id')
     .notNull()
     .references(() => businesses.id),
-  name: varchar('name', {length: 100})
-    .notNull()
+  name: varchar('name', { length: 100 }).notNull(),
+});
+
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  businessId: integer('business_id')
+    .references(() => businesses.id),
+  customerId: integer('customer_id')
+    .references(() => customer.id),
+  quantity: integer('quantity'),
+  createdAt: timestamp('created_at').defaultNow(),
+  deliveryStatus: varchar('delivery_status', { length: 255 }),
+  specialInstructions: text('special_instructions'),
 });
 
 //order items
@@ -202,6 +213,7 @@ export const customer_order = pgTable('customer_order', {
   menuItem: serial('menu_item')
     .notNull()
     .references(() => dishes.id),
+  quantity: integer('quantity').notNull().default(1),
   createdAt: timestamp('created_at')
     .notNull()
     .defaultNow(),
@@ -234,6 +246,7 @@ export const drivers = pgTable('drivers', {
   last_name: varchar('last_name', {length: 100})
     .notNull()
 });
+
 
 
 export const teamsRelations = relations(teams, ({ many }) => ({
