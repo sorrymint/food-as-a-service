@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, Legend } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, Legend } from "recharts";
 
 import {
   ChartConfig,
@@ -9,7 +9,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -18,7 +18,7 @@ const chartData = [
   { month: "April", desktop: 73, mobile: 190 },
   { month: "May", desktop: 209, mobile: 130 },
   { month: "June", desktop: 214, mobile: 140 },
-]
+];
 
 const chartConfig = {
   desktop: {
@@ -29,7 +29,7 @@ const chartConfig = {
     label: "Mobile",
     color: "#60a5fa",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function TrafficChart() {
   return (
@@ -45,17 +45,17 @@ export function TrafficChart() {
         />
         <ChartTooltip content={<ChartTooltipContent />} />
         <Legend
-            content={(props) => (
-                <ChartLegendContent
-                    payload={props.payload ?? []}
-                    verticalAlign="top"
-                    className="p-2"
-                />
-            )}
+          content={(props) => (
+            <ChartLegendContent
+              payload={props.payload ?? []}
+              verticalAlign="top"
+              className="p-2"
+            />
+          )}
         />
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
         <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
       </BarChart>
     </ChartContainer>
-  )
+  );
 }
