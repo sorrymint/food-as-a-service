@@ -57,6 +57,18 @@ async function seed() {
     user = existingUser;
     console.log('User already exists.');
   } else {
+    existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .then(res => res[0]);
+
+  let user;
+
+  if (existingUser) {
+    user = existingUser;
+    console.log('User already exists.');
+  } else {
     [user] = await db
     .insert(users)
     .values([
@@ -67,8 +79,8 @@ async function seed() {
       },
     ])
     .returning();
-
-  console.log('Initial user created.');
+    console.log('Initial user created.');
+  }
 
   const [team] = await db
     .insert(teams)
