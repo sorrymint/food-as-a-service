@@ -99,7 +99,7 @@ export default async function menu() {
       <div className='space-y-6 flex flex-wrap gap-2'>
         {menuItems.map(item => (
           <div key={item.id} className='border rounded-2xl h-[25rem] max-w-[20rem]'>
-            <Image src={item.image} alt='' width={320} height={0}
+            <Image src={item.image!} alt='' width={320} height={0}
             className='rounded-t-2xl '></Image>
             <div className='p-4 space-y-12'>
           <Link href={`/menu/${item.id}`}
