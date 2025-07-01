@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { ShoppingCart, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';

@@ -156,4 +156,4 @@ seed()
   .finally(() => {
     console.log('Seed process finished. Exiting...');
     process.exit(0);
-  });
+  })};
