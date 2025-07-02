@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ArrowRight, CreditCard, Database } from 'lucide-react';
 import { SearchInput } from "@/components/ui/inputs/searchInput"
 import { Terminal } from './terminal';
+import PopularPicksCards from './dashboard/_components/PopularPicksCards';
 
 export default function HomePage() {
   return (
@@ -61,26 +62,40 @@ function PopularPickSection() {
   );
 }
 
-function PopularPicksCards(){
-  return(
+// function PopularPicksCards(){
+//   return(
       
-        <div className="flex bg-gray-200 px-2 py-4 gap-[1.5rem] rounded-xl w-fit">
-          <Image
-            src={"/image.png"}
-            alt="a burger"
-            width={100}
-            height={100}
-            className='rounded-xl'
-          ></Image>
-          <div className=''>
-            <p className='text-xl font-bold'>Spicy chicken</p>
-            <div className='flex gap-[4rem] items-center mt-2'>
-              <p className='font-semibold'>$7.98</p>
-              <Button className='w-1 h-8 rounded-full'>+</Button>
-            </div>
-          </div>
-        </div>);
-}
+//         <div className="flex bg-gray-200 px-2 py-4 gap-[1.5rem] rounded-xl w-fit">
+//           <Image
+//             src={"/image.png"}
+//             alt="a burger"
+//             width={100}
+//             height={100}
+//             className='rounded-xl'
+//           ></Image>
+//           <div className=''>
+//             <p className='text-xl font-bold'>Spicy chicken</p>
+//             <div className='flex gap-[4rem] items-center mt-2'>
+//               <p className='font-semibold'>$7.98</p>
+//               <Button className='w-1 h-8 rounded-full'>+</Button>
+//               <Button
+//       variant="outline"
+//       onClick={() =>
+//         toast("Event has been created", {
+//           description: "Sunday, December 03, 2023 at 9:00 AM",
+//           action: {
+//             label: "Undo",
+//             onClick: () => console.log("Undo"),
+//           },
+//         })
+//       }
+//     >
+//       Show Toast
+//     </Button>
+//             </div>
+//           </div>
+//         </div>);
+// }
 
 function previousCode(){
   // <section className="py-20">
