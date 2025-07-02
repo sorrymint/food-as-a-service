@@ -1,8 +1,11 @@
-import Header from 'components/ui/header'
-import Link from 'next/link';
-import Image from 'next/image';
-import { db } from '@/lib/db/drizzle';
-import { dishes } from '@/lib/db/schema';
+
+import Link from "next/link";
+import Image from "next/image";
+import { db } from "@/lib/db/drizzle";
+import { dishes } from "@/lib/db/schema";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Menulist from "@/components/menulist";
 
 // const menuItems = [
 //   {
@@ -83,37 +86,47 @@ import { dishes } from '@/lib/db/schema';
 //     rating: 4.3
 //   }
 // ];
-
-
+//export default
 export default async function menu() {
-
   const menuItems = await db.select().from(dishes);
   return (
-    <div className='flex flex-col gap-12'>
-      <div className='flex flex-col gap-4'>
-      <h1 className='text-3xl mx-auto '>Menu</h1>
-      <Link href={'/create'} className='bg-blue-500 px-4 py-2 max-w-20 '>
-      <button className='cursor-pointer '>Create</button>
-      </Link>
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl mx-auto ">Menu</h1>
+        <Link href={"/create"} className="bg-blue-500 px-4 py-2 max-w-20 ">
+          <button className="cursor-pointer ">Create</button>
+        </Link>
       </div>
-      <div className='space-y-6 flex flex-wrap gap-2'>
-        {menuItems.map(item => (
-          <div key={item.id} className='border rounded-2xl h-[25rem] max-w-[20rem]'>
-            <Image src={item.image!} alt='' width={320} height={0}
-            className='rounded-t-2xl '></Image>
-            <div className='p-4 space-y-12'>
-          <Link href={`/menu/${item.id}`}
-          className='text-xl hover:text-blue-500 font-bold'>
-            {item.name}
-          </Link> 
-          <p className='text-sm text-gray-600 '>
-            {item.description.substring(0, 100)}
-            </p>
-            
-            <div className='flex justify-between'>
-            <p className='text-3xl font-bold'>${item.price}</p>
-            <button className=' bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer'>Add to Cart</button>
-            </div>
+      <div className="space-y-6 flex flex-wrap gap-2">
+        {menuItems.map((item) => (
+          <div
+            key={item.id}
+            className="border rounded-2xl h-[25rem] max-w-[20rem]"
+          >
+            <Image
+              src={item.image!}
+              alt=""
+              width={320}
+              height={0}
+              className="rounded-t-2xl "
+            ></Image>
+            <div className="p-4 space-y-12">
+              <Link
+                href={`/menu/${item.id}`}
+                className="text-xl hover:text-blue-500 font-bold"
+              >
+                {item.name}
+              </Link>
+              <p className="text-sm text-gray-600 ">
+                {item.description.substring(0, 100)}
+              </p>
+
+              <div className="flex justify-between">
+                <p className="text-3xl font-bold">${item.price}</p>
+                <button className=" bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer">
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -121,3 +134,4 @@ export default async function menu() {
     </div>
   );
 }
+
