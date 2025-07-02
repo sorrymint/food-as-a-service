@@ -1,28 +1,27 @@
-'use client'; 
-
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { useEffect } from 'react';
 
-// For testing the error page
-function CrashComponent() {
-    useEffect(() => {
-        throw new Error("Client-side error to trigger error.tsx");
-    }, []);
-    return null;
-}
+type SearchParams = {
+    category?: string;
+    rating?: string;
+    deals?: string;
+};
 
+type PageProps = {
+    searchParams?: Promise<SearchParams>;
+};
 
-export default function HomePage({ searchParams }) {
-    const category = searchParams?.category || '';
-    const rating = searchParams?.rating || '';
-    const deals = searchParams?.deals || '';
+export default async function HomePage({ searchParams }: PageProps) {
+    const resolvedSearchParams = searchParams instanceof Promise ? await searchParams : searchParams ?? {};
+
+    const category = resolvedSearchParams.category || '';
+    const rating = resolvedSearchParams.rating || '';
+    const deals = resolvedSearchParams.deals || '';
 
     const filteredItems = fetchFilteredMenu({ category, rating, deals });
 
     return (
         <main className='flex flex-col'>
-
             <section>
                 <FilterForm selected={{ category, rating, deals }} />
             </section>
@@ -32,7 +31,7 @@ export default function HomePage({ searchParams }) {
     );
 }
 
-function FilterForm({ selected }) {
+function FilterForm({ selected }: { selected: SearchParams }) {
     return (
         <form method="GET" className="flex gap-4 mb-6">
             <select name="category" defaultValue={selected.category} className="border rounded p-2">
@@ -90,7 +89,7 @@ function BodyAndAvatar() {
     );
 }
 
-function PopularPickSection({ items }) {
+function PopularPickSection({ items }: { items: any[] }) {
     return (
         <section className="flex flex-col my-15 items-center">
             <h2 className="text-4xl font-bold text-center mb-10">Hot Picks</h2>
@@ -104,7 +103,7 @@ function PopularPickSection({ items }) {
     );
 }
 
-function PopularPicksCard({ item }) {
+function PopularPicksCard({ item }: { item: any }) {
     return (
         <div className="flex bg-gray-200 px-2 py-4 gap-[1.5rem] rounded-xl w-fit">
             <Image
@@ -125,7 +124,7 @@ function PopularPicksCard({ item }) {
     );
 }
 
-function fetchFilteredMenu({ category, rating, deals }) {
+function fetchFilteredMenu({ category, rating, deals }: SearchParams) {
     const allItems = [
         { id: 1, name: 'Spicy Chicken', price: 7.98, rating: 4.5, category: 'normal', deal: true, image: '/image.png' },
         { id: 2, name: 'Vegan Salad', price: 5.99, rating: 5, category: 'vegan', deal: false, image: '/image.png' },
