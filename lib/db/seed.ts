@@ -98,6 +98,15 @@ async function seed() {
   })
 
   // dish table
+  const existingDish = await db
+  .select()
+  .from(dishes)
+  .where(eq(dishes.name, 'Peanut Stew'))
+  .then(res => res[0]);
+
+if (existingDish) {
+  console.log('Dish already exists.');
+} else {
   await db
   .insert(dishes)
   .values({
@@ -108,8 +117,18 @@ async function seed() {
     createdAt: new Date(),
     updatedAt: new Date(+3),    
   });
+}
 
   // ingredients
+  const existingIngredient = await db
+  .select()
+  .from(ingredients)
+  .where(eq(ingredients.name, 'Peanuts'))
+  .then(res => res[0]);
+
+if (existingIngredient) {
+  console.log('Ingredient already exists.');
+} else {
   await db
   .insert(ingredients)
   .values({
@@ -120,6 +139,7 @@ async function seed() {
     createdAt: new Date(),
     updatedAt: new Date(+2), 
   });
+}
 
   // dish_ingredients
   // await db
