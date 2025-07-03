@@ -1,6 +1,8 @@
 import Link from "next/link"
 import ShoppingCart from '@/components/ui/shopingcart';
 import { Suspense } from "react";
+import { SidebarTrigger } from "./sidebar";
+import  UserMenu from '@/components/UserMenu'
 
 
 export default function Header() {
