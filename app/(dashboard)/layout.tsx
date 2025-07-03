@@ -4,7 +4,7 @@ import { use, useState, Suspense } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar'
 import Header from '@/components/header';
-
+import { Toaster } from "@/components/ui/sonner"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
@@ -16,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Header />
           {children}
         </main>
+        <Toaster />
       </SidebarProvider>
     </section>
   );
