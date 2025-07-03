@@ -6,6 +6,7 @@ import { dishes } from "@/lib/db/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Menulist from "@/components/menulist";
+import ItemListing from "@/components/ItemListing";
 
 // const menuItems = [
 //   {
@@ -97,40 +98,9 @@ export default async function menu() {
           <button className="cursor-pointer ">Create</button>
         </Link>
       </div>
-      <div className="space-y-6 flex flex-wrap gap-2">
-        {menuItems.map((item) => (
-          <div
-            key={item.id}
-            className="border rounded-2xl h-[25rem] max-w-[20rem]"
-          >
-            <Image
-              src={item.image!}
-              alt=""
-              width={320}
-              height={0}
-              className="rounded-t-2xl "
-            ></Image>
-            <div className="p-4 space-y-12">
-              <Link
-                href={`/menu/${item.id}`}
-                className="text-xl hover:text-blue-500 font-bold"
-              >
-                {item.name}
-              </Link>
-              <p className="text-sm text-gray-600 ">
-                {item.description.substring(0, 100)}
-              </p>
-
-              <div className="flex justify-between">
-                <p className="text-3xl font-bold">${item.price}</p>
-                <button className=" bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ul className="space-y-6 flex flex-wrap gap-2">
+        <Menulist/>
+      </ul>
     </div>
   );
 }

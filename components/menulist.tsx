@@ -1,19 +1,40 @@
 'use client'
-import React, { useState } from "react";
-import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 
-export default async function Menulist() {
-  const menuItems = await db.select().from(dishes);
+
+  //TODO: items are the varaible that are returned from the database
+  type dishes = {
+    id: number
+    name: string
+    description: string
+    image: string
+    price: number
+  }
+
+export default function Menulist() {
+
+  // USESTATE creates an empty array of items
+  // SETITEMS allows use to add dishes into this array
+  const [items, setItems] = useState<dishes[]> ([])
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const res = await fetch("api/items");
+      const data = await res.json();
+      setItems(data);
+    }
+
+    fetchItems();
+  }, []) 
 
   const [userRatings, setUserRatings] = useState<Record<number, number>>({});
 
   return (
     <main className="p-6 bg-white flex-grow">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-        {menuItems.map((item) => (
+        {items.map(item => (
           <Card
             key={item.id}
             className="bg-yellow-100 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"

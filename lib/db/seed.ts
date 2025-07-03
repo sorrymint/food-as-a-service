@@ -101,11 +101,22 @@ async function seed() {
   await db
   .insert(dishes)
   .values({
-    name: 'Peanut Stew', 
-    description: 'A spicy aromatic peanut stew. Add your choice of meat.',
+    businessId: 1,  // assuming a business with ID 1 exists
+  name: 'Spicy Chicken Sandwich',
+  description: 'Crispy chicken sandwich with spicy mayo',
+  active: true,
+  image: 'https://example.com/images/spicy-chicken.jpg',
+  price: '8.99',
+  });
+
+    await db
+  .insert(dishes)
+  .values({
+    name: 'Spicy Chicken Sandwich', 
+    description: 'A spicy southern sandwich made from fresh famr raised chicken.',
     active: true,
     image: '/Burger-newspaper.png',
-    price: "12.93",
+    price: '12.93',
     createdAt: new Date(),
     updatedAt: new Date(+3),    
   });
