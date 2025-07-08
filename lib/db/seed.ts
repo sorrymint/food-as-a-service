@@ -1,7 +1,9 @@
 import{ stripe } from '../payments/stripe';
 import { db } from './drizzle';
-import { users, teams, teamMembers, businesses, dishes, ingredients, customer, dish_ingredients} from './schema';
-import { hashPassword } from '@/lib/auth/session';
+import { 
+  users, teams, teamMembers, businesses, dishes, ingredients,
+  customer, dish_ingredients, website_reviews, drivers, delivery, customer_order 
+} from './schema';import { hashPassword } from '@/lib/auth/session';
 import { eq } from 'drizzle-orm';
 
 async function createStripeProducts() {
@@ -98,29 +100,32 @@ async function seed() {
   })
 
   // dish table
-  const existingDish = await db
+const existingDish = await db
   .select()
   .from(dishes)
   .where(eq(dishes.name, 'Peanut Stew'))
   .then(res => res[0]);
 
+let dish;
 if (existingDish) {
   console.log('Dish already exists.');
+  dish = existingDish;
 } else {
-  await db
-  .insert(dishes)
-  .values({
-    name: 'Peanut Stew', 
-    description: 'A spicy aromatic peanut stew. Add your choice of meat.',
-    active: true,
-    image: '',
-    createdAt: new Date(),
-    updatedAt: new Date(+3),    
-  });
+  [dish] = await db
+    .insert(dishes)
+    .values({
+      name: 'Peanut Stew',
+      description: 'A spicy aromatic peanut stew. Add your choice of meat.',
+      active: true,
+      image: '',
+      createdAt: new Date(),
+      updatedAt: new Date(+3),
+    })
+    .returning();
 }
 
   // ingredients
-  const existingIngredient = await db
+const existingIngredient = await db
   .select()
   .from(ingredients)
   .where(eq(ingredients.name, 'Peanuts'))
@@ -139,6 +144,83 @@ if (existingIngredient) {
     createdAt: new Date(),
     updatedAt: new Date(+2), 
   });
+}
+// Businesses
+const [business] = await db
+  .insert(businesses)
+  .values({
+    name: 'African Wonders',
+    num_of_customers: 2,
+    active: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  })
+  .returning();
+
+// Customer
+const [cust] = await db
+  .insert(customer)
+  .values({
+    businessId: business.id,
+    username: 'spicyfan',
+    name: 'Spicy Fan',
+    email: 'spicy@fan.com',
+    phone: '1234567890',
+    active: true,
+    joinedAt: new Date(),
+  })
+  .onConflictDoNothing()
+  .returning();
+
+// Website reviews
+const [review] = await db
+  .insert(website_reviews)
+  .values({
+    businessId: business.id,
+    name: 'Spicy Order',
+  })
+  .returning();
+
+// Drivers
+const [driver] = await db
+  .insert(drivers)
+  .values({
+    first_name: 'Delivery',
+    last_name: 'Driver',
+  })
+  .returning();
+
+// Delivery
+const [deliveryItem] = await db
+  .insert(delivery)
+  .values({
+    ordersId: review.id,
+    driverId: driver.id,
+    status: 'Picked up',   // use valid enum value
+  })
+  .returning();
+
+// Customer order
+const existingOrderEntry = await db
+  .select()
+  .from(customer_order)
+  .where(eq(customer_order.id, 1))
+  .then(res => res[0]);
+
+if (!existingOrderEntry) {
+  await db
+    .insert(customer_order)
+    .values({
+      id: 1,
+      ordersId: review.id,
+      name: 'Spicy Chicken',
+      customerId: cust.id,
+      menuItem: dish.id,
+      deliveryStatus: deliveryItem.id,
+    });
+  console.log('Inserted customer_order with id: 1');
+} else {
+  console.log('customer_order id:1 already exists.');
 }
 
   // dish_ingredients
