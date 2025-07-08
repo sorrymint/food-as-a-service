@@ -1,7 +1,8 @@
 //This will be the homepage for restaurants
 // following the main page layout on figma
-import { TrafficChart } from "@/components/TrafficChart";
+
 import Image from 'next/image';
+import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 
 export default function HomePage() {
     return (
@@ -39,16 +40,10 @@ export default function HomePage() {
             </div>
 
 
-            <div className="flex justify-between"> {/* Bottom half div */}
-                <div className="bg-white p-3 rounded-lg shadow"> 
-                    <TrafficChart />
+            <div className=""> {/* Bottom half div */}
+                <div className="px-4 lg:px-6">
+                <ChartAreaInteractive />
                 </div>
-                {/* <div className="bg-white p-30 rounded-lg shadow">
-                    <h1>Card 2</h1>
-                </div>
-                <div className="bg-white p-30 rounded-lg shadow">
-                    <h1>Card 3</h1>
-                </div> */}
             </div>
         </main>
     );
