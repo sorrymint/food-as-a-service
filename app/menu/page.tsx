@@ -5,11 +5,8 @@ import { ShoppingCart, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Header from 'components/ui/header'
+
 import Link from 'next/link';
-import Image from 'next/image';
-import { db } from '@/lib/db/drizzle';
-import { dishes } from '@/lib/db/schema';
 
 
 interface MenuItem {
@@ -20,56 +17,12 @@ interface MenuItem {
     imageUrl?: string;
     rating?: number;
     category: string;
+    status?: 'available' | 'new' | 'unavailable';  // Added status here
 }
 
 interface CartItem extends MenuItem {
     quantity: number;
 }
-
-// import Header from 'components/ui/header'
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import { db } from '@/lib/db/drizzle';
-// import { dishes } from '@/lib/db/schema';
-
-
-// export default async function menu() {
-
-//   const menuItems = await db.select().from(dishes);
-//   return (
-//     <div className='flex flex-col gap-12'>
-//       <div className='flex flex-col gap-4'>
-//       <h1 className='text-3xl mx-auto '>Menu</h1>
-//       <Link href={'/create'} className='bg-blue-500 px-4 py-2 max-w-20 '>
-//       <button className='cursor-pointer '>Create</button>
-//       </Link>
-//       </div>
-//       <div className='space-y-6 flex flex-wrap gap-2'>
-//         {menuItems.map(item => (
-//           <div key={item.id} className='border rounded-2xl h-[25rem] max-w-[20rem]'>
-//             <Image src={item.image!} alt='' width={320} height={0}
-//             className='rounded-t-2xl '></Image>
-//             <div className='p-4 space-y-12'>
-//           <Link href={`/menu/${item.id}`}
-//           className='text-xl hover:text-blue-500 font-bold'>
-//             {item.name}
-//           </Link> 
-//           <p className='text-sm text-gray-600 '>
-//             {item.description.substring(0, 100)}
-//             </p>
-            
-//             <div className='flex justify-between'>
-//             <p className='text-3xl font-bold'>${item.price}</p>
-//             <button className=' bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer'>Add to Cart</button>
-//             </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
 
 export default function MenuPage() {
     const [items, setItems] = useState<MenuItem[]>([]);
@@ -109,19 +62,25 @@ export default function MenuPage() {
 
     const categories = Array.from(new Set(items.map((item) => item.category)));
 
+    // Filter by category and search, exclude unavailable items
     const filteredItems = categoryFilter
         ? items.filter(
             (item) =>
                 item.category === categoryFilter &&
-                item.name.toLowerCase().includes(searchQuery.toLowerCase())
+                item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+                item.status !== 'unavailable'
         )
-        : items.filter((item) =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        : items.filter(
+            (item) =>
+                item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+                item.status !== 'unavailable'
         );
 
     const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     function addToCart(item: MenuItem) {
+        if (item.status === 'unavailable') return;  // Prevent adding unavailable items
+
         setCartItems((prev) => {
             const existing = prev.find((i) => i.id === item.id);
             if (existing) {
@@ -266,13 +225,20 @@ export default function MenuPage() {
 
                 {/* Menu Items */}
                 <main className="p-6 bg-white flex-grow">
+                    {filteredItems.length === 0 && (
+                        <p className="text-center text-gray-700 font-semibold mt-8">
+                            {searchQuery
+                                ? `No items found for "${searchQuery}".`
+                                : 'No items available in this category.'}
+                        </p>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredItems.map((item) => (
                             <Card
                                 key={item.id}
                                 className="bg-yellow-100 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"
                             >
-                                <CardContent className="p-4 flex flex-col items-center w-full h-full">
+                                <CardContent className="p-4 flex flex-col items-center w-full h-full relative">
                                     <img
                                         src={item.imageUrl || '/placeholder.png'}
                                         alt={item.name}
@@ -280,6 +246,22 @@ export default function MenuPage() {
                                     />
                                     <h3 className="text-lg font-semibold">{item.name}</h3>
                                     <p className="text-gray-600 text-sm">{item.description}</p>
+
+                                    {/* Status badge */}
+                                    {item.status && (
+                                        <span
+                                            className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-bold ${
+                                                item.status === 'new'
+                                                    ? 'bg-green-600 text-white'
+                                                    : item.status === 'available'
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'bg-red-600 text-white'
+                                            }`}
+                                        >
+                                            {item.status.toUpperCase()}
+                                        </span>
+                                    )}
+
                                     <div className="flex items-center justify-center mt-1">
                                         <div className="flex text-yellow-500 mr-2">
                                             {[1, 2, 3, 4, 5].map((star) => (
@@ -316,9 +298,14 @@ export default function MenuPage() {
                                     <p className="font-bold mt-1">${item.price.toFixed(2)}</p>
                                     <Button
                                         onClick={() => addToCart(item)}
-                                        className="mt-auto bg-green-600 hover:bg-green-700 text-white w-full"
+                                        className={`mt-auto w-full ${
+                                            item.status === 'unavailable'
+                                                ? 'bg-gray-400 cursor-not-allowed'
+                                                : 'bg-green-600 hover:bg-green-700 text-white'
+                                        }`}
+                                        disabled={item.status === 'unavailable'}
                                     >
-                                        Add to Cart
+                                        {item.status === 'unavailable' ? 'Unavailable' : 'Add to Cart'}
                                     </Button>
                                 </CardContent>
                             </Card>
