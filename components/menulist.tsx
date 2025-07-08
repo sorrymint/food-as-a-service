@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 //TODO: items are the varaible that are returned from the database
 type dishes = {
@@ -35,6 +36,7 @@ export default function Menulist() {
       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
         {items.map(item => (
           <li key={item.id}>
+
             <Card
               className="bg-yellow-100 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"
             >
@@ -44,7 +46,7 @@ export default function Menulist() {
                   alt={item.name}
                   className="w-full h-36 object-cover rounded mb-2"
                 />
-                <h3 className="text-lg font-semibold">{item.name}</h3>
+                <Link href={`/menu/${item.id}`}><h3 className="text-lg font-semibold">{item.name}</h3></Link>
                 <p className="text-gray-600 text-sm">{item.description}</p>
                 <div className="flex items-center justify-center mt-1">
                   <div className="flex text-yellow-500 mr-2">

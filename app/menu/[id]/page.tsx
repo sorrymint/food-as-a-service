@@ -40,6 +40,7 @@ export default async function ProductsPage({
   if (!item) {
     return <div>Item Not Found</div>;
   }
+  console.log(item.image)
   return (
     <div>
       <Link href={"/menu"} className="text-blue-500 mb-4 inline-block">
@@ -51,7 +52,7 @@ export default async function ProductsPage({
         <h3>{item.name}</h3>
         <p>{item.description}</p>
         <p>{item.active? "Avaliable": "Unavaliable"}</p>
-        <Image src={item.image! || "/placeholder.png"} width={300} height={100} alt="Some type of images" />
+        <Image src={item.image! || "/Placeholder.png"} width={300} height={100} alt="Some type of images" />
         <p>${item.price}</p>
       </article>
     </div>
