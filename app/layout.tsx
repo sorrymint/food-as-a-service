@@ -3,9 +3,13 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { getUser, getTeamForUser } from "@/lib/db/queries";
 import { SWRConfig } from "swr";
+import { AppSidebar } from '@/components/app-sidebar'
+import Header from '@/components/header'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "Next.js SaaS Starter",
+  title: "Food as a Service",
   description: "Get started quickly with Next.js, Postgres, and Stripe.",
 };
 
@@ -36,7 +40,16 @@ export default function RootLayout({
             },
           }}
         >
-          {children}
+            <SidebarProvider defaultOpen={false}>
+              <AppSidebar />
+              <main className="w-full">
+                <Header />
+                <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 ">
+                {children}
+                </div>
+              </main>
+              <Toaster />
+            </SidebarProvider>
         </SWRConfig>
       </body>
     </html>

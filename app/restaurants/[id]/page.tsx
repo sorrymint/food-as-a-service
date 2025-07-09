@@ -21,8 +21,8 @@ export default function RestaurantDetailPage() {
 
     return (
         <div>
-        <h1>{restaurant.name}</h1>
-        <p>{restaurant.description}</p>
+            <h1>{restaurant.name}</h1>
+            <p>{restaurant.description}</p>
         </div>
-        );
+    );
 }
