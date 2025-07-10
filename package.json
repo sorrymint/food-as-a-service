@@ -44,6 +44,7 @@
     "react-dom": "19.1.0",
     "recharts": "^3.0.2",
     "react-hot-toast": "^2.5.2",
+    "recharts": "^3.0.2",
     "server-only": "^0.0.1",
     "sonner": "^2.0.5",
     "stripe": "^18.1.0",
