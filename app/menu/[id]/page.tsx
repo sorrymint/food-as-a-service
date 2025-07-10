@@ -20,13 +20,13 @@ import Link from "next/link"
 
 
 export default async function ProductsPage({
-  params,
+  params
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>
 }) {
-  console.log("params:", params);
-  const id = Number(params.id);
-  console.log("params.id:", params.id, typeof params.id);
+  
+  const stringId = (await params).id;
+  const id = Number(stringId);
 
   if (isNaN(id)) {
     return <div>Invalid ID</div>;
@@ -40,7 +40,6 @@ export default async function ProductsPage({
   if (!item) {
     return <div>Item Not Found</div>;
   }
-  console.log(item.image)
   return (
     <div>
       <Link href={"/menu"} className="text-blue-500 mb-4 inline-block">
@@ -52,7 +51,7 @@ export default async function ProductsPage({
         <h3>{item.name}</h3>
         <p>{item.description}</p>
         <p>{item.active? "Avaliable": "Unavaliable"}</p>
-        <Image src={item.image! || "/Placeholder.png"} width={300} height={100} alt="Some type of images" />
+        <Image placeholder="empty" src={item.image! || "/Placeholder.png"} width={300} height={300} alt="Some type of images" className="w-auto h-auto" priority={false}/>
         <p>${item.price}</p>
       </article>
     </div>
