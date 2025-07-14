@@ -5,46 +5,47 @@ import Image from 'next/image';
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 
 export default function HomePage() {
-    return (
-        <main className="flex flex-col gap-20 p-22">
+  return (
+    <main className="py-6 max-w-7xl space-y-8">
+      <section className="flex flex-col md:flex-row gap-8 ">
 
-            <div className="flex justify-between gap-32"> {/* Top half div */}
-                <div className="w-2/5 min-w-[400px]">{/* Left card div */}
-                    <Image 
-                        src="/create-website-PLACEHOLDER.jpg" 
-                        alt="A cartoon of a guy building a website" 
-                        width={400}
-                        height={300}
-                        className="rounded-md shadow"
-                    />
-                </div>
+        <div className="md:w-2/5 flex justify-center md:justify-start">{/* Left card div */}
+          <Image 
+            src="/create-website-PLACEHOLDER.jpg" 
+            alt="A placeholder image" 
+            width={400}
+            height={400}
+            className="rounded-md shadow"
+          />
+        </div>
 
-                
-                <div className="w-3/5"> {/* Right div*/}
-                    <div> {/* Info div */}
-                        <h1 className="text-4xl font-bold mb-6">Restaurants</h1> {/* need to add fonts */}
-                        <p className="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <a href="#" target="#" className="text-blue-500 underline">
-                            Learn More
-                        </a>
-                    </div>
-                    <div className="flex justify-between mt-2"> {/* Buttons div */}
-                        <button className="bg-black text-white px-4 py-2 rounded-full">
-                            View Restaurants
-                        </button>
-                        <button className="bg-White text-black border border-black px-4 py-2 rounded-full">
-                            Start a Restaurant
-                        </button>
-                    </div>
-                </div>
-            </div>
+              
+        <div className="md:w-3/5 flex flex-col justify-between"> {/* Right div*/}
+          <div> {/* Info div */}
+            <h1 className="text-4xl font-bold mb-6">Restaurants</h1> {/* need to add fonts */}
+            <p className="mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <a href="#" target="#" className="text-blue-500 underline">
+                Learn More
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-6"> {/* Buttons div */}
+            <button className="bg-black text-white px-4 py-2 rounded-full">
+                View Restaurants
+            </button>
+            <button className="bg-White text-black border border-black px-4 py-2 rounded-full">
+                Start a Restaurant
+            </button>
+          </div>
+        </div>
 
+      </section>
 
-            <div className=""> {/* Bottom half div */}
-                <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
-                </div>
-            </div>
-        </main>
-    );
+      {/* Bottom half div */}
+        <section>
+          <ChartAreaInteractive />
+        </section>
+      
+      
+    </main>
+  );
 }
