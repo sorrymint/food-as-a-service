@@ -9,7 +9,7 @@ import {
   numeric,
   primaryKey,
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 
 export const users = pgTable('users', {
@@ -99,6 +99,7 @@ export const dishes = pgTable('dishes', {
   active: boolean('active')
     .notNull(),
   image: text('image_url'),
+  price: numeric('price'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
@@ -143,21 +144,6 @@ export const ingredients = pgTable('ingredients',{
     .defaultNow()
 });
 
-export const customer = pgTable('customer', {
-  id: serial('id').primaryKey(),
-  businessId: serial('business_id')
-    .notNull()
-    .references(() => businesses.id),
-  username: varchar('username', {length: 20})
-    .notNull(),
-  name: varchar('name', {length: 100})
-    .notNull(),
-  email: varchar('email', { length: 20 }).notNull(),
-  phone: varchar('phone', {length: 14}),
-  active: boolean('active').notNull(),
-  joinedAt: timestamp('created_at').notNull().defaultNow(),
-});
-
 //business website
 export const business_website = pgTable('business_website', {
   id: serial('id').primaryKey(),
@@ -179,35 +165,66 @@ export const business_website = pgTable('business_website', {
 });
 
 //orders
-export const orders = pgTable('website_reviews', {
+export const orders = pgTable('carts', {
   id: serial('id').primaryKey(),
   businessId: serial('business_id')
     .notNull()
     .references(() => businesses.id),
-  name: varchar('name', {length: 100})
-    .notNull()
-});
-
-//order items
-export const customer_order = pgTable('customer_order', {
-  id: serial('id').primaryKey(),
-  ordersId: serial('orders_id')
-    .notNull()
-    .references(() => orders.id),
-  name: varchar('name', {length: 100})
-    .notNull(),
   customerId: serial('customer_id')
     .notNull()
     .references(() => customer.id),
-  menuItem: serial('menu_item')
+  menuItemId: serial('menu_item_id')
     .notNull()
     .references(() => dishes.id),
+  pricePaid: integer('price_paid'),
   createdAt: timestamp('created_at')
     .notNull()
     .defaultNow(),
-  deliveryStatus: serial('delivery_status')
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+});
+
+export const customer = pgTable('customer', {
+  id: serial('id').primaryKey(),
+  businessId: serial('business_id')
     .notNull()
-    .references(() => delivery.id)
+    .references(() => businesses.id),
+  username: varchar('username', {length: 20})
+    .notNull(),
+  name: varchar('name', {length: 100})
+    .notNull(),
+  email: varchar('email', { length: 20 }).notNull(),
+  phone: varchar('phone', {length: 14}),
+  active: boolean('active').notNull(),
+  joinedAt: timestamp('created_at').notNull().defaultNow(),
+  orders: serial()
+    .notNull()
+    .array()
+    .default(sql`ARRAY[]::serial[]`),
+});
+
+export const ordersRelations = relations(orders, ({ many }) => ({
+  orders: many(orders)
+}))
+
+//cart items
+export const cartItems = pgTable('cartItems', {
+  id: serial('id').primaryKey(),
+  orderId: serial('cart_id')
+    .notNull()
+    .references(() => orders.id),
+  menuItem: serial('menu_item')
+    .notNull()
+    .references(() => dishes.id),
+  quantity: integer('quantity'),
+  createdAt: timestamp('created_at')
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+  // deliveryStatus: text('delivery_status')
+  //   .notNull()
+  //   .references(() => delivery.status)
 });
 
 //delivery
@@ -215,7 +232,7 @@ export const delivery = pgTable('delivery', {
   id: serial('id').primaryKey(),
   ordersId: serial('orders_id')
     .notNull()
-    .references(() => orders.id),
+    .references(() => cartItems.id),
   driverId: serial('driver_id')
     .notNull()
     .references(() => drivers.id),
@@ -223,7 +240,6 @@ export const delivery = pgTable('delivery', {
   createdAt: timestamp('created_at')
     .notNull()
     .defaultNow(),
-
 });
 
 // delivery driver

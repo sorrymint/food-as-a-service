@@ -1,6 +1,6 @@
 {
-  "id": "6a185756-d650-4351-9814-4e147f8363b5",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "0896bfb2-912c-476d-9e1a-2a816551aa63",
+  "prevId": "6a185756-d650-4351-9814-4e147f8363b5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -219,14 +219,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "customer_id": {
-          "name": "customer_id",
+        "cart_id": {
+          "name": "cart_id",
           "type": "serial",
           "primaryKey": false,
           "notNull": true
@@ -249,16 +243,23 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "cartItems_customer_id_customer_id_fk": {
-          "name": "cartItems_customer_id_customer_id_fk",
+        "cartItems_cart_id_carts_id_fk": {
+          "name": "cartItems_cart_id_carts_id_fk",
           "tableFrom": "cartItems",
-          "tableTo": "customer",
+          "tableTo": "carts",
           "columnsFrom": [
-            "customer_id"
+            "cart_id"
           ],
           "columnsTo": [
             "id"
@@ -800,6 +801,78 @@
           "tableTo": "users",
           "columnsFrom": [
             "invited_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.carts": {
+      "name": "carts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "carts_business_id_businesses_id_fk": {
+          "name": "carts_business_id_businesses_id_fk",
+          "tableFrom": "carts",
+          "tableTo": "businesses",
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "carts_customer_id_customer_id_fk": {
+          "name": "carts_customer_id_customer_id_fk",
+          "tableFrom": "carts",
+          "tableTo": "customer",
+          "columnsFrom": [
+            "customer_id"
           ],
           "columnsTo": [
             "id"
