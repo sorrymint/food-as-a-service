@@ -112,13 +112,7 @@ export async function getTeamForUser() {
         with: {
           teamMembers: {
             with: {
-              user: {
-                columns: {
-                  id: true,
-                  name: true,
-                  email: true
-                }
-              }
+              user: true
             }
           }
         }
