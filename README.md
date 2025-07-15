@@ -107,6 +107,11 @@ In your Vercel project settings (or during deployment), add all the necessary en
 3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
 4. `POSTGRES_URL`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+6. `STRIPE_PUBLIC_KEY`: Use your Stripe public key for the production environment.
+
+### Changing and Viewing the Database
+To learn how to view and change the database 
+Link - https://indianhills0.sharepoint.com/:u:/r/sites/FieldProjects/SitePages/How-to-Change-and-View-Database.aspx?csf=1&web=1&e=oSViCo
 
 ## Other Templates
 
