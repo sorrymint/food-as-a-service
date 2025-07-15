@@ -1,5 +1,6 @@
 "use client"
 import Link from 'next/link'
+import CreateDishForm2 from './Components/createDishForm2'
 import CreateDishForm from '@/components/createDishForm'
 import { useActionState, useState } from 'react'
 import { createDish } from './actions'
@@ -21,7 +22,7 @@ export default function Create() {
         </Link>
         <h2 className='mb-6 font-extrabold'>Create A New Post</h2>
 
-        <CreateDishForm/>
+        <CreateDishForm2/>
         
     </div>
   )
