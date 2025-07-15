@@ -1,9 +1,51 @@
+"use Client"
+
 import { createDish } from '@/app/Admin/create/actions'
+import { dishFormSchema } from '@/lib/zodSchema/zodSchemas'
 import React, { useActionState } from 'react'
+import { toast } from 'sonner'
 
-export default function createDishForm() {
+export default function CreateDishForm() {
 
-    const [state, action, isPending] = useActionState(createDish, undefined)
+    const clientAction = async (state: any, formData : FormData) => {
+
+        const newDish = {
+            business_id: formData.get("business_id"),
+            name: formData.get("name"),
+            isActive: formData.get("isActive") === 'on',
+            discription: formData.get("discription"),
+            image: formData.get("image"),
+            price: formData.get("price"),
+        }
+
+        const results = dishFormSchema.safeParse(newDish);
+
+        if(!results.success){
+            // console.log(results.error.issues)
+            let errorMessage = "";
+
+            // If we werer to add toast goo way to incoparte error Message.
+            results.error.issues.forEach((issue) => {
+                errorMessage = 
+                errorMessage + issue.path[0] + ": " + issue.message + ". ";
+            });
+
+
+            toast.error(errorMessage);
+            return{
+            errors: results.error.flatten().fieldErrors,
+
+            };
+        }
+        console.log(results.data);
+        const response = await createDish( newDish);
+
+        if(response?.error){
+            toast.error(response.error)
+        }
+    }
+
+    const [state, action, isPending] = useActionState(clientAction, undefined)
 
   return (
     <form className="flex flex-col gap-5" action={action}>
@@ -16,8 +58,8 @@ export default function createDishForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
-        {state?.erorrs?.business_id && (
-          <p className="text-red-500">{state.erorrs.business_id}</p>
+        {state?.errors?.business_id && (
+          <p className="text-red-500">{state.errors.business_id}</p>
         )}
       </div>
       <div>
@@ -29,20 +71,20 @@ export default function createDishForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter Dish Name"
         />
-        {state?.erorrs?.name && (
-          <p className="text-red-500">{state.erorrs.name}</p>
+        {state?.errors?.name && (
+          <p className="text-red-500">{state.errors.name}</p>
         )}
       </div>
       <div>
-        <label>Avtive?</label>
+        <label>Active?</label>
         <input
           type="checkbox"
           name="isActive"
           id="isActive"
           defaultChecked={false}
         />
-        {state?.erorrs?.active && (
-          <p className="text-red-500">{state.erorrs.active}</p>
+        {state?.errors?.active && (
+          <p className="text-red-500">{state.errors.active}</p>
         )}
       </div>
 
@@ -54,8 +96,8 @@ export default function createDishForm() {
           className="w-full p-2 border rounded"
           rows={5}
         />
-        {state?.erorrs?.discription && (
-          <p className="text-red-500">{state.erorrs.discription}</p>
+        {state?.errors?.discription && (
+          <p className="text-red-500">{state.errors.discription}</p>
         )}
       </div>
 
@@ -68,8 +110,8 @@ export default function createDishForm() {
           className="w-full p-2 border rounded"
           placeholder="Name the Image is Saved as"
         />
-        {state?.erorrs?.image && (
-          <p className="text-red-500">{state.erorrs.image}</p>
+        {state?.errors?.image && (
+          <p className="text-red-500">{state.errors.image}</p>
         )}
       </div>
 
@@ -82,8 +124,8 @@ export default function createDishForm() {
           className="w-full p-2 border rounded"
           placeholder="Product Price"
         />
-        {state?.erorrs?.price && (
-          <p className="text-red-500">{state.erorrs.price}</p>
+        {state?.errors?.price && (
+          <p className="text-red-500">{state.errors.price}</p>
         )}
       </div>
 

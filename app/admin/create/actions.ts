@@ -2,24 +2,29 @@
 import { dishFormSchema, DishForm } from "@/lib/zodSchema/zodSchemas"
 
 
-export async function createDish(state: any, formData: FormData) {
+export async function createDish(newDish: unknown) {
+    // Server-Side Validation
   console.log("Creating Dish Action Called")
-const validatedFields = dishFormSchema.safeParse({
-    business_id: formData.get("business_id"),
-    name: formData.get("name"),
-    isActive: formData.get("isActive") === 'on',
-    discription: formData.get("discription"),
-    image: formData.get("image"),
-    price: formData.get("price")
-})
 
+  const results = dishFormSchema.safeParse(newDish);
 
-if(!validatedFields.success){
+// Checking for any errors
+if (!results.success) {
+    // console.log(results.error.issues)
+    let errorMessage = "";
+
+    // If we werer to add toast goo way to incoparte error Message.
+    results.error.issues.forEach((issue) => {
+        errorMessage =
+            errorMessage + issue.path[0] + ": " + issue.message + ". ";
+    });
+
+    console.log(results.error);
+
     return{
-        erorrs: validatedFields.error.flatten().fieldErrors,
-    }
+        error: errorMessage,
+    };
 }
-console.log(validatedFields.data)
 
 }
 

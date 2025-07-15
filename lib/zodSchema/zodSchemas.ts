@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const dishFormSchema = z.object({
+    id: z.number().optional(),
     business_id: z.string().min(1, "Id cant be less than 0"),
 
     name: z.string()
