@@ -38,7 +38,7 @@ export default function CreateDishForm() {
             };
         }
         console.log(results.data);
-        const response = await createDish( newDish);
+        const response = await createDish(results.data);
 
         if(response?.error){
             toast.error(response.error)

@@ -1,5 +1,8 @@
 "use server"
 import { dishFormSchema, DishForm } from "@/lib/zodSchema/zodSchemas"
+import { db } from "@/lib/db/drizzle";
+import { dishes } from "@/lib/db/schema";
+import { redirect } from "next/navigation";
 
 
 export async function createDish(newDish: unknown) {
@@ -7,7 +10,7 @@ export async function createDish(newDish: unknown) {
   console.log("Creating Dish Action Called")
 
   const results = dishFormSchema.safeParse(newDish);
-
+  const businessIdInt: number = Number(results.data?.business_id);
 // Checking for any errors
 if (!results.success) {
     // console.log(results.error.issues)
@@ -25,6 +28,23 @@ if (!results.success) {
         error: errorMessage,
     };
 }
+
+
+
+try{
+    await db.insert(dishes).values({
+        businessId: businessIdInt,
+        name: results.data.name,
+        active: results.data.active as boolean,
+        description: results.data.discription,
+        image: results.data.image,
+        price: results.data.price,
+    });
+    }
+    catch (err) {
+        console.log(err);
+    };
+    redirect("/menu");
 
 }
 
