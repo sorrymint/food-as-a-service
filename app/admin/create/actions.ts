@@ -35,7 +35,7 @@ try{
     await db.insert(dishes).values({
         businessId: businessIdInt,
         name: results.data.name,
-        active: results.data.active as boolean,
+        active: true,
         description: results.data.discription,
         image: results.data.image,
         price: results.data.price,
