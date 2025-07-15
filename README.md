@@ -1,6 +1,6 @@
 # DineDirect - Food as a Service
 
-This is a Food SaaS application created using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in admin.
+Food SaaS application created using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in admin.
 
 ## Tech Stack
 
@@ -21,7 +21,7 @@ This is a Food SaaS application created using **Next.js** with support for authe
 - Local middleware to protect Server Actions or validate Zod schemas
 - Activity logging system for any user events
 
-### Website Link
+## Website Link
 
 DineDirect Website - https://food-as-a-service.vercel.app/
 
@@ -104,18 +104,18 @@ In your Vercel project settings (or during deployment), add all the necessary en
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
 6. `STRIPE_PUBLIC_KEY`: Use your Stripe public key for the production environment.
 
-### Documentation
+## Documentation
 
 Initial Setup - 
 Stripe Setup  - 
 Changing and viewing the database - https://indianhills0.sharepoint.com/:u:/r/sites/FieldProjects/SitePages/How-to-Change-and-View-Database.aspx?csf=1&web=1&e=oSViCo
 
 
-### Developers
+## Developers
 
-- Ashley
-- Clayton
-- Keith
-- Shimea 
-- Laillah 
-- Jaxon
+Ashley
+Clayton
+Keith
+Shimea 
+Laillah 
+Jaxon
