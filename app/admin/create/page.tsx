@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import CreateDishForm from '@/components/createDishForm'
+import CreateDishForm from '@/components/CreateDishForm'
 import { useActionState, useState } from 'react'
 import { createDish } from './actions'
 
