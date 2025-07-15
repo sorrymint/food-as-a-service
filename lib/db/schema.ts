@@ -1,3 +1,4 @@
+
 import {
   pgTable,
   serial,
@@ -8,8 +9,10 @@ import {
   boolean,
   numeric,
   primaryKey,
+  PgNumeric
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+
 
 
 export const users = pgTable('users', {
@@ -94,11 +97,13 @@ export const dishes = pgTable('dishes', {
   name: varchar('name', {length: 100})
     .notNull()
     .unique(),
+    // Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
   description: varchar('description', {length: 500})
     .notNull(),
   active: boolean('active')
     .notNull(),
   image: text('image_url'),
+  price: numeric('price'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
