@@ -2,10 +2,7 @@
 
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
-import { error } from "console";
-import { PgSerialBuilderInitial } from "drizzle-orm/pg-core";
 import { redirect } from "next/navigation";
-import { PostgresError } from "postgres";
 
 export async function createDishForHandling(formData: FormData){
     // Include form validation with zod
