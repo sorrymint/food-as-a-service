@@ -117,7 +117,9 @@ if (existingDish) {
       name: 'Peanut Stew',
       description: 'A spicy aromatic peanut stew. Add your choice of meat.',
       active: true,
-      image: '',
+      image: '', 
+      price: '10.0',
+      tags: 'spicy, kosher, healthy',
       createdAt: new Date(),
       updatedAt: new Date(+3),
     })
