@@ -9,6 +9,7 @@ type dishes = {
     description: string
     image: string
     price: number
+    tags?: string;
     }
 
 export default function ItemListing() {
@@ -49,7 +50,13 @@ export default function ItemListing() {
             <p className="text-sm text-gray-600 ">
               {item.description.substring(0, 100)}
             </p>
-
+              
+              {item.tags && (
+                  <p className="text-xs text-gray-500 italic">
+                      Tags: {item.tags.split(',').map(tag => tag.trim()).join(', ')}
+                  </p>
+              )}
+              
             <div className="flex justify-between">
               <p className="text-3xl font-bold">${item.price}</p>
               <button className=" bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer">
