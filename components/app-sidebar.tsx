@@ -1,4 +1,4 @@
-import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings } from "lucide-react"
+import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings, UserCircle } from "lucide-react"
 
 import {
   Sidebar,
@@ -10,6 +10,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 // Menu items.
 const items = [
@@ -38,6 +44,20 @@ const items = [
     url: "#",
     icon: Settings,
   },
+  {
+    title: "Account",
+    icon: UserCircle,
+    subItems: [
+      {
+        title: "Account Information",
+        url: "/account"
+      },
+      {
+        title: "Payment",
+        url: "/account/payment"
+      },
+    ],
+  },
 ]
 
 export function AppSidebar() {
@@ -47,7 +67,27 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {items.map((item) => item.subItems ? (
+                <SidebarMenuItem key={item.title}>
+                  <Collapsible>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton>
+                          <item.icon />
+                          <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-6">
+                      {item.subItems.map((sub) => (
+                        <SidebarMenuButton key={`${item.title}-${sub.title}`} asChild>
+                          <a href={sub.url}>
+                            <span>{sub.title}</span>
+                          </a>
+                        </SidebarMenuButton>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>  
+                </SidebarMenuItem>
+              ) : (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import {
     Card,
     CardAction,
@@ -15,14 +16,18 @@ export default function ProfileSettings() {
     return (
         <Card className="w-full max-w-xl mx-auto mt-20">
             <CardHeader>
-                <CardTitle>Profile</CardTitle>
+                <CardTitle className="text-3xl font-bold">Profile</CardTitle>
                 <CardDescription>
                     View or update your profile.
                 </CardDescription>
                 <CardAction>
-                    <Button variant="link">Change Password</Button>
-
-                    <Button variant="link">Manage Account</Button>
+                    <Link href="/account/changePassword">
+                        <Button variant="link">Change Password</Button>
+                    </Link>
+                    
+                    <Link href="/account/manageAccount">
+                        <Button variant="link">Manage Account</Button>
+                    </Link>
                 </CardAction>
             </CardHeader>
             <CardContent>
@@ -31,7 +36,7 @@ export default function ProfileSettings() {
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-full">
                                 <Label htmlFor="fName" className="block text-sm font-medium mb-1">First Name</Label>
-                                <input 
+                                <Input 
                                     id="fName"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -42,7 +47,7 @@ export default function ProfileSettings() {
                             
                             <div className="w-full">
                                 <Label htmlFor="lName" className="block text-sm font-medium mb-1">Last Name</Label>
-                                <input 
+                                <Input 
                                     id="lName"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -65,7 +70,7 @@ export default function ProfileSettings() {
 
                         <div className="w-full">
                             <Label htmlFor="phoneNumber" className="block text-sm font-medium mb-1">Phone Number</Label>
-                            <input 
+                            <Input 
                                 id="phoneNumber"
                                 type="tel" 
                                 className="w-full border rounded px-3 py-2" 
@@ -76,14 +81,14 @@ export default function ProfileSettings() {
 
                         <div className="w-full">
                                 <Label htmlFor="address" className="block text-sm font-medium mb-1">Address</Label>
-                                <input 
+                                <Input 
                                     id="address"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
                                     placeholder="Street address" 
                                     required
                                 />
-                                <input 
+                                <Input 
                                     id="address"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -94,7 +99,7 @@ export default function ProfileSettings() {
 
                         <div className="w-full">
                                 <Label htmlFor="city" className="block text-sm font-medium mb-1">City</Label>
-                                <input 
+                                <Input 
                                     id="city"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -106,7 +111,7 @@ export default function ProfileSettings() {
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-full">
                                 <Label htmlFor="state" className="block text-sm font-medium mb-1">State</Label>
-                                <input 
+                                <Input 
                                     id="state"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -117,7 +122,7 @@ export default function ProfileSettings() {
 
                             <div className="w-full">
                                 <Label htmlFor="zip" className="block text-sm font-medium mb-1">ZIP Code</Label>
-                                <input 
+                                <Input 
                                     id="zip"
                                     type="text" 
                                     className="w-full border rounded px-3 py-2" 
@@ -132,7 +137,7 @@ export default function ProfileSettings() {
             </CardContent>
             <CardFooter className="flex-col gap-2">
                 <Button type="submit" className="w-full">
-                    Save
+                    Save changes
                 </Button>
             </CardFooter>
         </Card>
