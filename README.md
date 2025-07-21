@@ -1,6 +1,6 @@
 # DineDirect - Food as a Service
 
-Food SaaS application created using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in admin.
+Dine Direct is a food SaaS application created using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in admin.
 
 ## Tech Stack
 
