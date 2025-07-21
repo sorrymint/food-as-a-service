@@ -29,8 +29,8 @@ DineDirect Website - https://food-as-a-service.vercel.app/
 ## Getting Started
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
+git clone https://github.com/sorrymint/food-as-a-service.git
+cd food-as-a-service
 pnpm install
 ```
 
