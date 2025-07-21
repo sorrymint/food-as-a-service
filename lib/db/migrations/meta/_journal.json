@@ -2,6 +2,7 @@
   "version": "7",
   "dialect": "postgresql",
   "entries": [
+<<<<<<< HEAD
     {
       "idx": 0,
       "version": "7",
@@ -16,5 +17,7 @@
       "tag": "0001_mixed_tag",
       "breakpoints": true
     }
+=======
+>>>>>>> 4d1eefa5105864e90d7e8e136b3b1e3f4c513242
   ]
 }

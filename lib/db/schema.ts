@@ -1,3 +1,4 @@
+
 import {
   pgTable,
   serial,
@@ -8,8 +9,10 @@ import {
   boolean,
   numeric,
   primaryKey,
+  PgNumeric
 } from 'drizzle-orm/pg-core';
-import { relations, sql } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
+
 
 
 export const users = pgTable('users', {
@@ -94,12 +97,14 @@ export const dishes = pgTable('dishes', {
   name: varchar('name', {length: 100})
     .notNull()
     .unique(),
+    // Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
   description: varchar('description', {length: 500})
     .notNull(),
   active: boolean('active')
     .notNull(),
   image: text('image_url'),
   price: numeric('price'),
+  tags: varchar('tags', { length: 255 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
@@ -165,7 +170,7 @@ export const business_website = pgTable('business_website', {
 });
 
 //orders
-export const orders = pgTable('carts', {
+export const website_reviews = pgTable('website_reviews', {
   id: serial('id').primaryKey(),
   businessId: serial('business_id')
     .notNull()
@@ -184,7 +189,18 @@ export const orders = pgTable('carts', {
     .defaultNow()
 });
 
-export const customer = pgTable('customer', {
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  businessId: integer('business_id').references(() => businesses.id),
+  customerId: integer('customer_id').references(() => customer.id),
+  quantity: integer('quantity'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  deliveryStatus: varchar('delivery_status', { length: 50 }),
+  specialInstructions: text('special_instructions'),
+});
+
+//order items
+export const customer_order = pgTable('customer_order', {
   id: serial('id').primaryKey(),
   businessId: serial('business_id')
     .notNull()

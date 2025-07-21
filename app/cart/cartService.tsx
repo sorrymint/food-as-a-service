@@ -1,4 +1,3 @@
-
 import { db } from '@/lib/db/drizzle';
 import { cartItems, dishes} from '@/lib/db/schema';
 import { eq, and, sum } from 'drizzle-orm';
@@ -26,7 +25,6 @@ async function updateItemInCart(orderId: number, menuItem: number, quantity: num
     .set({ quantity })
     .where(and(eq(cartItems.orderId, orderId), eq(cartItems.menuItem, menuItem)));
 }
-
 
 
 export default function Cart() {
