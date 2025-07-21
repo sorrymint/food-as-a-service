@@ -49,6 +49,9 @@ export default async function ProductsPage({
         <span className="text-xl mr-2">←</span>
         Menu{" "}
       </Link>
+      <Link href={`/Admin/update/${item.id}`} className="bg-blue-500 px-4 py-2 max-w-20 ">
+        <button className="cursor-pointer ">Update Item</button>
+      </Link>
     <div className="flex items-center justify-center">
 
       <article className="flex flex-col-reverse gap-6 items-center md:flex-row-reverse md:mt-30 md:gap-10 ">
