@@ -1,3 +1,5 @@
+"use client"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
@@ -12,7 +14,33 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+const fetchUserProfile = async () => {
+    return {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+    }
+}
+
 export default function ProfileSettings() {
+    const [profile, setProfile] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+    })
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            const data = await fetchUserProfile()
+            setProfile(data)
+        }
+        loadProfile()
+    }, [])
+
     return (
         <Card className="w-full max-w-xl mx-auto mt-20">
             <CardHeader>
@@ -24,7 +52,7 @@ export default function ProfileSettings() {
                     <Link href="/account/changePassword">
                         <Button variant="link">Change Password</Button>
                     </Link>
-                    
+
                     <Link href="/account/manageAccount">
                         <Button variant="link">Manage Account</Button>
                     </Link>
@@ -36,23 +64,27 @@ export default function ProfileSettings() {
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-full">
                                 <Label htmlFor="fName" className="block text-sm font-medium mb-1">First Name</Label>
-                                <Input 
+                                <Input
                                     id="fName"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
+                                    type="text"
+                                    className="w-full border rounded px-3 py-2"
                                     placeholder="John"
-                                    required 
+                                    required
+                                    value={profile.firstName}
+                                    onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
                                 />
                             </div>
-                            
+
                             <div className="w-full">
                                 <Label htmlFor="lName" className="block text-sm font-medium mb-1">Last Name</Label>
-                                <Input 
+                                <Input
                                     id="lName"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
-                                    placeholder="Doe" 
+                                    type="text"
+                                    className="w-full border rounded px-3 py-2"
+                                    placeholder="Doe"
                                     required
+                                    value={profile.lastName}
+                                    onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
                                 />
                             </div>
                         </div>
@@ -62,78 +94,81 @@ export default function ProfileSettings() {
                             <Input
                                 id="email"
                                 type="email"
-                                className="w-full border rounded px-3 py-2" 
+                                className="w-full border rounded px-3 py-2"
                                 placeholder="m@example.com"
                                 required
+                                value={profile.email}
+                                onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                             />
                         </div>
 
                         <div className="w-full">
                             <Label htmlFor="phoneNumber" className="block text-sm font-medium mb-1">Phone Number</Label>
-                            <Input 
+                            <Input
                                 id="phoneNumber"
-                                type="tel" 
-                                className="w-full border rounded px-3 py-2" 
-                                placeholder="(111) 123-4567" 
+                                type="tel"
+                                className="w-full border rounded px-3 py-2"
+                                placeholder="(111) 123-4567"
                                 required
+                                value={profile.phone}
+                                onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                             />
-                        </div>            
-
-                        <div className="w-full">
-                                <Label htmlFor="address" className="block text-sm font-medium mb-1">Address</Label>
-                                <Input 
-                                    id="address"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
-                                    placeholder="Street address" 
-                                    required
-                                />
-                                <Input 
-                                    id="address"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
-                                    placeholder="Apt, Suite, unit, Building (optional)" 
-                                    required
-                                />
                         </div>
 
                         <div className="w-full">
-                                <Label htmlFor="city" className="block text-sm font-medium mb-1">City</Label>
-                                <Input 
-                                    id="city"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
-                                    placeholder="Ottumwa" 
-                                    required
-                                />
+                            <Label htmlFor="address" className="block text-sm font-medium mb-1">Address</Label>
+                            <Input
+                                id="address"
+                                type="text"
+                                className="w-full border rounded px-3 py-2"
+                                placeholder="Street address"
+                                required
+                            />
+                            <Input
+                                id="address2"
+                                type="text"
+                                className="w-full border rounded px-3 py-2"
+                                placeholder="Apt, Suite, unit, Building (optional)"
+                                required
+                            />
+                        </div>
+
+                        <div className="w-full">
+                            <Label htmlFor="city" className="block text-sm font-medium mb-1">City</Label>
+                            <Input
+                                id="city"
+                                type="text"
+                                className="w-full border rounded px-3 py-2"
+                                placeholder="Ottumwa"
+                                required
+                            />
                         </div>
 
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-full">
                                 <Label htmlFor="state" className="block text-sm font-medium mb-1">State</Label>
-                                <Input 
+                                <Input
                                     id="state"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
+                                    type="text"
+                                    className="w-full border rounded px-3 py-2"
                                     placeholder="Iowa"
-                                    required 
+                                    required
                                 />
                             </div>
 
                             <div className="w-full">
                                 <Label htmlFor="zip" className="block text-sm font-medium mb-1">ZIP Code</Label>
-                                <Input 
+                                <Input
                                     id="zip"
-                                    type="text" 
-                                    className="w-full border rounded px-3 py-2" 
-                                    placeholder="" 
+                                    type="text"
+                                    className="w-full border rounded px-3 py-2"
+                                    placeholder=""
                                     required
                                 />
                             </div>
                         </div>
                     </div>
                 </form>
-            
             </CardContent>
             <CardFooter className="flex-col gap-2">
                 <Button type="submit" className="w-full">
