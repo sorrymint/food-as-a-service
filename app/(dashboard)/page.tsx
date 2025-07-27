@@ -25,6 +25,8 @@ const allItems: Item[] = [
 
 export default function HomePage() {
     const [filters, setFilters] = useState({ category: '', rating: '', deals: '' });
+    
+    const [quantities, setQuantities] = useState<Record<number, number>>({});
 
     const filteredItems = allItems.filter((item) => {
         if (filters.category && item.category !== filters.category) return false;
@@ -36,6 +38,17 @@ export default function HomePage() {
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilters({ ...filters, [e.target.name]: e.target.value });
+    };
+
+    const handleAdd = (item: Item) => {
+        setQuantities(prev => {
+            const newQty = (prev[item.id] ?? 0) + 1;
+            return { ...prev, [item.id]: newQty };
+        });
+        toast.success(`${item.name} added to cart!`, {
+            description: "Check your cart to review your item.",
+        });
+        // TODO: Add your API call here to sync with backend cart
     };
 
     return (
@@ -97,13 +110,11 @@ export default function HomePage() {
                             />
                             <div>
                                 <p className="text-xl font-bold">{item.name}</p>
-
-                                {/* Tags display */}
+                                
                                 {item.tags && (
                                     <p className="text-sm text-gray-700 italic mb-2">
                                         {item.tags.split(',').map(tag => tag.trim()).map((tag, i) => (
-                                            <span key={i} className="mr-2 px-2 py-1 rounded bg-yellow-200 text-yellow-900 text-xs font-semibold">{tag}
-                                            </span>
+                                            <span key={i} className="mr-2 px-2 py-1 rounded bg-yellow-200 text-yellow-900 text-xs font-semibold">{tag}</span>
                                         ))}
                                     </p>
                                 )}
@@ -112,14 +123,13 @@ export default function HomePage() {
                                     <p className="font-semibold">${item.price.toFixed(2)}</p>
                                     <Button
                                         className="w-8 h-8 rounded-full"
-                                        onClick={() =>
-                                            toast.success(`${item.name} added to cart!`, {
-                                                description: "Check your cart to review your item.",
-                                            })
-                                        }
+                                        onClick={() => handleAdd(item)}
                                     >
                                         +
                                     </Button>
+                                    {quantities[item.id] && (
+                                        <span className="ml-2 font-bold">{quantities[item.id]}</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
