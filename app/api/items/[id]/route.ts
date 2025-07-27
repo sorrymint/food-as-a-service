@@ -5,10 +5,10 @@ import { eq } from 'drizzle-orm';
 
 export async function GET(
     request: Request,
-    context: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const params = await context.params;
-    const id = Number(params.id);
+    const awaitedParams = await params;
+    const id = Number(awaitedParams.id);
 
     if (isNaN(id)) {
         return NextResponse.json({ error: 'Invalid item ID' }, { status: 400 });
@@ -28,9 +28,10 @@ export async function GET(
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const id = Number(params.id);
+    const awaitedParams = await params;
+    const id = Number(awaitedParams.id);
 
     if (isNaN(id)) {
         return NextResponse.json({ error: 'Invalid item ID' }, { status: 400 });
