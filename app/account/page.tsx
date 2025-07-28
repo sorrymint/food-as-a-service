@@ -14,6 +14,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+
+
 const fetchUserProfile = async () => {
     return {
         firstName: "",
@@ -38,8 +40,23 @@ export default function ProfileSettings() {
             const data = await fetchUserProfile()
             setProfile(data)
         }
+
         loadProfile()
     }, [])
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        // Simulate saving the profile data (you'll replace this with an actual API call)
+        console.log("Saving updated profile:", profile)
+
+        // Simulate a delay to mimic a server response
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        // Notify the user of success
+        alert("Your profile has been updated successfully!")
+    }
+
 
     return (
         <Card className="w-full max-w-xl mx-auto mt-20">
@@ -59,7 +76,7 @@ export default function ProfileSettings() {
                 </CardAction>
             </CardHeader>
             <CardContent>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-full">
