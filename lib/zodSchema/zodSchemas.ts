@@ -17,4 +17,4 @@ export const dishFormSchema = z.object({
     price: z.string().min(4, "Enter a valid Price ex: 3.00")
 })
 
-export type DishForm = z.infer<typeof dishFormSchema>;
+export type DishType = z.infer<typeof dishFormSchema>;

@@ -1,28 +1,38 @@
-import { number } from "zod";
+// import { useParams } from "next/navigation";
+import { getDishes } from "./actions";
 import UpdateForm from "./components/updateForm";
 
-export default function UpdatingPage({
+export default async function UpdatingPage({
   params,
 }: {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }) {
 
-    const theNum = async () => {
-      //Parsing string into a number
-      console.log(params, typeof params);
-      const itemId = await parseInt(params.id);
-      console.log(itemId, typeof itemId);
-      return itemId;
-    };
+  // Converting the id into a number so its safe for the database
+    const { id } = await params
+    const itemId : number = parseInt(id, 10);
 
+    if (isNaN(itemId)) {
+    return <div>Invalid ID - must be a number</div>;
+    }
+
+    // Getting th current Dish ID for default values
+    const initdish = await getDishes(itemId);
+
+    if (!initdish) {
+      return <div>Dish not found</div>;
+    }
+
+// export default async function UpdatingPage() {
+//   const params = useParams();
+//   const id = params?.id;
+//   const itemId = parseInt(id as string, 10);
   
   return (
     <div>
       <h2 className="font-extrabold mb-4">Update Page</h2>
 
-      <UpdateForm param={theNum} />
+      <UpdateForm prevData={initdish}/>
     </div>
   );
 }

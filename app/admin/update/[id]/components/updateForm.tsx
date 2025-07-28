@@ -1,16 +1,26 @@
 "use client";
 
 import { getDishes, UpdateDish } from "../actions";
-import { dishFormSchema } from "@/lib/zodSchema/zodSchemas";
-import { useActionState } from "react";
+import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
-export default function UpdateForm( itemId: number) {
+interface ItemIdType {
+  params: number;
+}
 
-    const prevData = getDishes(itemId);
+export default function UpdateForm(
+  { prevData }: { prevData : DishType}
+) {
 
 
-    
+  // const prevData = getDishes(params);
+  // console.log(prevData);
+
+  // if(!prevData){
+  //   console.log("The Previous Data is not being read in");
+  // }
+
   const clientAction = async (state: any, formData: FormData) => {
     const newDish = {
       business_id: formData.get("business_id"),
@@ -49,7 +59,6 @@ export default function UpdateForm( itemId: number) {
   const [state, action, isPending] = useActionState(clientAction, undefined);
 
   return (
-    
     <form className="flex flex-col gap-5" action={action}>
       <div>
         <label>Business ID</label>
@@ -57,7 +66,7 @@ export default function UpdateForm( itemId: number) {
           type="text"
           name="business_id"
           id="business_id"
-          // defaultValue={prevData.bussiness_id}
+          // defaultValue={prevData}
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
@@ -86,6 +95,7 @@ export default function UpdateForm( itemId: number) {
           id="isActive"
           defaultChecked={false}
         />
+
         {state?.errors?.active && (
           <p className="text-red-500">{state.errors.active}</p>
         )}

@@ -4,6 +4,7 @@ import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { error } from "node:console";
 
 export async function UpdateDish(dish: unknown) {
   return (
@@ -15,11 +16,15 @@ export async function UpdateDish(dish: unknown) {
 
 export async function getDishes(dishId: number) {
   try {
-    await db.select()
+    const res = await db.select()
     .from(dishes)
-    .where(eq(dishes.id, dishId))
+    .where(eq(dishes.id, dishId));
+    
+    console.log(res);
+
+    return res;
   } catch (err) {
     console.log(err);
+    throw err;
   }
-  redirect("/menu");
 }
