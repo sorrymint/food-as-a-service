@@ -13,13 +13,14 @@ type Item = {
     category: string;
     deal: boolean;
     image?: string;
+    tags?: string;
 };
 
 const allItems: Item[] = [
-    { id: 1, name: 'Spicy Chicken', price: 7.98, rating: 4.5, category: 'normal', deal: true, image: '/image.png' },
-    { id: 2, name: 'Vegan Salad', price: 5.99, rating: 5, category: 'vegan', deal: false, image: '/image.png' },
-    { id: 3, name: 'Grilled Salmon', price: 12.5, rating: 4, category: 'normal', deal: true, image: '/image.png' },
-    { id: 4, name: 'Veggie Burger', price: 8.25, rating: 3.5, category: 'vegan', deal: true, image: '/image.png' },
+    { id: 1, name: 'Spicy Chicken', price: 7.98, rating: 4.5, category: 'normal', deal: true, image: '/image.png', tags: 'spicy, popular' },
+    { id: 2, name: 'Vegan Salad', price: 5.99, rating: 5, category: 'vegan', deal: false, image: '/image.png', tags: 'vegan, healthy' },
+    { id: 3, name: 'Grilled Salmon', price: 12.5, rating: 4, category: 'normal', deal: true, image: '/image.png', tags: 'seafood, fresh' },
+    { id: 4, name: 'Veggie Burger', price: 8.25, rating: 3.5, category: 'vegan', deal: true, image: '/image.png', tags: 'vegan, popular' },
 ];
 
 export default function HomePage() {
@@ -96,6 +97,17 @@ export default function HomePage() {
                             />
                             <div>
                                 <p className="text-xl font-bold">{item.name}</p>
+
+                                {/* Tags display */}
+                                {item.tags && (
+                                    <p className="text-sm text-gray-700 italic mb-2">
+                                        {item.tags.split(',').map(tag => tag.trim()).map((tag, i) => (
+                                            <span key={i} className="mr-2 px-2 py-1 rounded bg-yellow-200 text-yellow-900 text-xs font-semibold">{tag}
+                                            </span>
+                                        ))}
+                                    </p>
+                                )}
+
                                 <div className="flex gap-10 items-center mt-2">
                                     <p className="font-semibold">${item.price.toFixed(2)}</p>
                                     <Button

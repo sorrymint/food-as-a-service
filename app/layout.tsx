@@ -7,6 +7,7 @@ import { AppSidebar } from '@/components/app-sidebar'
 import Header from '@/components/header'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from "@/components/ui/sonner"
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Food as a Service",
@@ -41,14 +42,17 @@ export default function RootLayout({
           }}
         >
             <SidebarProvider defaultOpen={false}>
-              <AppSidebar />
-              <main className="w-full">
-                <Header />
-                <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 ">
-                {children}
-                </div>
-              </main>
-              <Toaster />
+              <div className="flex flex-col flex-1">
+                <AppSidebar />
+                <main className="w-full flex-1 flex flex-col">
+                  <Header />
+                  <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 flex-1">
+                  {children}
+                  </div>
+                  <Footer/>
+                </main>
+                <Toaster />
+              </div>
             </SidebarProvider>
         </SWRConfig>
       </body>
