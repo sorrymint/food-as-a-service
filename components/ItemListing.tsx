@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState  } from "react"
+import AddToCartButton from "./AddtoCartButton"
 type dishes = {
     id: number
     name: string
@@ -59,9 +60,10 @@ export default function ItemListing() {
               
             <div className="flex justify-between">
               <p className="text-3xl font-bold">${item.price}</p>
-              <button className=" bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer">
+              <AddToCartButton dish={dish}/>
+              {/* <button className=" bg-amber-400 px-4 py-2 text-sm font-extrabold hover:bg-amber-300 rounded border-b-3 border-amber-600 cursor-pointer">
                 Add to Cart
-              </button>
+              </button> */}
             </div>
           </div>
         </li>
