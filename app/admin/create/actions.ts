@@ -1,5 +1,5 @@
 "use server";
-import { dishFormSchema, DishForm } from "@/lib/zodSchema/zodSchemas";
+import { dishFormSchema } from "@/lib/zodSchema/zodSchemas";
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
 import { redirect } from "next/navigation";
