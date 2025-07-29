@@ -7,10 +7,11 @@ export const dishFormSchema = z.object({
     name: z.string()
     .min(1, "Name field can't be empty"),
 
-    active: z.boolean().optional(),
+    active: z.boolean(),
 
     description: z.string().min(10, "description must be at least 10 characters")
     .max(500, "description must be at most 500 characters"), 
+    tags: z.string().nullable(),
 
     //making this into a URl(add .url())
     image: z.string().nullable(),

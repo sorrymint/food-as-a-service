@@ -9,11 +9,13 @@ import {
   boolean,
   numeric,
   primaryKey,
-  PgNumeric
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 
+// CREATE SCHEMA IF NOT EXISTS "public";
+// grant usage on schema public to public;
+// grant create on schema public to public;
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),

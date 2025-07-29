@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Menulist from "@/components/menulist";
+import { GetAllDishes } from "../actions/database_Resquest";
 
-export default function menu() {
+export default async function menu() {
+  const items = await GetAllDishes();
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4">
@@ -11,7 +13,7 @@ export default function menu() {
         </Link>
       </div>
       <div className="space-y-6 flex flex-wrap gap-2">
-        <Menulist />
+        <Menulist items={items}/>
       </div>
     </div>
   );

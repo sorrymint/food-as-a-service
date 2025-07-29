@@ -21,6 +21,18 @@ export async function createDishForHandling(formData: FormData){
     };
     redirect("/menu");
 }
+export async function GetAllDishes() {
+    try{
+        const res = await db
+        .select()
+        .from(dishes);
+        // console.log(res);
+        return res;
+    } catch(err){
+        console.log(err);
+        throw err;
+    } 
+}
 
 export async function GetDishById( id : number ) {
     try{
