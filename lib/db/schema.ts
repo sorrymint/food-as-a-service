@@ -310,6 +310,7 @@ export type TeamDataWithMembers = Team & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
+export type dish = typeof dishes.$inferSelect;
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',

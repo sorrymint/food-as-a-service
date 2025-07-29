@@ -8,10 +8,10 @@ import { toast } from "sonner";
 export default function CreateDishForm() {
   const clientAction = async (state: any, formData: FormData) => {
     const newDish = {
-      business_id: formData.get("business_id"),
+      businessId: formData.get("business_id"),
       name: formData.get("name"),
       isActive: formData.get("isActive") === "on",
-      discription: formData.get("discription"),
+      description: formData.get("description"),
       image: formData.get("image"),
       price: formData.get("price"),
     };
@@ -50,13 +50,13 @@ export default function CreateDishForm() {
         <label>Business ID</label>
         <input
           type="text"
-          name="business_id"
-          id="business_id"
+          name="businessId"
+          id="businessId"
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
-        {state?.errors?.business_id && (
-          <p className="text-red-500">{state.errors.business_id}</p>
+        {state?.errors?.businessId && (
+          <p className="text-red-500">{state.errors.businessId}</p>
         )}
       </div>
       <div>
@@ -86,15 +86,15 @@ export default function CreateDishForm() {
       </div>
 
       <div>
-        <label>Discription</label>
+        <label>description</label>
         <textarea
-          name="discription"
-          id="discription"
+          name="description"
+          id="description"
           className="w-full p-2 border rounded"
           rows={5}
         />
-        {state?.errors?.discription && (
-          <p className="text-red-500">{state.errors.discription}</p>
+        {state?.errors?.description && (
+          <p className="text-red-500">{state.errors.description}</p>
         )}
       </div>
 

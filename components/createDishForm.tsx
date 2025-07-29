@@ -58,8 +58,8 @@ export default function CreateDishForm() {
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
-        {state?.errors?.business_id && (
-          <p className="text-red-500">{state.errors.business_id}</p>
+        {state?.errors?.businessId && (
+          <p className="text-red-500">{state.errors.businessId}</p>
         )}
       </div>
       <div>
@@ -96,8 +96,8 @@ export default function CreateDishForm() {
           className="w-full p-2 border rounded"
           rows={5}
         />
-        {state?.errors?.discription && (
-          <p className="text-red-500">{state.errors.discription}</p>
+        {state?.errors?.description && (
+          <p className="text-red-500">{state.errors.description}</p>
         )}
       </div>
 

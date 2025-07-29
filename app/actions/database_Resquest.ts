@@ -1,5 +1,5 @@
 "use server";
-
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
 import { redirect } from "next/navigation";
@@ -20,4 +20,19 @@ export async function createDishForHandling(formData: FormData){
         console.log(err);
     };
     redirect("/menu");
+}
+
+export async function GetDishById( id : number ) {
+    try{
+        const [res] = await db
+        .select()
+        .from(dishes)
+        .where(eq(dishes.id, id));
+
+        return res;
+
+    } catch(err) {
+        console.log(err);
+        throw err;
+    };
 }
