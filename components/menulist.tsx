@@ -33,7 +33,7 @@ export default function Menulist() {
 
   return (
     <main className=" flex-grow">
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 ">
         {items.map(item => (
           <li key={item.id}>
 
@@ -44,10 +44,10 @@ export default function Menulist() {
                 <img
                   src={item.image! || "/placeholder.png"}
                   alt={item.name}
-                  className="w-full h-36 object-cover rounded mb-2"
+                  className="w-full h-36 object-cover rounded mb-2 "
                 />
-                <Link href={`/menu/${item.id}`}><h3 className="text-lg font-semibold">{item.name}</h3></Link>
-                <p className="text-gray-600 text-sm">{item.description}</p>
+                <Link href={`/menu/${item.id}`}><h3 className="text-lg font-semibold hover:text-blue-500">{item.name}</h3></Link>
+                <p className="text-gray-600 text-sm">{item.description.substring(0, 100)}</p>
                 <div className="flex items-center justify-center mt-1">
                   <div className="flex text-yellow-500 mr-2">
                     {[1, 2, 3, 4, 5].map((star) => (
