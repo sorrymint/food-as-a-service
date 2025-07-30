@@ -185,13 +185,23 @@ export const business_website = pgTable('business_website', {
 });
 
 //orders
-export const orders = pgTable('website_reviews', {
+export const website_reviews = pgTable('website_reviews', {
   id: serial('id').primaryKey(),
   businessId: serial('business_id')
     .notNull()
     .references(() => businesses.id),
   name: varchar('name', {length: 100})
     .notNull()
+});
+
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  businessId: integer('business_id').references(() => businesses.id),
+  customerId: integer('customer_id').references(() => customer.id),
+  quantity: integer('quantity'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  deliveryStatus: varchar('delivery_status', { length: 50 }),
+  specialInstructions: text('special_instructions'),
 });
 
 //order items

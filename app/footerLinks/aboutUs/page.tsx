@@ -1,8 +1,7 @@
-
-export default function Product() {
+export default function AboutUs() {
   return (
     <div className='flex justify-center items-center'>
-        <h1>Product Page</h1>
+        <h1>About Us Page</h1>
     </div>
   )
 }
