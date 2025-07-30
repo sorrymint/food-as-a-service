@@ -1,6 +1,10 @@
 "use Client";
 
-import { DishFormState, StringMap, StringToBooleanMap } from "@/app/actions/DishHelpers";
+import {
+  DishFormState,
+  StringMap,
+  StringToBooleanMap,
+} from "@/app/actions/DishHelpers";
 import { createDishAction } from "../actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
 import { useActionState, useEffect, useState } from "react";
@@ -14,7 +18,7 @@ const initialDish = {
   description: "",
   price: "",
   active: false,
-  image: ""
+  image: "",
 };
 
 const initState: DishFormState<DishType> = {};
@@ -28,51 +32,44 @@ export default function CreateDishForm() {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
-
   const [state, action, isPending] = useFormState(createDishAction, initState);
 
   const [dish, setDish] = useState<DishType>(state.data || initialDish);
 
   useEffect(() => {
-    if(state.successMsg){
+    if (state.successMsg) {
       toast.success(state.successMsg);
-      setBlurs({})
+      setBlurs({});
+    } else if (state.errors) {
     }
-    else if(state.errors){
-
-    }
-    if(state.data){
+    if (state.data) {
       setDish(state.data);
     }
-  }, [state])
+  }, [state]);
 
-  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) =>{
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.target;
-    setBlurs(prev => ({...prev, [name]: true}))
-  }
+    setBlurs((prev) => ({ ...prev, [name]: true }));
+  };
 
   // Take the whatever data is currently in the the input feild and try to parse them, if an error occurs then it its it thrown
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {  name, value } = e.target;
+    const { name, value } = e.target;
     setDish((prev) => {
-      const updateData = {...prev, [name]: value}
+      const updateData = { ...prev, [name]: value };
       const validated = dishFormSchema.safeParse(updateData);
 
-      if(validated.success){
-        setErrors({})
-      }
-      else{
-        const errors = convertZodErrors(validated.error)
+      if (validated.success) {
+        setErrors({});
+      } else {
+        const errors = convertZodErrors(validated.error);
         setErrors(errors);
       }
       return updateData;
-    })
-  }
-
-
+    });
+  };
 
   return (
-    
     <form className="flex flex-col gap-5" action={action}>
       <div>
         <label>Business ID</label>
@@ -193,38 +190,37 @@ export default function CreateDishForm() {
   );
 }
 
+// const clientAction = async (state: any, formData: FormData) => {
+//   const newDish = {
+//     businessId: formData.get("businessId"),
+//     name: formData.get("name"),
+//     isActive: formData.get("isActive") === "on",
+//     description: formData.get("description"),
+//     image: formData.get("image"),
+//     price: formData.get("price"),
+//   };
 
-  // const clientAction = async (state: any, formData: FormData) => {
-  //   const newDish = {
-  //     businessId: formData.get("businessId"),
-  //     name: formData.get("name"),
-  //     isActive: formData.get("isActive") === "on",
-  //     description: formData.get("description"),
-  //     image: formData.get("image"),
-  //     price: formData.get("price"),
-  //   };
+//   const results = dishFormSchema.safeParse(newDish);
 
-  //   const results = dishFormSchema.safeParse(newDish);
+//   if (!results.success) {
+//     // console.log(results.error.issues)
+//     let errorMessage = "";
 
-  //   if (!results.success) {
-  //     // console.log(results.error.issues)
-  //     let errorMessage = "";
+//     // If we werer to add toast goo way to incoparte error Message.
+//     results.error.issues.forEach((issue) => {
+//       errorMessage =
+//         errorMessage + issue.path[0] + ": " + issue.message + ". ";
+//     });
 
-  //     // If we werer to add toast goo way to incoparte error Message.
-  //     results.error.issues.forEach((issue) => {
-  //       errorMessage =
-  //         errorMessage + issue.path[0] + ": " + issue.message + ". ";
-  //     });
+//     toast.error(errorMessage);
+//     return {
+//       errors: results.error.flatten().fieldErrors,
+//     };
+//   }
+//   console.log(results.data);
+//   const response = await createDishAction(results.data);
 
-  //     toast.error(errorMessage);
-  //     return {
-  //       errors: results.error.flatten().fieldErrors,
-  //     };
-  //   }
-  //   console.log(results.data);
-  //   const response = await createDishAction(results.data);
-
-  //   if (response?.error) {
-  //     toast.error(response.error);
-  //   }
-  // };
+//   if (response?.error) {
+//     toast.error(response.error);
+//   }
+// };
