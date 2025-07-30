@@ -1,51 +1,47 @@
-"use Client"
+"use client";
 
-import { createDish } from '@/app/Admin/create/actions'
-import { dishFormSchema } from '@/lib/zodSchema/zodSchemas'
-import React, { useActionState } from 'react'
-import { toast } from 'sonner'
+import { createDish } from "@/app/Admin/create/actions";
+import { dishFormSchema } from "@/lib/zodSchema/zodSchemas";
+import React, { useActionState } from "react";
+import { toast } from "sonner";
 
 export default function CreateDishForm() {
+  const clientAction = async (state: any, formData: FormData) => {
+    const newDish = {
+      business_id: formData.get("business_id"),
+      name: formData.get("name"),
+      isActive: formData.get("isActive") === "on",
+      discription: formData.get("discription"),
+      image: formData.get("image"),
+      price: formData.get("price"),
+    };
 
-    const clientAction = async (state: any, formData : FormData) => {
+    const results = dishFormSchema.safeParse(newDish);
 
-        const newDish = {
-            business_id: formData.get("business_id"),
-            name: formData.get("name"),
-            isActive: formData.get("isActive") === 'on',
-            discription: formData.get("discription"),
-            image: formData.get("image"),
-            price: formData.get("price"),
-        }
+    if (!results.success) {
+      // console.log(results.error.issues)
+      let errorMessage = "";
 
-        const results = dishFormSchema.safeParse(newDish);
+      // If we werer to add toast goo way to incoparte error Message.
+      results.error.issues.forEach((issue) => {
+        errorMessage =
+          errorMessage + issue.path[0] + ": " + issue.message + ". ";
+      });
 
-        if(!results.success){
-            // console.log(results.error.issues)
-            let errorMessage = "";
-
-            // If we werer to add toast goo way to incoparte error Message.
-            results.error.issues.forEach((issue) => {
-                errorMessage = 
-                errorMessage + issue.path[0] + ": " + issue.message + ". ";
-            });
-
-
-            toast.error(errorMessage);
-            return{
-            errors: results.error.flatten().fieldErrors,
-
-            };
-        }
-        console.log(results.data);
-        const response = await createDish(results.data);
-
-        if(response?.error){
-            toast.error(response.error)
-        }
+      toast.error(errorMessage);
+      return {
+        errors: results.error.flatten().fieldErrors,
+      };
     }
+    console.log(results.data);
+    const response = await createDish(results.data);
 
-    const [state, action, isPending] = useActionState(clientAction, undefined)
+    if (response?.error) {
+      toast.error(response.error);
+    }
+  };
+
+  const [state, action, isPending] = useActionState(clientAction, undefined);
 
   return (
     <form className="flex flex-col gap-5" action={action}>
