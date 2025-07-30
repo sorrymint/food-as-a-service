@@ -2,7 +2,7 @@ import{ stripe } from '../payments/stripe';
 import { db } from './drizzle';
 import { users, teams, teamMembers, businesses, dishes, ingredients, customer, dish_ingredients} from './schema';
 import { hashPassword } from '@/lib/auth/session';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 
 async function createStripeProducts() {
   console.log('Creating Stripe products and prices...');
@@ -98,28 +98,74 @@ async function seed() {
   })
 
   // dish table
-  await db
-  .insert(dishes)
-  .values({
-    businessId: 1,  // assuming a business with ID 1 exists
-  name: 'Spicy Chicken Sandwich',
-  description: 'Crispy chicken sandwich with spicy mayo',
-  active: true,
-  image: 'https://example.com/images/spicy-chicken.jpg',
-  price: '8.99',
-  });
+// Array of all the value that are getting inserting into the database with the seeding command.
+    const dishArray = [
+    {
+        businessId: 1,
+        name: "Peanut Stew",
+        description: "A spicy aromatic peanut stew. Add your choice of meat.",
+        active: true,
+        image: "/PlaceHolder.png",
+        tags: "hearthy, stew, soup",
+        price: "10.00",
+        createdAt: new Date(),
+        updatedAt: new Date(+3),
+    },
+    {
+        businessId: 1,
+        name: "Broccoli Dish",
+        description: "This vibrant and wholesome dish brings together the goodness of fresh broccoli, creamy cheese, fluffy rice, crunchy carrots, and tender cabbage. Each ingredient contributes to a delightful medley of flavors and textures, making it not only nutritious but also satisfying. To elevate the dining experience, a selection of complementary side options and an array of flavorful sauces are included, allowing you to customize each bite to your liking. ",
+        active: true,
+        image: "/PlaceHolder.png",
+        price: "12.34",
+        tags: "health, fresh",
+        createdAt: new Date(),
+        updatedAt: new Date(+3),
+    },
+    {
+        businessId: 1,
+        name: "Chicken Soup",
+        description: "This is a light, aromatic, and richly flavorful soup, perfect for those dreary, rainy days when comfort is key. This dish is a beloved staple across many Middle Eastern countries, celebrated for its warmth and heartiness. It comes with a delightful array of variations and additions, allowing for endless customization to suit every palate. Enjoying this soup is not just about nourishment; it's an experience that warms both body and soul.",
+        active: true,
+        image: "/PlaceHolder.png",
+        price: "10.50",
+        tags: "chicken, healthy",
+        createdAt: new Date(),
+        updatedAt: new Date(+3),
+    },
+    {
+        businessId: 1,
+        name: "Infamouse Burger",
+        description: "This buger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide amence flavor burger ",
+        active: true,
+        image: "/Burger2.jpg",
+        price: "12.34",
+        tags: 'spicy, beef',
+        createdAt: new Date(),
+        updatedAt: new Date(+3),
+    }
+    ];
 
-    await db
-  .insert(dishes)
-  .values({
-    name: 'Spicy Chicken Sandwich', 
-    description: 'A spicy southern sandwich made from fresh famr raised chicken.',
-    active: true,
-    image: '/Burger-newspaper.png',
-    price: '12.93',
-    createdAt: new Date(),
-    updatedAt: new Date(+3),    
-  });
+    // Loop and getting all the names.
+    const dishNames = dishArray.map( d => d.name);
+
+    // Checking if any of the name exist already in the database.
+    const existingDish = await db
+        .select()
+        .from(dishes)
+        .where(inArray(dishes.name, dishNames))
+        .then((res: any[]) => res[0]);
+
+    let dish;
+    if (existingDish) {
+        console.log('Dish already exists.');
+        dish = existingDish;
+    } else {
+        [dish] = await db
+            .insert(dishes)
+            .values(dishArray)
+            .returning();
+    }
 
   // ingredients
   await db

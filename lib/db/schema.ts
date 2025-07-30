@@ -104,6 +104,7 @@ export const dishes = pgTable('dishes', {
     .notNull(),
   image: text('image_url'),
   price: numeric('price'),
+  tags: varchar('tags', { length: 255 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
 });
