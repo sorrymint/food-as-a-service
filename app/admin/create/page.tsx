@@ -3,7 +3,6 @@ import Link from 'next/link'
 import CreateDishForm2 from './Components/createDishForm2'
 import CreateDishForm from '@/components/createDishForm'
 import { useActionState, useState } from 'react'
-import { createDish } from './actions'
 
 export default function Create() {
 

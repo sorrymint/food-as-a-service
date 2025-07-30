@@ -1,78 +1,101 @@
-"use client";
+'use client';
 
-import { getDishes, UpdateDish } from "../actions";
+import { DishFormState, StringMap, StringToBooleanMap } from "@/app/actions/DishHelpers";
+import { createDishAction } from "@/app/Admin/create/actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
-import { useActionState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useFormState } from "react-dom";
 import { toast } from "sonner";
+import { convertZodErrors } from "@/app/actions/errors";
 
-interface ItemIdType {
-  params: number;
+const initialDish = {
+  businessId: 0,
+  name: "",
+  description: "",
+  price: "",
+  active: false,
+  image: ""
+};
+
+const initState: DishFormState<DishType> = {};
+
+type DishProp = {
+  prevData: DishType[];
 }
 
-export default function UpdateForm(
-  { prevData }: { prevData : DishType}
-) {
+
+export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
+  // TODO: Add a useRef
+
+  // Keeping track of Errors
+  const [errors, setErrors] = useState<StringMap>({});
+  // Tracking blurs
+  const [blurs, setBlurs] = useState<StringToBooleanMap>({});
+  // Tracking dish Data
 
 
-  // const prevData = getDishes(params);
-  // console.log(prevData);
+  const [state, action, isPending] = useFormState(createDishAction, initState);
 
-  // if(!prevData){
-  //   console.log("The Previous Data is not being read in");
-  // }
+  const [dish, setDish] = useState<DishType>(state.data || initialDish);
 
-  const clientAction = async (state: any, formData: FormData) => {
-    const newDish = {
-      business_id: formData.get("business_id"),
-      name: formData.get("name"),
-      isActive: formData.get("isActive") === "on",
-      discription: formData.get("discription"),
-      image: formData.get("image"),
-      price: formData.get("price"),
-    };
-
-    const results = dishFormSchema.safeParse(newDish);
-
-    if (!results.success) {
-      // console.log(results.error.issues)
-      let errorMessage = "";
-
-      // If we werer to add toast goo way to incoparte error Message.
-      results.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ": " + issue.message + ". ";
-      });
-
-      toast.error(errorMessage);
-      return {
-        errors: results.error.flatten().fieldErrors,
-      };
+  useEffect(() => {
+    if(state.successMsg){
+      toast.success(state.successMsg);
+      setBlurs({})
     }
-    console.log(results.data);
-    const response = await UpdateDish(results.data);
+    else if(state.errors){
 
-    // if (response?.error) {
-    //   toast.error(response.error);
-    // }
-  };
+    }
+    if(state.data){
+      setDish(state.data);
+    }
+  }, [state])
 
-  const [state, action, isPending] = useActionState(clientAction, undefined);
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) =>{
+    const { name } = e.target;
+    setBlurs(prev => ({...prev, [name]: true}))
+  }
+
+  // Take the whatever data is currently in the the input feild and try to parse them, if an error occurs then it its it thrown
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {  name, value } = e.target;
+    setDish((prev) => {
+      const updateData = {...prev, [name]: value}
+      const validated = dishFormSchema.safeParse(updateData);
+
+      if(validated.success){
+        setErrors({})
+      }
+      else{
+        const errors = convertZodErrors(validated.error)
+        setErrors(errors);
+      }
+      return updateData;
+    })
+  }
+
+
 
   return (
+    
     <form className="flex flex-col gap-5" action={action}>
       <div>
         <label>Business ID</label>
         <input
           type="text"
-          name="business_id"
-          id="business_id"
-          // defaultValue={prevData}
+          name="businessId"
+          id="businessId"
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
+          value={dish.businessId}
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
-        {state?.errors?.business_id && (
-          <p className="text-red-500">{state.errors.business_id}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.businessId && errors?.businessId && (
+            <p className="text-red-500">{errors.businessId}</p>
+          )}
+        </div>
       </div>
       <div>
         <label>Dish Name</label>
@@ -80,12 +103,17 @@ export default function UpdateForm(
           type="text"
           name="name"
           id="name"
+          value={dish.name}
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
           className="w-full p-2 border rounded"
           placeholder="Enter Dish Name"
         />
-        {state?.errors?.name && (
-          <p className="text-red-500">{state.errors.name}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.name && errors?.name && (
+            <p className="text-red-500">{errors.name}</p>
+          )}
+        </div>
       </div>
       <div>
         <label>Active?</label>
@@ -93,25 +121,31 @@ export default function UpdateForm(
           type="checkbox"
           name="isActive"
           id="isActive"
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
           defaultChecked={false}
         />
-
-        {state?.errors?.active && (
-          <p className="text-red-500">{state.errors.active}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.isActive && errors?.isActive && (
+            <p className="text-red-500">{errors.isActive}</p>
+          )}
+        </div>
       </div>
 
       <div>
-        <label>Discription</label>
+        <label>description</label>
         <textarea
-          name="discription"
-          id="discription"
+          name="description"
+          id="description"
+          value={dish.description}
           className="w-full p-2 border rounded"
           rows={5}
         />
-        {state?.errors?.discription && (
-          <p className="text-red-500">{state.errors.discription}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.description && errors?.description && (
+            <p className="text-red-500">{errors.description}</p>
+          )}
+        </div>
       </div>
 
       <div>
@@ -120,12 +154,17 @@ export default function UpdateForm(
           type="text"
           name="image"
           id="image"
+          value={dish.image}
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
           className="w-full p-2 border rounded"
           placeholder="Name the Image is Saved as"
         />
-        {state?.errors?.image && (
-          <p className="text-red-500">{state.errors.image}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.image && errors?.image && (
+            <p className="text-red-500">{errors.image}</p>
+          )}
+        </div>
       </div>
 
       <div>
@@ -134,12 +173,17 @@ export default function UpdateForm(
           type="text"
           name="price"
           id="price"
+          value={dish.price}
+          onBlur={handleOnBlur}
+          onChange={handleOnChange}
           className="w-full p-2 border rounded"
           placeholder="Product Price"
         />
-        {state?.errors?.price && (
-          <p className="text-red-500">{state.errors.price}</p>
-        )}
+        <div className="min-h-8">
+          {blurs.price && errors?.price && (
+            <p className="text-red-500">{errors.price}</p>
+          )}
+        </div>
       </div>
 
       <button
@@ -148,7 +192,7 @@ export default function UpdateForm(
         className="bg-blue-500
             text-white px-4 py-2 rounded"
       >
-        {isPending ? "Loading" : "Update Item"}
+        {isPending ? "Loading" : "Create Item"}
       </button>
     </form>
   );
