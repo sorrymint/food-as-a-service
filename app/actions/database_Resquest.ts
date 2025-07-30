@@ -21,6 +21,7 @@ export async function createDishForHandling(formData: FormData){
     };
     redirect("/menu");
 }
+
 export async function GetAllDishes() {
     try{
         const res = await db
