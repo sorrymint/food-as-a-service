@@ -1,4 +1,4 @@
-import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings, UserCircle } from "lucide-react"
+import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings, UserCircle, ReceiptText } from "lucide-react"
 
 import {
   Sidebar,
@@ -57,6 +57,11 @@ const items = [
         url: "/account/payment"
       },
     ],
+  },  
+  {
+    title: "Orders",
+    url: "/orders",
+    icon: ReceiptText,
   },
 ]
 
