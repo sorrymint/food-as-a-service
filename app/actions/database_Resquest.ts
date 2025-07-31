@@ -1,11 +1,8 @@
 "use server";
-
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
-import { error } from "console";
-import { PgSerialBuilderInitial } from "drizzle-orm/pg-core";
 import { redirect } from "next/navigation";
-import { PostgresError } from "postgres";
 
 export async function createDishForHandling(formData: FormData){
     // Include form validation with zod
@@ -23,4 +20,32 @@ export async function createDishForHandling(formData: FormData){
         console.log(err);
     };
     redirect("/menu");
+}
+
+export async function GetAllDishes() {
+    try{
+        const res = await db
+        .select()
+        .from(dishes);
+        // console.log(res);
+        return res;
+    } catch(err){
+        console.log(err);
+        throw err;
+    } 
+}
+
+export async function GetDishById( id : number ) {
+    try{
+        const [res] = await db
+        .select()
+        .from(dishes)
+        .where(eq(dishes.id, id));
+
+        return res;
+
+    } catch(err) {
+        console.log(err);
+        throw err;
+    };
 }
