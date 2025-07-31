@@ -21,7 +21,7 @@ export default async function UpdatingPage({
   if (!initdish || initdish.length === 0) {
     return <div>Dish not found</div>;
   }
-  
+
   // export default async function UpdatingPage() {
   //   const params = useParams();
   //   const id = params?.id;
@@ -31,7 +31,7 @@ export default async function UpdatingPage({
     <div>
       <h2 className="font-extrabold mb-4">Update Page</h2>
 
-      <UpdateForm prevData={initdish} />
+      <UpdateForm prevData={initdish[0]} />
     </div>
   );
 }

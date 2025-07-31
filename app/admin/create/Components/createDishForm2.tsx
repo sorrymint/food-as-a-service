@@ -8,7 +8,6 @@ import {
 import { createDishAction } from "../actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
 import { useActionState, useEffect, useState } from "react";
-import { useFormState } from "react-dom";
 import { toast } from "sonner";
 import { convertZodErrors } from "@/app/actions/errors";
 
@@ -32,7 +31,7 @@ export default function CreateDishForm() {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
-  const [state, action, isPending] = useFormState(createDishAction, initState);
+  const [state, action, isPending] = useActionState(createDishAction, initState);
 
   const [dish, setDish] = useState<DishType>(state.data || initialDish);
 
@@ -56,7 +55,9 @@ export default function CreateDishForm() {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDish((prev) => {
-      const updateData = { ...prev, [name]: value };
+      const businessIdValue = Number(prev.businessId);
+      console.log(typeof businessIdValue);
+      const updateData = { ...prev, [name]: value  };
       const validated = dishFormSchema.safeParse(updateData);
 
       if (validated.success) {
@@ -95,7 +96,7 @@ export default function CreateDishForm() {
           type="text"
           name="name"
           id="name"
-          value={dish.name}
+          defaultValue={dish.name}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"
@@ -129,7 +130,7 @@ export default function CreateDishForm() {
         <textarea
           name="description"
           id="description"
-          value={dish.description}
+          defaultValue={dish.description}
           className="w-full p-2 border rounded"
           rows={5}
         />
@@ -146,7 +147,7 @@ export default function CreateDishForm() {
           type="text"
           name="image"
           id="image"
-          value={dish.image}
+          defaultValue={dish.image || '/Placeholder.png'}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"
@@ -165,7 +166,7 @@ export default function CreateDishForm() {
           type="text"
           name="price"
           id="price"
-          value={dish.price}
+          defaultValue={dish.price}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"

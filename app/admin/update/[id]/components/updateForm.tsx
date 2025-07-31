@@ -1,10 +1,13 @@
-'use client';
+"use client";
 
-import { DishFormState, StringMap, StringToBooleanMap } from "@/app/actions/DishHelpers";
+import {
+  DishFormState,
+  StringMap,
+  StringToBooleanMap,
+} from "@/app/actions/DishHelpers";
 import { createDishAction } from "@/app/Admin/create/actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
-import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { convertZodErrors } from "@/app/actions/errors";
 
@@ -14,17 +17,12 @@ const initialDish = {
   description: "",
   price: "",
   active: false,
-  image: ""
+  image: "",
 };
 
 const initState: DishFormState<DishType> = {};
 
-type DishProp = {
-  prevData: DishType[];
-}
-
-
-export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
+export default function CreateDishForm({ prevData }: { prevData: DishType }) {
   // TODO: Add a useRef
 
   // Keeping track of Errors
@@ -33,51 +31,48 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
+  const [state, action, isPending] = useActionState(
+    createDishAction,
+    initState
+  );
 
-  const [state, action, isPending] = useFormState(createDishAction, initState);
-
-  const [dish, setDish] = useState<DishType>(state.data || initialDish);
+  const [dish, setDish] = useState<DishType>(state.data || prevData);
 
   useEffect(() => {
-    if(state.successMsg){
+    if (state.successMsg) {
       toast.success(state.successMsg);
-      setBlurs({})
+      setBlurs({});
+    } else if (state.errors) {
     }
-    else if(state.errors){
-
-    }
-    if(state.data){
+    if (state.data) {
       setDish(state.data);
     }
-  }, [state])
+  }, [state]);
 
-  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) =>{
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.target;
-    setBlurs(prev => ({...prev, [name]: true}))
-  }
+    setBlurs((prev) => ({ ...prev, [name]: true }));
+  };
 
   // Take the whatever data is currently in the the input feild and try to parse them, if an error occurs then it its it thrown
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {  name, value } = e.target;
+    const { name, value } = e.target;
     setDish((prev) => {
-      const updateData = {...prev, [name]: value}
+      console.log(prev);
+      const updateData = { ...prev, [name]: value };
       const validated = dishFormSchema.safeParse(updateData);
 
-      if(validated.success){
-        setErrors({})
-      }
-      else{
-        const errors = convertZodErrors(validated.error)
+      if (validated.success) {
+        setErrors({});
+      } else {
+        const errors = convertZodErrors(validated.error);
         setErrors(errors);
       }
       return updateData;
-    })
-  }
-
-
+    });
+  };
 
   return (
-    
     <form className="flex flex-col gap-5" action={action}>
       <div>
         <label>Business ID</label>
@@ -87,7 +82,7 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
           id="businessId"
           onBlur={handleOnBlur}
           onChange={handleOnChange}
-          value={dish.businessId}
+          defaultValue={dish.businessId}
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
@@ -103,7 +98,7 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
           type="text"
           name="name"
           id="name"
-          value={dish.name}
+          defaultValue={dish.name}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"
@@ -133,11 +128,11 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
       </div>
 
       <div>
-        <label>description</label>
+        <label>Description</label>
         <textarea
           name="description"
           id="description"
-          value={dish.description}
+          defaultValue={dish.description}
           className="w-full p-2 border rounded"
           rows={5}
         />
@@ -154,7 +149,7 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
           type="text"
           name="image"
           id="image"
-          value={dish.image}
+          defaultValue={dish.image || "/Placeholder.png"}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"
@@ -173,7 +168,7 @@ export default function CreateDishForm( {prevData} : {prevData : DishType[]}) {
           type="text"
           name="price"
           id="price"
-          value={dish.price}
+          defaultValue={dish.price}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"

@@ -25,7 +25,7 @@ export const dishFormSchema = z.object({
     //making this into a URl(add .url())
     image: z
     .string()
-    .optional(),
+    .nullable(),
 
     price: z.coerce
     .string({message: "Price is required"})
