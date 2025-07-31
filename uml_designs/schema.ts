@@ -1,8 +1,7 @@
-import { pgTable, type AnyPgColumn, foreignKey, serial, varchar, timestamp, unique, text, integer, boolean, check, numeric, smallint, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, type AnyPgColumn, foreignKey, serial, varchar, timestamp, unique, text, integer, boolean, numeric, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const deliveryStatus = pgEnum("Delivery Status", ['Picked Up', 'On the Way', 'Delivered'])
-export const dishStatus = pgEnum("Dish Status", ['Active - In Stock', 'Discontinued', 'Out of Stock'])
 export const websiteStatus = pgEnum("Website Status", ['Live - Published', 'Pending - Editing', 'Created - Started'])
 
 
@@ -160,23 +159,6 @@ export const websiteReviews = pgTable("website_reviews", {
 		}),
 ]);
 
-export const businessWebsite = pgTable("business_website", {
-	id: serial().primaryKey().notNull(),
-	businessId: serial("business_id").notNull(),
-	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
-	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
-	status: websiteStatus().default('Created - Started').notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
-}, (table) => [
-	foreignKey({
-			columns: [table.businessId],
-			foreignColumns: [businesses.id],
-			name: "business_website_business_id_businesses_id_fk"
-		}),
-	unique("business_website_title_key").on(table.url),
-]);
-
 export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
 	businessId: integer("business_id"),
@@ -198,6 +180,23 @@ export const orders = pgTable("orders", {
 		}),
 ]);
 
+export const businessWebsite = pgTable("business_website", {
+	id: serial().primaryKey().notNull(),
+	businessId: serial("business_id").notNull(),
+	url: text().notNull(),
+	description: varchar({ length: 500 }).notNull(),
+	status: websiteStatus().default('Created - Started').notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
+}, (table) => [
+	foreignKey({
+			columns: [table.businessId],
+			foreignColumns: [businesses.id],
+			name: "business_website_business_id_businesses_id_fk"
+		}),
+	unique("business_website_title_key").on(table.url),
+]);
+
 export const dishes = pgTable("dishes", {
 	id: serial().primaryKey().notNull(),
 	businessId: serial("business_id").notNull(),
@@ -207,9 +206,6 @@ export const dishes = pgTable("dishes", {
 	price: numeric(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
-	imageName: text("image_name"),
-	inStockQty: smallint("in_stock_qty").default(sql`'1'`).notNull(),
-	active: dishStatus().default('Active - In Stock').notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.businessId],
@@ -217,7 +213,6 @@ export const dishes = pgTable("dishes", {
 			name: "dishes_business_id_businesses_id_fk"
 		}),
 	unique("dishes_name_unique").on(table.name),
-	check("dishes_in_stock_qty_check", sql`in_stock_qty > 0`),
 ]);
 
 export const businesses = pgTable("businesses", {
@@ -235,7 +230,7 @@ export const businesses = pgTable("businesses", {
 			columns: [table.websiteUrl],
 			foreignColumns: [businessWebsite.url],
 			name: "businesses_website_url_fkey"
-		}),
+		}).onUpdate("cascade").onDelete("cascade"),
 ]);
 
 export const dishIngredients = pgTable("dish_ingredients", {
