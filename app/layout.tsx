@@ -8,6 +8,7 @@ import Header from '@/components/header'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { Toaster } from "@/components/ui/sonner"
 import Footer from "@/components/footer";
+import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: "Food as a Service",
@@ -28,33 +29,41 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+      className={manrope.className}
+      suppressHydrationWarning
     >
-      <body className="min-h-[100dvh] bg-gray-50">
-        <SWRConfig
-          value={{
-            fallback: {
-              // We do NOT await here
-              // Only components that read this data will suspend
-              "/api/user": getUser(),
-              "/api/team": getTeamForUser(),
-            },
-          }}
+      <body className="min-h-[100dvh] bg-white text-black dark:bg-gray-950 dark:text-white">
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
         >
-            <SidebarProvider defaultOpen={false}>
-              <div className="flex flex-col flex-1">
-                <AppSidebar />
-                <main className="w-full flex-1 flex flex-col">
-                  <Header />
-                  <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 flex-1">
-                  {children}
-                  </div>
-                  <Footer/>
-                </main>
-                <Toaster />
-              </div>
-            </SidebarProvider>
-        </SWRConfig>
+          <SWRConfig
+            value={{
+              fallback: {
+                // We do NOT await here
+                // Only components that read this data will suspend
+                "/api/user": getUser(),
+                "/api/team": getTeamForUser(),
+              },
+            }}
+          >
+              <SidebarProvider defaultOpen={false}>
+                <div className="flex flex-col flex-1">
+                  <AppSidebar />
+                  <main className="w-full flex-1 flex flex-col">
+                    <Header />
+                    <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 flex-1">
+                    {children}
+                    </div>
+                    <Footer/>
+                  </main>
+                  <Toaster />
+                </div>
+              </SidebarProvider>
+          </SWRConfig>
+        </ThemeProvider>
       </body>
     </html>
   );

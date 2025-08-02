@@ -35,7 +35,7 @@ export default function UserMenu() {
       <>
         <Link
           href="/pricing"
-          className="text-sm font-medium text-gray-900 md:hover:bg-gray-200 md:px-3 md:py-2 rounded-2xl"
+          className="text-sm font-medium md:hover:text-black md:hover:bg-gray-200 md:px-3 md:py-2 rounded-2xl"
         >
           Pricing
         </Link>

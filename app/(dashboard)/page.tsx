@@ -87,7 +87,7 @@ export default function HomePage() {
                 <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-6 px-6">
                     {filteredItems.length === 0 && <p>No results found.</p>}
                     {filteredItems.map((item) => (
-                        <div key={item.id} className="flex bg-gray-200 px-4 py-4 gap-6 rounded-xl w-fit">
+                        <div key={item.id} className="flex px-4 border py-4 gap-6 rounded-xl w-fit">
                             <Image
                                 src={item.image || "/image.png"}
                                 alt={item.name}
