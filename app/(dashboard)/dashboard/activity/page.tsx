@@ -11,7 +11,7 @@ import {
   CheckCircle,
   type LucideIcon,
 } from 'lucide-react';
-import { ActivityType } from '@/lib/db/schema';
+import { ActivityType } from '@/uml_designs/schema';
 import { getActivityLogs } from '@/lib/db/queries';
 
 const iconMap: Record<ActivityType, LucideIcon> = {

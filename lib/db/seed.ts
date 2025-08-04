@@ -14,7 +14,7 @@ import {
   drivers,
   delivery,
   customer_order,
-} from "./schema";
+} from "../../uml_designs/schema";
 import { hashPassword } from "@/lib/auth/session";
 import { eq, inArray } from "drizzle-orm";
 

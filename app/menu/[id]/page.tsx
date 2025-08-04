@@ -1,5 +1,5 @@
 import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
+import { dishes } from "@/uml_designs/schema";
 import { eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link"

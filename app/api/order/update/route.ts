@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/drizzle';
-import { customer_order } from '@/lib/db/schema';
+import { customer_order } from '@/uml_designs/schema';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: Request) {

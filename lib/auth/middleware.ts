@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TeamDataWithMembers, User } from '@/lib/db/schema';
+import { TeamDataWithMembers, User } from '@/uml_designs/schema';
 import { getTeamForUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 

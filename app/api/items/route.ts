@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
+import { dishes } from "@/uml_designs/schema";
 
 export async function GET() {
   try {
