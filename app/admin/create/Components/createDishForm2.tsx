@@ -16,7 +16,7 @@ const initialDish = {
   name: "",
   description: "",
   price: "",
-  active: true,
+  isActive: true,
   image: "",
 };
 
@@ -37,7 +37,7 @@ export default function CreateDishForm() {
   );
 
   const [dish, setDish] = useState<DishType>(state.data || initialDish);
-  console.log(dish.active);
+  console.log(dish.isActive);
 
   useEffect(() => {
     if (state.successMsg) {
@@ -57,7 +57,7 @@ export default function CreateDishForm() {
 
   const handleOnChangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-      console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
+      // console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
 
 
     setDish((prev) => {
@@ -65,10 +65,10 @@ export default function CreateDishForm() {
       const newValue = type === "checkbox" ? checked : value;
           // console.log("Updating:", { [name]: newValue }); // Verify the new value
 
-      const updateData = { ...prev, [name]: true };
+      const updateData = { ...prev, [name]: newValue };
 
       // Reusable validation
-      console.log("Update active Status", updateData.active);
+      // console.log("Updated active Status", updateData.isActive);
       return updateData;
     });
   };
