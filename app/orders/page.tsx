@@ -1,5 +1,6 @@
 "use client"
 
+import { Rating, RatingButton } from '@/components/ui/rating';
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
@@ -45,7 +46,11 @@ export default function PastOrders() {
                                 </ul>
 
                                 <div className="flex items-center gap-2 mt-2">
-                                    <Star/> <Star/> <Star/> <Star/> <Star/>
+                                    <Rating defaultValue={0}>
+                                        {Array.from({ length: 5 }).map((_, index) => (
+                                            <RatingButton key={index} />
+                                        ))}
+                                    </Rating>
                                     <p className="text-sm text-gray-500">Leave a review</p>
                                 </div>
                             </div>
