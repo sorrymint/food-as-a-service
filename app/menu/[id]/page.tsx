@@ -51,7 +51,7 @@ export default async function ProductsPage({
         <h3>{item.name}</h3>
         <p>{item.description}</p>
         <p>{item.active? "Avaliable": "Unavaliable"}</p>
-        <Image placeholder="empty" src={item.image! || "/Placeholder.png"} width={300} height={300} alt="Some type of images" className="w-auto h-auto" priority={false}/>
+        <Image placeholder="empty" src={item.imageUrl! || "/Placeholder.png"} width={300} height={300} alt="Some type of images" className="w-auto h-auto" priority={false}/>
         <p>${item.price}</p>
       </article>
     </div>
