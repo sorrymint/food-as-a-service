@@ -3,5 +3,6 @@ export default function AboutUs() {
     <div className='flex justify-center items-center'>
         <h1>About Us Page</h1>
     </div>
+
   )
 }

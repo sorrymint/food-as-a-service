@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 type Item = {
     id: number;
@@ -76,8 +77,12 @@ export default function HomePage() {
                 <div className="text-center md:text-left">
                     <h2 className="text-5xl font-bold mb-6">Hope you're Hungry!!</h2>
                     <div className="flex flex-col gap-4 lg:flex-row">
-                        <Button className="w-48 lg:w-32 hover:bg-[#181818]">Order</Button>
-                        <Button className="w-48 lg:w-32 bg-white text-black border hover:bg-white">Menu</Button>
+                        <Link href={"../menu"} >
+                            <Button className="w-48 lg:w-32 bg-[#181818] text-white border  ">Order</Button>
+                        </Link>
+                        <Link href={"../menu"} >
+                            <Button className="w-48 lg:w-32 bg-white text-black border hover: bg-white">Menu</Button>
+                        </Link>
                     </div>
                 </div>
             </section>

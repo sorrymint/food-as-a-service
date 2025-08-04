@@ -30,19 +30,23 @@ const items = [
     icon: BookOpenCheck,
   },
   {
-    title: "Location",
-    url: "#",
-    icon: MapPin,
-  },
-  {
     title: "Search",
     url: "#",
     icon: Search,
   },
-  {
-    title: "Settings",
+  {title: "Location",
     url: "#",
-    icon: Settings,
+    icon: MapPin,
+  },
+  {
+    title: "Orders",
+    url: "/orders",
+    icon: ReceiptText,
+  },
+  {
+    title: "About Us",
+    url: "/about",
+    icon: Home,
   },
   {
     title: "Account",
@@ -57,12 +61,12 @@ const items = [
         url: "/account/payment"
       },
     ],
-  },  
-  {
-    title: "Orders",
-    url: "/orders",
-    icon: ReceiptText,
   },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings,
+  }
 ]
 
 export function AppSidebar() {

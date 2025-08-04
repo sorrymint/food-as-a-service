@@ -13,9 +13,8 @@ import {
   type NewTeam,
   type NewTeamMember,
   type NewActivityLog,
-  ActivityType,
   invitations
-} from '@/uml_designs/schema';
+} from '@/lib/db/schema';
 import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
