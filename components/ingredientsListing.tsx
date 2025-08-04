@@ -15,7 +15,7 @@ export async function IngredientsListing(props: {dishId: number}) {
         <h2>Ingredients Listing</h2>
         
         {Ingredients.map( (Ingredient) => (
-            <li key={Ingredient.dishId} className="list-none">
+            <li key={Ingredient.id} className="list-none">
                 <p className="font-bold">{Ingredient.ingredientName}</p>
             </li>
         ))}
