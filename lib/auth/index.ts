@@ -1,4 +1,4 @@
-﻿import { getSession } from './session';
+import { getSession } from './session';
 
 export async function auth() {
     const session = await getSession();
