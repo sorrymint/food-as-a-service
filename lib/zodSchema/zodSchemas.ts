@@ -6,6 +6,7 @@ export const dishFormSchema = z.object({
     .optional(),
 
     businessId: z
+    .coerce
     .number()
     .positive({message: "Must be postive"}),
 

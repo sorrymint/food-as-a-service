@@ -16,7 +16,7 @@ const initialDish = {
   name: "",
   description: "",
   price: "",
-  active: false,
+  active: true,
   image: "",
 };
 
@@ -31,9 +31,13 @@ export default function CreateDishForm() {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
-  const [state, action, isPending] = useActionState(createDishAction, initState);
+  const [state, action, isPending] = useActionState(
+    createDishAction,
+    initState
+  );
 
   const [dish, setDish] = useState<DishType>(state.data || initialDish);
+  console.log(dish.active);
 
   useEffect(() => {
     if (state.successMsg) {
@@ -51,13 +55,32 @@ export default function CreateDishForm() {
     setBlurs((prev) => ({ ...prev, [name]: true }));
   };
 
+  const handleOnChangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+      console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
+
+
+    setDish((prev) => {
+      // Handle checkboxes vs. other inputs
+      const newValue = type === "checkbox" ? checked : value;
+          // console.log("Updating:", { [name]: newValue }); // Verify the new value
+
+      const updateData = { ...prev, [name]: true };
+
+      // Reusable validation
+      console.log("Update active Status", updateData.active);
+      return updateData;
+    });
+  };
+
   // Take the whatever data is currently in the the input feild and try to parse them, if an error occurs then it its it thrown
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setDish((prev) => {
-      const businessIdValue = Number(prev.businessId);
-      console.log(typeof businessIdValue);
-      const updateData = { ...prev, [name]: value  };
+      //console.log(typeof prev.active);
+      console.log("OTher function");
+      const updateData = { ...prev, [name]: value };
       const validated = dishFormSchema.safeParse(updateData);
 
       if (validated.success) {
@@ -66,6 +89,7 @@ export default function CreateDishForm() {
         const errors = convertZodErrors(validated.error);
         setErrors(errors);
       }
+      //console.log(updateData.active);
       return updateData;
     });
   };
@@ -115,7 +139,7 @@ export default function CreateDishForm() {
           name="isActive"
           id="isActive"
           onBlur={handleOnBlur}
-          onChange={handleOnChange}
+          onChange={handleOnChangeChecked}
           defaultChecked={false}
         />
         <div className="min-h-8">
@@ -147,7 +171,7 @@ export default function CreateDishForm() {
           type="text"
           name="image"
           id="image"
-          defaultValue={dish.image || '/Placeholder.png'}
+          defaultValue={dish.image || "/Placeholder.png"}
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           className="w-full p-2 border rounded"

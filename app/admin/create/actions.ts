@@ -19,7 +19,7 @@ export const createDishAction = async(
   const unvalidatedDish: StringMap = {
     businessId: formData.get("businessId") as string,
     name: formData.get("name") as string,
-    isActive: formData.get("isActive") as any,
+    isActive: formData.get("isActive") === null ? "false" : "true",
     description: formData.get("description") as string,
     image: formData.get("image") as string,
     price: formData.get("price") as string,
@@ -35,7 +35,7 @@ export const createDishAction = async(
     const dishData = {
       businessId: Number(formData.get("businessId")) || 1,
       name: formData.get("name") as string,
-      active: formData.get("isActive") as any || false,
+      active: formData.get("isActive") === null ? false : true,
       description: formData.get("description") as string,
       image: formData.get("image") as string,
       price: formData.get("price") as string,
