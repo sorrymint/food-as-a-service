@@ -41,31 +41,6 @@ export default function HomePage() {
 
     return (
         <main className="flex flex-col">
-            <section className="mb-6">
-                <form className="flex gap-4">
-                    <select name="category" value={filters.category} onChange={handleFilterChange} className="border rounded p-2">
-                        <option value="">All Categories</option>
-                        <option value="normal">Normal</option>
-                        <option value="vegan">Vegan</option>
-                    </select>
-
-                    <select name="rating" value={filters.rating} onChange={handleFilterChange} className="border rounded p-2">
-                        <option value="">Any Rating</option>
-                        <option value="1">1 star & up</option>
-                        <option value="2">2 stars & up</option>
-                        <option value="3">3 stars & up</option>
-                        <option value="4">4 stars & up</option>
-                        <option value="5">5 stars</option>
-                    </select>
-
-                    <select name="deals" value={filters.deals} onChange={handleFilterChange} className="border rounded p-2">
-                        <option value="">All Prices</option>
-                        <option value="normal">Normal Priced</option>
-                        <option value="deal">Deal / Sale Price</option>
-                    </select>
-                </form>
-            </section>
-
             <section className="flex flex-col md:flex-row-reverse items-center gap-6 lg:gap-15 lg:justify-center mb-10">
                 <Image
                     src="/shrimpdish.jpg"
