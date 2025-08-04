@@ -2,6 +2,12 @@
   "version": "7",
   "dialect": "postgresql",
   "entries": [
-
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1754323960084,
+      "tag": "0000_peaceful_enchantress",
+      "breakpoints": true
+    }
   ]
 }
