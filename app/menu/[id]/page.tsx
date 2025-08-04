@@ -1,3 +1,4 @@
+import { IngredientsListing } from "@/components/ingredientsListing";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
@@ -19,7 +20,6 @@ import Link from "next/link"
 //     spicy_level: 1,
 //     rating: 4.5
 //   }
-
 
 export default async function ProductsPage({
   params
@@ -43,6 +43,7 @@ export default async function ProductsPage({
     return <div>Item Not Found</div>;
   }
 
+
   return (
     <div>
           <Link href={"/menu"} className="text-blue-500 mb-4 inline-block">
@@ -52,7 +53,8 @@ export default async function ProductsPage({
       <Link href={`/Admin/update/${item.id}`} className="bg-blue-500 px-4 py-2 max-w-20 ">
         <button className="cursor-pointer ">Update Item</button>
       </Link>
-    <div className="flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-20">
+    <div className="flex items-center justify-center ">
 
       <article className="flex flex-col-reverse gap-6 items-center md:flex-row-reverse md:mt-30 md:gap-10 ">
         <div className="w-[505px] space-y-2">
@@ -71,7 +73,6 @@ export default async function ProductsPage({
           </div>
         </div>
         <Image
-          placeholder="empty"
           src={item.image! || "/Placeholder.png"}
           width={200}
           height={200}
@@ -81,6 +82,10 @@ export default async function ProductsPage({
         />
 
       </article>
+      </div>
+      <div >
+        <IngredientsListing dishId={id} />
+      </div>
 
     </div>
     </div>

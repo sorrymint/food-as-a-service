@@ -1,7 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
+import { dish_ingredients, dishes } from "@/lib/db/schema";
+import { eq } from 'drizzle-orm';
 import { redirect } from "next/navigation";
 
 export async function createDishForHandling(formData: FormData){
@@ -20,4 +21,22 @@ export async function createDishForHandling(formData: FormData){
         console.log(err);
     };
     redirect("/menu");
+}
+
+export async function GetAllIngredientsWithDishId(dishId: number) {
+
+    try{
+        const res = await db
+        .select()
+        .from(dish_ingredients)
+        .where(eq(dish_ingredients.dishId, dishId))
+
+        // console.log(res);
+
+        return res;
+
+    }catch(err){
+        console.error(err);
+        throw err;
+    }
 }

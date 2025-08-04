@@ -7,5 +7,8 @@ export default {
   dbCredentials: {
     url: process.env.POSTGRES_URL!
   },
+    migrations: {
+    schema: "public", // Specify the schema for the migrations table
+  },
 } satisfies Config;
 

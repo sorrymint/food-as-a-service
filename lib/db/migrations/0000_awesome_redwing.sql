@@ -57,13 +57,13 @@ CREATE TABLE "delivery" (
 );
 --> statement-breakpoint
 CREATE TABLE "dish_ingredients" (
+	"id" serial PRIMARY KEY NOT NULL,
 	"dish_name" varchar(100) NOT NULL,
-	"dish_id" serial NOT NULL,
+	"dish_id" integer NOT NULL,
 	"ingredient_name" varchar(100) NOT NULL,
-	"ingredient_id" serial NOT NULL,
-	"quantity" numeric,
-	"unit" varchar(20) NOT NULL,
-	CONSTRAINT "dish_ingredients_dish_id_ingredient_id_pk" PRIMARY KEY("dish_id","ingredient_id")
+	"ingredient_id" integer NOT NULL,
+	"quantity" varchar,
+	"unit" varchar(20) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "dishes" (
@@ -71,9 +71,10 @@ CREATE TABLE "dishes" (
 	"business_id" serial NOT NULL,
 	"name" varchar(100) NOT NULL,
 	"description" varchar(500) NOT NULL,
-	"active" boolean NOT NULL,
+	"active" boolean,
 	"image_url" text,
-	"price" numeric,
+	"price" numeric NOT NULL,
+	"tags" varchar(255),
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "dishes_name_unique" UNIQUE("name")
@@ -106,10 +107,14 @@ CREATE TABLE "invitations" (
 	"status" varchar(20) DEFAULT 'pending' NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "website_reviews" (
+CREATE TABLE "orders" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"business_id" serial NOT NULL,
-	"name" varchar(100) NOT NULL
+	"business_id" integer,
+	"customer_id" integer,
+	"quantity" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"delivery_status" varchar(50),
+	"special_instructions" text
 );
 --> statement-breakpoint
 CREATE TABLE "team_members" (
@@ -146,15 +151,21 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
+CREATE TABLE "website_reviews" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"business_id" serial NOT NULL,
+	"name" varchar(100) NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "activity_logs" ADD CONSTRAINT "activity_logs_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "activity_logs" ADD CONSTRAINT "activity_logs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "business_website" ADD CONSTRAINT "business_website_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "customer" ADD CONSTRAINT "customer_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "customer_order" ADD CONSTRAINT "customer_order_orders_id_website_reviews_id_fk" FOREIGN KEY ("orders_id") REFERENCES "public"."website_reviews"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "customer_order" ADD CONSTRAINT "customer_order_orders_id_orders_id_fk" FOREIGN KEY ("orders_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "customer_order" ADD CONSTRAINT "customer_order_customer_id_customer_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customer"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "customer_order" ADD CONSTRAINT "customer_order_menu_item_dishes_id_fk" FOREIGN KEY ("menu_item") REFERENCES "public"."dishes"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "customer_order" ADD CONSTRAINT "customer_order_delivery_status_delivery_id_fk" FOREIGN KEY ("delivery_status") REFERENCES "public"."delivery"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "delivery" ADD CONSTRAINT "delivery_orders_id_website_reviews_id_fk" FOREIGN KEY ("orders_id") REFERENCES "public"."website_reviews"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "delivery" ADD CONSTRAINT "delivery_orders_id_orders_id_fk" FOREIGN KEY ("orders_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "delivery" ADD CONSTRAINT "delivery_driver_id_drivers_id_fk" FOREIGN KEY ("driver_id") REFERENCES "public"."drivers"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dish_ingredients" ADD CONSTRAINT "dish_ingredients_dish_name_dishes_name_fk" FOREIGN KEY ("dish_name") REFERENCES "public"."dishes"("name") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "dish_ingredients" ADD CONSTRAINT "dish_ingredients_dish_id_dishes_id_fk" FOREIGN KEY ("dish_id") REFERENCES "public"."dishes"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -163,6 +174,8 @@ ALTER TABLE "dish_ingredients" ADD CONSTRAINT "dish_ingredients_ingredient_id_in
 ALTER TABLE "dishes" ADD CONSTRAINT "dishes_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "invitations" ADD CONSTRAINT "invitations_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "invitations" ADD CONSTRAINT "invitations_invited_by_users_id_fk" FOREIGN KEY ("invited_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "website_reviews" ADD CONSTRAINT "website_reviews_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_customer_id_customer_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customer"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "team_members" ADD CONSTRAINT "team_members_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "website_reviews" ADD CONSTRAINT "website_reviews_business_id_businesses_id_fk" FOREIGN KEY ("business_id") REFERENCES "public"."businesses"("id") ON DELETE no action ON UPDATE no action;

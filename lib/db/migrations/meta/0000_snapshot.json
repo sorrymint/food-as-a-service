@@ -1,5 +1,5 @@
 {
-  "id": "48d3d47e-7a78-4ff9-a814-e03b96c3c341",
+  "id": "1b411307-5a57-424c-9d67-02e99157a8d8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -335,10 +335,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "customer_order_orders_id_website_reviews_id_fk": {
-          "name": "customer_order_orders_id_website_reviews_id_fk",
+        "customer_order_orders_id_orders_id_fk": {
+          "name": "customer_order_orders_id_orders_id_fk",
           "tableFrom": "customer_order",
-          "tableTo": "website_reviews",
+          "tableTo": "orders",
           "columnsFrom": [
             "orders_id"
           ],
@@ -432,10 +432,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "delivery_orders_id_website_reviews_id_fk": {
-          "name": "delivery_orders_id_website_reviews_id_fk",
+        "delivery_orders_id_orders_id_fk": {
+          "name": "delivery_orders_id_orders_id_fk",
           "tableFrom": "delivery",
-          "tableTo": "website_reviews",
+          "tableTo": "orders",
           "columnsFrom": [
             "orders_id"
           ],
@@ -469,6 +469,12 @@
       "name": "dish_ingredients",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "dish_name": {
           "name": "dish_name",
           "type": "varchar(100)",
@@ -477,7 +483,7 @@
         },
         "dish_id": {
           "name": "dish_id",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -489,13 +495,13 @@
         },
         "ingredient_id": {
           "name": "ingredient_id",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "quantity": {
           "name": "quantity",
-          "type": "numeric",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -561,15 +567,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "dish_ingredients_dish_id_ingredient_id_pk": {
-          "name": "dish_ingredients_dish_id_ingredient_id_pk",
-          "columns": [
-            "dish_id",
-            "ingredient_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -607,7 +605,7 @@
           "name": "active",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "image_url": {
           "name": "image_url",
@@ -618,6 +616,12 @@
         "price": {
           "name": "price",
           "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
@@ -846,8 +850,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.website_reviews": {
-      "name": "website_reviews",
+    "public.orders": {
+      "name": "orders",
       "schema": "",
       "columns": {
         "id": {
@@ -858,25 +862,63 @@
         },
         "business_id": {
           "name": "business_id",
-          "type": "serial",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
+        "customer_id": {
+          "name": "customer_id",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "delivery_status": {
+          "name": "delivery_status",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "special_instructions": {
+          "name": "special_instructions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "website_reviews_business_id_businesses_id_fk": {
-          "name": "website_reviews_business_id_businesses_id_fk",
-          "tableFrom": "website_reviews",
+        "orders_business_id_businesses_id_fk": {
+          "name": "orders_business_id_businesses_id_fk",
+          "tableFrom": "orders",
           "tableTo": "businesses",
           "columnsFrom": [
             "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "orders_customer_id_customer_id_fk": {
+          "name": "orders_customer_id_customer_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "customer",
+          "columnsFrom": [
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -1114,6 +1156,51 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.website_reviews": {
+      "name": "website_reviews",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "website_reviews_business_id_businesses_id_fk": {
+          "name": "website_reviews_business_id_businesses_id_fk",
+          "tableFrom": "website_reviews",
+          "tableTo": "businesses",
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
