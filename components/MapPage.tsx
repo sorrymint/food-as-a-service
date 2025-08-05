@@ -1,87 +1,51 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
-import * as GoogleMapsAPI from "@react-google-maps/api";
-
-const GoogleMap = GoogleMapsAPI.GoogleMap as unknown as React.FC<any>;
-const Marker = GoogleMapsAPI.Marker as unknown as React.FC<any>;
-const Autocomplete = GoogleMapsAPI.Autocomplete as unknown as React.FC<any>;
-const InfoWindow = GoogleMapsAPI.InfoWindow as unknown as React.FC<any>;
-const useJsApiLoader = GoogleMapsAPI.useJsApiLoader;
-
-
-const containerStyle = {
-    width: "100%",
-    height: "100vh",
-};
-
-const defaultCenter = {
+const defaultPosition = {
     lat: 41.5868,
     lng: -93.625,
 };
 
-const MapPage: React.FC = () => {
-    const [position, setPosition] = useState(defaultCenter);
-    const [placeName, setPlaceName] = useState("Des Moines");
-    const [showInfo, setShowInfo] = useState(true);
-    const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+const markerIcon = new L.Icon({
+    iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+});
 
-    const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: "YOUR_API_KEY_HERE",
-        libraries: ["places"],
+const ClickHandler = ({ setPosition }: { setPosition: (pos: any) => void }) => {
+    useMapEvents({
+        click(e) {
+            setPosition(e.latlng);
+        },
     });
+    return null;
+};
 
-    const handlePlaceChanged = () => {
-        const place = autocompleteRef.current?.getPlace();
-        if (place?.geometry?.location) {
-            setPosition({
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng(),
-            });
-            setPlaceName(place.formatted_address || place.name || "Unknown");
-            setShowInfo(true);
-        }
-    };
-
-    if (loadError) return <div>Error loading maps</div>;
-    if (!isLoaded) return <div>Loading...</div>;
+const MapPage: React.FC = () => {
+    const [position, setPosition] = useState(defaultPosition);
 
     return (
-        <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={14}>
-            <Autocomplete
-                onLoad={(autocomplete: google.maps.places.Autocomplete) => {
-                    autocompleteRef.current = autocomplete;
-                }}
-                onPlaceChanged={handlePlaceChanged}
-            >
-                <input
-                    type="text"
-                    placeholder="Search location..."
-                    style={{
-                        width: "80%",
-                        height: "40px",
-                        padding: "10px",
-                        fontSize: "16px",
-                        position: "absolute",
-                        top: "10px",
-                        left: "10%",
-                        zIndex: 100,
-                    }}
-                />
-            </Autocomplete>
-
-            <Marker position={position} onClick={() => setShowInfo(true)} />
-
-            {showInfo && (
-                <InfoWindow position={position} onCloseClick={() => setShowInfo(false)}>
-                    <div>
-                        <strong>{placeName}</strong>
-                    </div>
-                </InfoWindow>
-            )}
-        </GoogleMap>
+        <MapContainer center={position} zoom={13} style={{ height: "100vh", width: "100%" }}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <ClickHandler setPosition={setPosition} />
+            <Marker position={position} icon={markerIcon}>
+                <Popup>
+                    You clicked at:<br />
+                    Latitude: {position.lat.toFixed(4)}<br />
+                    Longitude: {position.lng.toFixed(4)}
+                </Popup>
+            </Marker>
+        </MapContainer>
     );
 };
 
 export default MapPage;
+
+
 
 
