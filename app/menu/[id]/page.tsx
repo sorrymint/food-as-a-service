@@ -60,7 +60,7 @@ export default async function ProductsPage({
           <h2 className="text-2xl font-bold ">{item.name}</h2>
           <HeartIcon fill="black"/>
           </div>
-          {item.active ? activeStatus() : unactiveStatus()}
+          {item.isActive ? activeStatus() : unactiveStatus()}
           <div className="flex flex-row justify-between items-center">
             <p className=" w-fit h-fit p-2 bg-amber-400 text-xs m-0">Rating Component (0)</p>
             <p className="font-extrabold text-2xl"> ${item.price}</p>

@@ -100,7 +100,7 @@ export const dishes = pgTable('dishes', {
     // Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
   description: varchar('description', {length: 500})
     .notNull(),
-  active: boolean('active'),
+  isActive: boolean('active'),
   image: text('image_url'),
   price: numeric('price').notNull(),
   tags: varchar('tags', { length: 255 }),
