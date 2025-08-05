@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm/relations";
-import { customer, customerOrder, delivery, dishes, orders, teams, activityLogs, users, businesses, invitations, teamMembers, websiteReviews, businessWebsite, dishIngredients, ingredients, drivers } from "./schema";
+import { customer, customerOrder, delivery, dishes, orders, teams, activityLogs, users,
+    businesses, invitations, teamMembers, websiteReviews, businessWebsite,
+    dishIngredients, ingredients, drivers } from "/lib/db/schema";
 
 export const customerOrderRelations = relations(customerOrder, ({one, many}) => ({
 	customer: one(customer, {

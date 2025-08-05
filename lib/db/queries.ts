@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from '../../uml_designs/schema';
+import { activityLogs, teamMembers, teams, users } from '@/lib/db/schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
