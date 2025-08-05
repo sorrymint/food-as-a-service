@@ -57,13 +57,12 @@ export default function CreateDishForm() {
 
   const handleOnChangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-      // console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
-
+    // console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
 
     setDish((prev) => {
       // Handle checkboxes vs. other inputs
       const newValue = type === "checkbox" ? checked : value;
-          // console.log("Updating:", { [name]: newValue }); // Verify the new value
+      // console.log("Updating:", { [name]: newValue }); // Verify the new value
 
       const updateData = { ...prev, [name]: newValue };
 

@@ -24,7 +24,6 @@ export const createDishAction = async(
     price: formData.get("price") as string,
   };
 
-  console.log("Unvalidated Data: ", unvalidatedDish.isActive);
   const validatedDish = dishFormSchema.safeParse(unvalidatedDish);
 
   // Checking for any errors
