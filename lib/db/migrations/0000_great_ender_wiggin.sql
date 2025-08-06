@@ -5,10 +5,9 @@ CREATE SCHEMA public;
 CREATE TYPE "public"."Delivery_Status" AS ENUM('Picked Up', 'On the Way', 'Delivered');--> statement-breakpoint
 CREATE TYPE "public"."Dish_Status" AS ENUM('Active - In Stock', 'Discontinued', 'Out of Stock');--> statement-breakpoint
 CREATE TYPE "public"."Website_Status" AS ENUM('Live - Published', 'Pending - Editing', 'Created - Started');--> statement-breakpoint
-========
+
 CREATE SCHEMA IF NOT EXISTS "public";
 
->>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee:lib/db/migrations/0000_great_ender_wiggin.sql
 CREATE TABLE "activity_logs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"team_id" integer NOT NULL,

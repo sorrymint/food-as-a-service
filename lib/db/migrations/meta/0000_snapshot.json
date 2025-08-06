@@ -374,8 +374,8 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "customer_order_customer_id_customer_id_fk": {
-          "name": "customer_order_customer_id_customer_id_fk",
+        "customer_order_orders_id_orders_id_fk": {
+          "name": "customer_order_orders_id_orders_id_fk",
           "tableFrom": "customer_order",
           "tableTo": "customer",
           "columnsFrom": [
@@ -686,6 +686,12 @@
         "price": {
           "name": "price",
           "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
