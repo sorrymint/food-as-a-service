@@ -88,7 +88,7 @@ export const customer = pgTable("customer", {
 	email: varchar({ length: 20 }).notNull(),
 	phone: varchar({ length: 14 }),
 	active: boolean().notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.businessId],

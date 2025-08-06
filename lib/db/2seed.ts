@@ -147,9 +147,9 @@ async function seed() {
     },
     {
       businessId: 1,
-      name: "Infamouse Burger",
+      name: "Infamous Burger",
       description:
-        "This buger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide amence flavor burger ",
+        "This burger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide an immense flavor-packed burger ",
       active: true,
       image: "/Burger2.jpg",
       price: "12.34",
@@ -168,8 +168,8 @@ async function seed() {
     .from(dishes)
     .where(inArray(dishes.name, dishNames))
     .then((res: any[]) => res[0]);
-
   let dish;
+
   if (existingDish) {
     console.log("Dish already exists.");
     dish = existingDish;
@@ -190,11 +190,7 @@ async function seed() {
     .insert(ingredients)
     .values({
       name: "Peanuts",
-      description: "",
-      is_optional: true,
-      is_allogenic: true,
-      createdAt: new Date(),
-      updatedAt: new Date(+2),
+      isAllogenic: true
     });
   }
   // Businesses
@@ -213,13 +209,13 @@ async function seed() {
   const [cust] = await db
     .insert(customer)
     .values({
-      businessId: business.id,
+      businessId: businesses.id,
       username: "spicyfan",
       name: "Spicy Fan",
       email: "spicy@fan.com",
       phone: "1234567890",
       active: true,
-      joinedAt: new Date(),
+      createdAt: new Date()
     })
     .onConflictDoNothing()
     .returning();
@@ -248,8 +244,8 @@ async function seed() {
   const [driver] = await db
     .insert(drivers)
     .values({
-      first_name: "Delivery",
-      last_name: "Driver",
+      firstName: "Delivery",
+      lastName: "Driver",
     })
     .returning();
 
