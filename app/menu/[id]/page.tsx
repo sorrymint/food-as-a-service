@@ -1,3 +1,4 @@
+import { GetDishById } from "@/app/actions/database_Resquest";
 import DeleteDishButton from "@/app/Admin/Delete/DeleteDishButton";
 import OrderNowButton from "@/components/OrderNowButton";
 import { Button } from "@/components/ui/button";
@@ -26,15 +27,15 @@ export default async function ProductsPage({
   params: Promise<{ id: string }>;
 }) {
   const stringId = (await params).id;
-  const id = Number(stringId);
+  const itemId = Number(stringId);
 
   if (isNaN(itemId)) {
     return <div>Invalid ID</div>;
   }
   // Getting data from database
-  const data = await GetDishById(itemId);
+  const item = await GetDishById(itemId);
   
-  if(!data){
+  if(!item){
     return <p>Dish Not Found</p>
   }
 

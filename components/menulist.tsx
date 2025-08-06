@@ -4,6 +4,7 @@ import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import AddToCartButton from "./AddToCartButton";
+import { DishType } from "@/lib/zodSchema/zodSchemas";
 
 //TODO: items are the varaible that are returned from the database
 type dishes = {
