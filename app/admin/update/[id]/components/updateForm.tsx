@@ -10,7 +10,7 @@ import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { convertZodErrors } from "@/app/actions/errors";
-import { UpdateDish } from "../actions";
+import { UpdateDishAction } from "../actions";
 
 const initialDish = {
   businessId: 0,
@@ -32,9 +32,14 @@ export default function CreateDishForm({ prevData }: { prevData: DishType }) {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
+  const dishId: number = Number(prevData.id);
+
+  const boundAction = UpdateDishAction.bind(null, dishId);
+  console.log("Dish Id ", prevData.id);
+
   const [state, action, isPending] = useActionState(
-    UpdateDish,
-    initState
+    boundAction,
+    initState,
   );
 
   const [dish, setDish] = useState<DishType>(state.data || prevData);
