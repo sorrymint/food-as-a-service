@@ -1,9 +1,7 @@
 import DeleteDishButton from "@/app/Admin/Delete/DeleteDishButton";
 import OrderNowButton from "@/components/OrderNowButton";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { DishType } from "@/lib/zodSchema/zodSchemas";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,17 +28,14 @@ export default async function ProductsPage({
   const stringId = (await params).id;
   const id = Number(stringId);
 
-  if (isNaN(id)) {
+  if (isNaN(itemId)) {
     return <div>Invalid ID</div>;
   }
-  const item = await db
-    .select()
-    .from(dishes)
-    .where(eq(dishes.id, id))
-    .then((res) => res[0]);
-
-  if (!item) {
-    return <div>Item Not Found</div>;
+  // Getting data from database
+  const data = await GetDishById(itemId);
+  
+  if(!data){
+    return <p>Dish Not Found</p>
   }
 
   return (

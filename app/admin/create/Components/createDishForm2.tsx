@@ -23,7 +23,19 @@ const initialDish = {
 const initState: DishFormState<DishType> = {};
 
 export default function CreateDishForm() {
+<<<<<<< HEAD
   // TODO: Add a useRef
+=======
+  const clientAction = async (state: any, formData: FormData) => {
+    const newDish = {
+      businessId: formData.get("business_id"),
+      name: formData.get("name"),
+      isActive: formData.get("isActive") === "on",
+      description: formData.get("description"),
+      image: formData.get("image"),
+      price: formData.get("price"),
+    };
+>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee
 
   // Keeping track of Errors
   const [errors, setErrors] = useState<StringMap>({});
@@ -101,6 +113,7 @@ export default function CreateDishForm() {
           type="text"
           name="businessId"
           id="businessId"
+<<<<<<< HEAD
           onBlur={handleOnBlur}
           onChange={handleOnChange}
           value={dish.businessId}
@@ -112,6 +125,14 @@ export default function CreateDishForm() {
             <p className="text-red-500">{errors.businessId}</p>
           )}
         </div>
+=======
+          className="w-full p-2 border rounded"
+          placeholder="Enter Business ID"
+        />
+        {state?.errors?.businessId && (
+          <p className="text-red-500">{state.errors.businessId}</p>
+        )}
+>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee
       </div>
       <div>
         <label>Dish Name</label>
@@ -153,6 +174,7 @@ export default function CreateDishForm() {
         <textarea
           name="description"
           id="description"
+<<<<<<< HEAD
           defaultValue={dish.description}
           className="w-full p-2 border rounded"
           rows={5}
@@ -162,6 +184,14 @@ export default function CreateDishForm() {
             <p className="text-red-500">{errors.description}</p>
           )}
         </div>
+=======
+          className="w-full p-2 border rounded"
+          rows={5}
+        />
+        {state?.errors?.description && (
+          <p className="text-red-500">{state.errors.description}</p>
+        )}
+>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee
       </div>
 
       <div>

@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "id": "1faa15c0-26ea-4c35-8190-9c0a8bec3ca9",
+=======
+  "id": "27184255-6418-4296-a933-35badb077fa0",
+>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -620,6 +624,12 @@
           "type": "numeric",
           "primaryKey": false,
           "notNull": true
+        },
+        "tags": {
+          "name": "tags",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "tags": {
           "name": "tags",

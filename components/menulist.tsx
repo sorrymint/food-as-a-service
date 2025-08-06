@@ -14,21 +14,21 @@ type dishes = {
   price: number;
 };
 
-export default function Menulist() {
+export default function Menulist({items} : {items : DishType[] }) {
   // USESTATE creates an empty array of items
   // SETITEMS allows use to add dishes into this array
-  const [items, setItems] = useState<dishes[]>([]);
+  // const [items, setItems] = useState<dishes[]>([]);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const res = await fetch("api/items");
-      const data = await res.json();
-      setItems(data);
-      console.log(data);
-    };
+  // useEffect(() => {
+  //   const fetchItems = async () => {
+  //     const res = await fetch("api/items");
+  //     const data = await res.json();
+  //     setItems(data);
+  //     console.log(data);
+  //   };
 
-    fetchItems();
-  }, []);
+  //   fetchItems();
+  // }, []);
 
   const [userRatings, setUserRatings] = useState<Record<number, number>>({});
 
@@ -57,7 +57,7 @@ export default function Menulist() {
                         onClick={async () => {
                           setUserRatings((prev) => ({
                             ...prev,
-                            [item.id]: star,
+                            [item.id!]: star,
                           }));
                           try {
                             await fetch("/api/menu-items", {
@@ -75,7 +75,7 @@ export default function Menulist() {
                           }
                         }}
                         className={`cursor-pointer text-xl ${
-                          (userRatings[item.id] ?? Math.floor(3)) >= star
+                          (userRatings[item.id!] ?? Math.floor(3)) >= star
                             ? "text-yellow-500"
                             : "text-gray-300"
                         }`}
@@ -85,7 +85,7 @@ export default function Menulist() {
                     ))}
                   </div>
                   <span className="text-sm text-gray-700">
-                    {(userRatings[item.id] ?? 3)?.toFixed(1)}
+                    {(userRatings[item.id!] ?? 3)?.toFixed(1)}
                   </span>
                 </div>
                 <p className="font-bold mt-1">${item.price}</p>
