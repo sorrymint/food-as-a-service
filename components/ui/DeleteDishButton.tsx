@@ -2,7 +2,7 @@
 import React, { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { DeleteDishAction } from "./actions";
+import { DeleteDishAction } from "@/app/admin/delete/actions";
 
 export default function DeleteDishButton({ dishId }: { dishId: number }) {
   const [isPending, startTransition] = useTransition();
