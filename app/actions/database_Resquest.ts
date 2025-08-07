@@ -1,11 +1,8 @@
 "use server";
-
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
 import { dishes } from "@/lib/db/schema";
-import { error } from "console";
-import { PgSerialBuilderInitial } from "drizzle-orm/pg-core";
 import { redirect } from "next/navigation";
-import { PostgresError } from "postgres";
 
 export async function createDishForHandling(formData: FormData){
     // Include form validation with zod
@@ -13,7 +10,7 @@ export async function createDishForHandling(formData: FormData){
     await db.insert(dishes).values({
         businessId: formData.get('business_id') as unknown as number,
         name: formData.get('name') as string,
-        active: formData.get('isActive') as unknown as boolean,
+        isActive: formData.get('isActive') as unknown as boolean,
         description: formData.get('discription') as string,
         image: formData.get('image') as string,
         price: formData.get('price') as string,
@@ -23,4 +20,64 @@ export async function createDishForHandling(formData: FormData){
         console.log(err);
     };
     redirect("/menu");
+}
+
+export async function GetAllDishes() {
+    try{
+        const res = await db
+        .select()
+        .from(dishes);
+        // console.log(res);
+        return res;
+    } catch(err){
+        console.log(err);
+        throw err;
+    } 
+}
+
+export async function GetDishById( id : number ) {
+    try{
+        const [res] = await db
+        .select()
+        .from(dishes)
+        .where(eq(dishes.id, id));
+
+        return res;
+
+    } catch(err) {
+        console.log(err);
+        throw err;
+    };
+}
+
+export type DeleteDishState = {
+  success?: boolean;
+  error?: string;
+  message?: string;
+};
+export const DeleteDishAction = async (
+  dishId: number,
+  prevState: DeleteDishState
+): Promise<DeleteDishState> => {
+  try {
+    const initialId = dishId;
+
+    await db
+    .delete(dishes)
+    .where(eq(dishes.id, initialId));
+
+    console.log(`Deleted dish with ID: ${dishId}`);
+
+    return {
+      success: true,
+      message: "Delete was Sucessfull"
+    };
+  } catch (error) {
+    console.error("Delete failed:", error);
+
+    return {
+      error: 'Failed to delete dish', 
+      message: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
 }
