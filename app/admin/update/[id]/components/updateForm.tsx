@@ -1,28 +1,29 @@
-"use Client";
+"use client";
 
 import {
   DishFormState,
   StringMap,
   StringToBooleanMap,
 } from "@/app/actions/DishHelpers";
-import { createDishAction } from "../actions";
+import { createDishAction } from "@/app/admin/create/actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { convertZodErrors } from "@/app/actions/errors";
+import { UpdateDishAction } from "../actions";
 
 const initialDish = {
   businessId: 0,
   name: "",
   description: "",
   price: "",
-  isActive: true,
+  active: false,
   image: "",
 };
 
 const initState: DishFormState<DishType> = {};
 
-export default function CreateDishForm() {
+export default function CreateDishForm({ prevData }: { prevData: DishType }) {
   // TODO: Add a useRef
 
   // Keeping track of Errors
@@ -31,13 +32,17 @@ export default function CreateDishForm() {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
+  const dishId: number = Number(prevData.id);
+
+  const boundAction = UpdateDishAction.bind(null, dishId);
+  console.log("Dish Id ", prevData.id);
+
   const [state, action, isPending] = useActionState(
-    createDishAction,
-    initState
+    boundAction,
+    initState,
   );
 
-  const [dish, setDish] = useState<DishType>(state.data || initialDish);
-  console.log(dish.isActive);
+  const [dish, setDish] = useState<DishType>(state.data || prevData);
 
   useEffect(() => {
     if (state.successMsg) {
@@ -77,8 +82,7 @@ export default function CreateDishForm() {
     const { name, value } = e.target;
 
     setDish((prev) => {
-      //console.log(typeof prev.active);
-      console.log("OTher function");
+      console.log(prev);
       const updateData = { ...prev, [name]: value };
       const validated = dishFormSchema.safeParse(updateData);
 
@@ -88,7 +92,6 @@ export default function CreateDishForm() {
         const errors = convertZodErrors(validated.error);
         setErrors(errors);
       }
-      //console.log(updateData.active);
       return updateData;
     });
   };
@@ -103,7 +106,7 @@ export default function CreateDishForm() {
           id="businessId"
           onBlur={handleOnBlur}
           onChange={handleOnChange}
-          value={dish.businessId}
+          defaultValue={dish.businessId}
           className="w-full p-2 border rounded"
           placeholder="Enter Business ID"
         />
@@ -149,7 +152,7 @@ export default function CreateDishForm() {
       </div>
 
       <div>
-        <label>description</label>
+        <label>Description</label>
         <textarea
           name="description"
           id="description"
@@ -208,43 +211,8 @@ export default function CreateDishForm() {
         className="bg-blue-500
             text-white px-4 py-2 rounded"
       >
-        {isPending ? "Loading" : "Create Item"}
+        {isPending ? "Loading" : "Update Item"}
       </button>
     </form>
   );
 }
-
-// const clientAction = async (state: any, formData: FormData) => {
-//   const newDish = {
-//     businessId: formData.get("businessId"),
-//     name: formData.get("name"),
-//     isActive: formData.get("isActive") === "on",
-//     description: formData.get("description"),
-//     image: formData.get("image"),
-//     price: formData.get("price"),
-//   };
-
-//   const results = dishFormSchema.safeParse(newDish);
-
-//   if (!results.success) {
-//     // console.log(results.error.issues)
-//     let errorMessage = "";
-
-//     // If we werer to add toast goo way to incoparte error Message.
-//     results.error.issues.forEach((issue) => {
-//       errorMessage =
-//         errorMessage + issue.path[0] + ": " + issue.message + ". ";
-//     });
-
-//     toast.error(errorMessage);
-//     return {
-//       errors: results.error.flatten().fieldErrors,
-//     };
-//   }
-//   console.log(results.data);
-//   const response = await createDishAction(results.data);
-
-//   if (response?.error) {
-//     toast.error(response.error);
-//   }
-// };

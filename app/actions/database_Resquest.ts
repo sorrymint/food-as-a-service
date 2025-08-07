@@ -10,7 +10,7 @@ export async function createDishForHandling(formData: FormData){
     await db.insert(dishes).values({
         businessId: formData.get('business_id') as unknown as number,
         name: formData.get('name') as string,
-        active: formData.get('isActive') as unknown as boolean,
+        isActive: formData.get('isActive') as unknown as boolean,
         description: formData.get('discription') as string,
         image: formData.get('image') as string,
         price: formData.get('price') as string,
@@ -48,4 +48,36 @@ export async function GetDishById( id : number ) {
         console.log(err);
         throw err;
     };
+}
+
+export type DeleteDishState = {
+  success?: boolean;
+  error?: string;
+  message?: string;
+};
+export const DeleteDishAction = async (
+  dishId: number,
+  prevState: DeleteDishState
+): Promise<DeleteDishState> => {
+  try {
+    const initialId = dishId;
+
+    await db
+    .delete(dishes)
+    .where(eq(dishes.id, initialId));
+
+    console.log(`Deleted dish with ID: ${dishId}`);
+
+    return {
+      success: true,
+      message: "Delete was Sucessfull"
+    };
+  } catch (error) {
+    console.error("Delete failed:", error);
+
+    return {
+      error: 'Failed to delete dish', 
+      message: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
 }

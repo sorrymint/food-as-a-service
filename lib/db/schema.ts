@@ -102,10 +102,9 @@ export const dishes = pgTable('dishes', {
     // Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
   description: varchar('description', {length: 500})
     .notNull(),
-  active: boolean('active')
-    .notNull(),
+  isActive: boolean('active'),
   image: text('image_url'),
-  price: numeric('price'),
+  price: numeric('price').notNull(),
   tags: varchar('tags', { length: 255 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
@@ -308,6 +307,7 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type InsertDish = typeof dishes.$inferSelect;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
