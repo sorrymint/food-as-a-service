@@ -1,24 +1,30 @@
-import { GetAllIngredientsWithDishId } from "@/app/actions/database_Resquest"
+import {
+  getAllIngredientsJoined,
+  GetAllIngredientsWithDishId,
+} from "@/app/actions/database_Resquest";
 
-export async function IngredientsListing(props: {dishId: number}) {
+export async function IngredientsListing(props: { dishId: number }) {
+  // const Ingredients = await GetAllIngredientsWithDishId(props.dishId);
+  //console.log("Ingedients", Ingredients.map((e) => e.ingredientName))
 
-    const Ingredients = await GetAllIngredientsWithDishId(props.dishId);
-    console.log(Ingredients)
+  const JoinIngredients = await getAllIngredientsJoined(props.dishId);
+  console.log("Joined Table", JoinIngredients);
 
-    if(!Ingredients){
-       <div>Item Not Found</div>
-    }
+  if (!JoinIngredients) {
+    <div>Item Not Found</div>;
+  }
 
   return (
     <div>
-        
-        <h2>Ingredients Listing</h2>
-        
-        {Ingredients.map( (Ingredient) => (
-            <li key={Ingredient.id} className="list-none">
-                <p className="font-bold">{Ingredient.ingredientName}</p>
-            </li>
-        ))}
+      {JoinIngredients.map((Ingredient) => (
+        <li key={Ingredient.id} className="list-none py-3">
+          <p>
+            <span className="font-semibold">{Ingredient.name}</span> -{" "}
+            {Ingredient.quantity}
+          </p>
+          <p className=" text-sm text-gray-600">{Ingredient.des}</p>
+        </li>
+      ))}
     </div>
-  )
+  );
 }

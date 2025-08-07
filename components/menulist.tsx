@@ -23,7 +23,7 @@ export default function Menulist() {
       const res = await fetch("api/items");
       const data = await res.json();
       setItems(data);
-      console.log(data);
+      //console.log(data);
     };
 
     fetchItems();
