@@ -1,8 +1,8 @@
 "use client";
 import React, { useTransition } from "react";
-import { DeleteDishAction } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { DeleteDishAction } from "./actions";
 
 export default function DeleteDishButton({ dishId }: { dishId: number }) {
   const [isPending, startTransition] = useTransition();
@@ -18,7 +18,7 @@ export default function DeleteDishButton({ dishId }: { dishId: number }) {
         // Checks if the results was successful
         if (result?.success) {
           toast.success(`Item ${dishId} is Deleted`);
-          router.push('/menu'); // Refresh the page to update the UI
+          router.push("/menu"); // Refresh the page to update the UI
         } else {
           console.error(result?.error || "Failed to delete dish");
           alert(result?.error || "Failed to delete dish");

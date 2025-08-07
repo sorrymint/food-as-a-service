@@ -1,25 +1,10 @@
 import { GetDishById } from "@/app/actions/database_Resquest";
-import DeleteDishButton from "@/app/Admin/Delete/DeleteDishButton";
+import DeleteDishButton from "@/app/Admin/delete/DeleteDishButton";
 import OrderNowButton from "@/components/OrderNowButton";
-import { Button } from "@/components/ui/button";
-import { DishType } from "@/lib/zodSchema/zodSchemas";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-
-// const item =
-//   {
-//     id: 1,
-//     title: "Classic Cheeseburger",
-//     description: "Grilled beef patty with cheddar cheese, lettuce, tomato, and house sauce.",
-//     price: 11.99,
-//     category: "Main Course",
-//     image: "/Burger2.jpg",
-//     available: true,
-//     spicy_level: 1,
-//     rating: 4.5
-//   }
 
 export default async function ProductsPage({
   params,
@@ -34,9 +19,9 @@ export default async function ProductsPage({
   }
   // Getting data from database
   const item = await GetDishById(itemId);
-  
-  if(!item){
-    return <p>Dish Not Found</p>
+
+  if (!item) {
+    return <p>Dish Not Found</p>;
   }
 
   return (
@@ -52,11 +37,8 @@ export default async function ProductsPage({
         >
           <button className="cursor-pointer ">Update Item</button>
         </Link>
-        <DeleteDishButton dishId={item.id}/>
+        <DeleteDishButton dishId={item.id} />
 
-        {/* <div className="bg-red-500 px-4 py-2 max-w-20 ">
-          <button className="cursor-pointer " onClick={DeleteDishAction}>Delete</button>
-        </div> */}
       </div>
 
       <div className="flex items-center justify-center">
@@ -77,7 +59,7 @@ export default async function ProductsPage({
               {item.description}
             </p>
             <div className=" flex justify-center items-center mb-6">
-            <OrderNowButton name={item.name}/>
+              <OrderNowButton name={item.name} />
             </div>
           </div>
           <Image
@@ -115,7 +97,4 @@ export default async function ProductsPage({
       </div>
     );
   }
-
-
 }
-
