@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 
 import Link from 'next/link';
 
-
 interface MenuItem {
     id: number;
     name: string;
@@ -17,7 +16,7 @@ interface MenuItem {
     imageUrl?: string;
     rating?: number;
     category: string;
-    status?: 'available' | 'new' | 'unavailable';  // Added status here
+    status?: 'available' | 'new' | 'unavailable';
 }
 
 interface CartItem extends MenuItem {
@@ -62,18 +61,16 @@ export default function MenuPage() {
 
     const categories = Array.from(new Set(items.map((item) => item.category)));
 
-    // Filter by category and search, exclude unavailable items
-    const filteredItems = categoryFilter
+    // Search all matching items (including unavailable)
+    const searchFilteredItems = categoryFilter
         ? items.filter(
             (item) =>
                 item.category === categoryFilter &&
-                item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-                item.status !== 'unavailable'
+                item.name.toLowerCase().includes(searchQuery.toLowerCase())
         )
         : items.filter(
             (item) =>
-                item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-                item.status !== 'unavailable'
+                item.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
     const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -225,7 +222,7 @@ export default function MenuPage() {
 
                 {/* Menu Items */}
                 <main className="p-6 bg-white flex-grow">
-                    {filteredItems.length === 0 && (
+                    {searchFilteredItems.length === 0 && (
                         <p className="text-center text-gray-700 font-semibold mt-8">
                             {searchQuery
                                 ? `No items found for "${searchQuery}".`
@@ -233,7 +230,7 @@ export default function MenuPage() {
                         </p>
                     )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {filteredItems.map((item) => (
+                        {searchFilteredItems.map((item) => (
                             <Card
                                 key={item.id}
                                 className="bg-yellow-100 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"
@@ -248,7 +245,7 @@ export default function MenuPage() {
                                     <p className="text-gray-600 text-sm">{item.description}</p>
 
                                     {/* Status badge */}
-                                    {item.status && (
+                                    {/*{item.status && (
                                         <span
                                             className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-bold ${
                                                 item.status === 'new'
@@ -260,7 +257,7 @@ export default function MenuPage() {
                                         >
                                             {item.status.toUpperCase()}
                                         </span>
-                                    )}
+                                    )}*/}
 
                                     <div className="flex items-center justify-center mt-1">
                                         <div className="flex text-yellow-500 mr-2">
