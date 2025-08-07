@@ -5,10 +5,70 @@ export const deliveryStatus = pgEnum("Delivery_Status", ['Picked Up', 'On the Wa
 export const dishStatus = pgEnum("Dish_Status", ['Active - In Stock', 'Discontinued', 'Out of Stock'])
 export const websiteStatus = pgEnum("Website_Status", ['Live - Published', 'Pending - Editing', 'Created - Started'])
 
-export const deliveryStatusValues = deliveryStatus.values as const;
-export const dishStatusValues = dishStatus.values as const;
-export const websiteStatusValues = websiteStatus.values as const;
+export const deliveryStatusValues = deliveryStatus.enumValues as typeof deliveryStatus.enumValues;
+export const dishStatusValues = dishStatus.enumValues as typeof dishStatus.enumValues;
+export const websiteStatusValues = websiteStatus.enumValues as typeof websiteStatus.enumValues;
 
+export type DeliveryEnum = typeof deliveryStatusValues[number];
+export type DishEnum = typeof dishStatusValues[number];
+export type WebsiteEnum = typeof websiteStatusValues[number];
+
+
+export const businesses = pgTable("businesses", {
+	id: serial().primaryKey().notNull(),
+	name: text().notNull(),
+	numCustomers: integer("num_customers").notNull(),
+	active: boolean().notNull(),
+	status: websiteStatus(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
+	description: text(),
+	websiteUrl: text("website_url"),
+}, (table) => [
+	foreignKey({
+			columns: [table.websiteUrl],
+			foreignColumns: [businessWebsite.url],
+			name: "businesses_website_url_fkey"
+		}),
+]);
+
+export const businessWebsite = pgTable("business_website", {
+	id: serial().primaryKey().notNull(),
+	businessId: serial("business_id").notNull(),
+	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
+	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
+	status: websiteStatus().default('Created - Started').notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
+}, (table) => [
+	foreignKey({
+			columns: [table.businessId],
+			foreignColumns: [businesses.id],
+			name: "business_website_business_id_businesses_id_fk"
+		}),
+	unique("business_website_title_key").on(table.url),
+]);
+
+export const delivery = pgTable("delivery", {
+	id: serial().primaryKey().notNull(),
+	customerOrderId: serial("customer_order_id").notNull(),
+	driverId: serial("driver_id").notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	status: deliveryStatus().default('Picked Up'),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
+}, (table) => [
+	foreignKey({
+			columns: [table.customerOrderId],
+			foreignColumns: [customerOrder.id],
+			name: "delivery_customer_order_id_fkey"
+		}),
+	foreignKey({
+			columns: [table.driverId],
+			foreignColumns: [drivers.id],
+			name: "delivery_driver_id_drivers_id_fk"
+		}),
+	unique("delivery_status_key").on(table.status),
+]);
 
 export const customerOrder = pgTable("customer_order", {
 	id: serial().primaryKey().notNull(),
@@ -87,7 +147,6 @@ export const customer = pgTable("customer", {
 	name: varchar({ length: 100 }).notNull(),
 	email: varchar({ length: 20 }).notNull(),
 	phone: varchar({ length: 14 }),
-	active: boolean().notNull(),
 	createdAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	foreignKey({
@@ -136,27 +195,12 @@ export const websiteReviews = pgTable("website_reviews", {
 }, (table) => [
 	foreignKey({
 			columns: [table.websiteId],
-			foreignColumns: [businesses.id],
+			foreignColumns: [businessWebsite.id],
 			name: "website_reviews_business_id_businesses_id_fk"
 		}),
 ]);
 
-export const businessWebsite = pgTable("business_website", {
-	id: serial().primaryKey().notNull(),
-	businessId: serial("business_id").notNull(),
-	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
-	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
-	status: websiteStatus().default('Created - Started').notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
-}, (table) => [
-	foreignKey({
-			columns: [table.businessId],
-			foreignColumns: [businesses.id],
-			name: "business_website_business_id_businesses_id_fk"
-		}),
-	unique("business_website_title_key").on(table.url),
-]);
+
 
 export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
@@ -199,24 +243,6 @@ export const dishes = pgTable("dishes", {
 		}),
 	unique("dishes_name_unique").on(table.name),
 	check("dishes_in_stock_qty_check", sql`in_stock_qty > 0`),
-]);
-
-export const businesses = pgTable("businesses", {
-	id: serial().primaryKey().notNull(),
-	name: text().notNull(),
-	numCustomers: integer("num_customers").notNull(),
-	active: boolean().notNull(),
-	status: websiteStatus(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
-	description: text(),
-	websiteUrl: text("website_url"),
-}, (table) => [
-	foreignKey({
-			columns: [table.websiteUrl],
-			foreignColumns: [businessWebsite.url],
-			name: "businesses_website_url_fkey"
-		}),
 ]);
 
 export const dishIngredients = pgTable("dish_ingredients", {
@@ -265,72 +291,6 @@ export const ingredients = pgTable("ingredients", {
 	unique("ingredients_is_allogenic_key").on(table.isAllogenic),
 ]);
 
-export const delivery = pgTable("delivery", {
-	id: serial().primaryKey().notNull(),
-	customerOrderId: serial("customer_order_id").notNull(),
-	driverId: serial("driver_id").notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	status: deliveryStatus().default('Picked Up'),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
-}, (table) => [
-	foreignKey({
-			columns: [table.customerOrderId],
-			foreignColumns: [customerOrder.id],
-			name: "delivery_customer_order_id_fkey"
-		}),
-	foreignKey({
-			columns: [table.driverId],
-			foreignColumns: [drivers.id],
-			name: "delivery_driver_id_drivers_id_fk"
-		}),
-	unique("delivery_status_key").on(table.status),
-]);
-
-// export const teamsRelations = relations(teams, ({ many }) => ({
-//   teamMembers: many(teamMembers),
-//   activityLogs: many(activityLogs),
-//   invitations: many(invitations),
-// }));
-
-// export const usersRelations = relations(users, ({ many }) => ({
-//   teamMembers: many(teamMembers),
-//   invitationsSent: many(invitations),
-// }));
-//
-// export const invitationsRelations = relations(invitations, ({ one }) => ({
-//   team: one(teams, {
-//     fields: [invitations.teamId],
-//     references: [teams.id],
-//   }),
-//   invitedBy: one(users, {
-//     fields: [invitations.invitedBy],
-//     references: [users.id],
-//   }),
-// }));
-
-// export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
-//   user: one(users, {
-//     fields: [teamMembers.userId],
-//     references: [users.id],
-//   }),
-//   team: one(teams, {
-//     fields: [teamMembers.teamId],
-//     references: [teams.id],
-//   }),
-// }));
-//
-// export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
-//   team: one(teams, {
-//     fields: [activityLogs.teamId],
-//     references: [teams.id],
-//   }),
-//   user: one(users, {
-//     fields: [activityLogs.userId],
-//     references: [users.id],
-//   }),
-// }));
-
-
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Team = typeof teams.$inferSelect;
@@ -341,7 +301,7 @@ export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
 export type TeamDataWithMembers = Team & {
-  teamMembers: (TeamMember & {
+  teamMembers: (NewTeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dishStatus } from "../db/schema";
+import { dishStatusValues } from "../db/schema";
 
 export const dishFormSchema = z.object({
     id: z
@@ -16,7 +16,7 @@ export const dishFormSchema = z.object({
     .min(1, "Name field can't be empty"),
  
     isActive: z.enum
-    (dishStatus.enumValues),
+    (dishStatusValues),
  
     description: z
     .string()
@@ -27,6 +27,7 @@ export const dishFormSchema = z.object({
     image: z
     .string()
     .nullable(),
+    
  
     price: z.coerce
     .string({message: "Price is required"})

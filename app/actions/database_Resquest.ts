@@ -1,9 +1,10 @@
 "use server";
+
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
+import { dishes, dishStatusValues } from "@/lib/db/schema";
 import { redirect } from "next/navigation";
-import { EnumLike, EnumValues } from "zod";
+
 
 export async function createDishForHandling(formData: FormData){
     // Include form validation with zod
@@ -13,7 +14,7 @@ export async function createDishForHandling(formData: FormData){
      .values({
         businessId: formData.get('business_id') as unknown as number,
         name: formData.get('name') as string,
-        active: formData.get('isActive') as unknown as EnumValues,
+        active: formData.get('isActive') as ,
         description: formData.get('description') as string,
         imageUrl: formData.get('image') as string,
         price: formData.get('price') as string

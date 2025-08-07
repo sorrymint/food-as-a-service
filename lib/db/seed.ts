@@ -8,12 +8,13 @@ import {
   dishes,
   ingredients,
   customer,
-  dish_ingredients,
-  website_reviews,
+  dishIngredients,
+  websiteReviews,
   orders,
   drivers,
   delivery,
-  customer_order,
+  customerOrder,
+  businessWebsite,
 } from "@/lib/db/schema";
 import { hashPassword } from "@/lib/auth/session";
 import { eq, inArray } from "drizzle-orm";
@@ -147,9 +148,9 @@ async function seed() {
     },
     {
       businessId: 1,
-      name: "Infamouse Burger",
+      name: "Infamous Burger",
       description:
-        "This buger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide amence flavor burger ",
+        "This burger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide an immense flavor-packed burger ",
       active: true,
       image: "/Burger2.jpg",
       price: "12.34",
@@ -168,8 +169,8 @@ async function seed() {
     .from(dishes)
     .where(inArray(dishes.name, dishNames))
     .then((res: any[]) => res[0]);
-
   let dish;
+
   if (existingDish) {
     console.log("Dish already exists.");
     dish = existingDish;
@@ -190,11 +191,7 @@ async function seed() {
     .insert(ingredients)
     .values({
       name: "Peanuts",
-      description: "",
-      is_optional: true,
-      is_allogenic: true,
-      createdAt: new Date(),
-      updatedAt: new Date(+2),
+      isAllogenic: true
     });
   }
   // Businesses
@@ -213,22 +210,21 @@ async function seed() {
   const [cust] = await db
     .insert(customer)
     .values({
-      businessId: business.id,
+      businessId: businesses.id,
       username: "spicyfan",
       name: "Spicy Fan",
       email: "spicy@fan.com",
       phone: "1234567890",
-      active: true,
-      joinedAt: new Date(),
+      createdAt: new Date()
     })
     .onConflictDoNothing()
     .returning();
 
   // Website reviews
   const [review] = await db
-    .insert(website_reviews)
+    .insert(websiteReviews)
     .values({
-      businessId: business.id,
+      websiteId: businessWebsite.id,
       name: "Spicy Order",
     })
     .returning();
@@ -248,8 +244,8 @@ async function seed() {
   const [driver] = await db
     .insert(drivers)
     .values({
-      first_name: "Delivery",
-      last_name: "Driver",
+      firstName: "Delivery",
+      lastName: "Driver",
     })
     .returning();
 
@@ -266,12 +262,12 @@ async function seed() {
   // Customer order
   const existingOrderEntry = await db
     .select()
-    .from(customer_order)
-    .where(eq(customer_order.id, 1))
+    .from(customerOrder)
+    .where(eq(customerOrder.id, 1))
     .then((res) => res[0]);
 
   if (!existingOrderEntry) {
-    await db.insert(customer_order).values({
+    await db.insert(customerOrder).values({
       id: 1,
       ordersId: order.id,
       name: "Spicy Chicken",
@@ -283,18 +279,6 @@ async function seed() {
   } else {
     console.log("customer_order id:1 already exists.");
   }
-
-  // dish_ingredients
-  // await db
-  // .insert(dish_ingredients)
-  // .values({
-  //   // dishName: 'Peanut Stew',
-  //   // dishId: 2,
-  //   // ingredientName: 'Peanut',
-  //   // ingredientId: 2,
-  //   quantity: 1.0,
-  //   unit: '12oz Bag'
-  // });
 }
 
 seed()
