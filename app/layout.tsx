@@ -3,10 +3,10 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { getUser, getTeamForUser } from "@/lib/db/queries";
 import { SWRConfig } from "swr";
-import { AppSidebar } from '@/components/app-sidebar'
-import Header from '@/components/header'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { Toaster } from "@/components/ui/sonner"
+import { AppSidebar } from "@/components/app-sidebar";
+import Header from "@/components/header";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
@@ -41,19 +41,19 @@ export default function RootLayout({
             },
           }}
         >
-            <SidebarProvider defaultOpen={false}>
-              <div className="flex flex-col flex-1">
-                <AppSidebar />
-                <main className="w-full flex-1 flex flex-col">
-                  <Header />
-                  <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 flex-1">
+          <SidebarProvider defaultOpen={false}>
+            <div className="flex flex-col flex-1">
+              <AppSidebar />
+              <main className="w-full flex-1 flex flex-col">
+                <Header />
+                <div className="max-w-7xl mx-auto container xl:px-11 mt-8 sm:px-9 px-7 flex-1">
                   {children}
-                  </div>
-                  <Footer/>
-                </main>
-                <Toaster />
-              </div>
-            </SidebarProvider>
+                </div>
+                <Footer />
+              </main>
+              <Toaster />
+            </div>
+          </SidebarProvider>
         </SWRConfig>
       </body>
     </html>

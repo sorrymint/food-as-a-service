@@ -19,7 +19,6 @@ export default async function menu() {
       <div className="space-y-6 flex flex-wrap gap-2">
         <Menulist items={items} />
       </div>
-      6
     </div>
   );
 }
