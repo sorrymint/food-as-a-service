@@ -52,7 +52,7 @@ export default async function ProductsPage({
         </div>
         <Image
           placeholder="empty"
-          src={data.image! || "/Placeholder.png"}
+          src={data.imageUrl! || "/Placeholder.png"}
           width={200}
           height={200}
           alt="Some type of images"

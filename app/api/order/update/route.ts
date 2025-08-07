@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db/drizzle';
-import { customer_order } from '@/lib/db/schema';
+import { customerOrder } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: Request) {
@@ -21,9 +21,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No valid fields provided to update' }, { status: 400 });
     }
 
-    const [updatedOrder] = await db.update(customer_order)
+    const [updatedOrder] = await db.update(customerOrder)
       .set(filteredFields)
-      .where(eq(customer_order.id, id))
+      .where(eq(customerOrder.id, id))
       .returning();
 
     if (!updatedOrder) {
