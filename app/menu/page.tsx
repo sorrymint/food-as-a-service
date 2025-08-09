@@ -10,7 +10,7 @@ export default async function menu() {
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl mx-auto ">Menu</h1>
         <Link
-          href={"/Admin/create"}
+          href={"/admin/create"}
           className="bg-blue-500 px-4 py-2 max-w-20 "
         >
           <button className="cursor-pointer ">Create</button>

@@ -200,8 +200,6 @@ export const websiteReviews = pgTable("website_reviews", {
 		}),
 ]);
 
-
-
 export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
 	businessId: integer("business_id"),

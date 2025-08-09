@@ -10,7 +10,7 @@ export default function CreateDishForm() {
     const newDish = {
       businessId: formData.get("business_id"),
       name: formData.get("name"),
-      isActive: formData.get("isActive") === "on",
+      active: formData.get("active"),
       description: formData.get("description"),
       image: formData.get("image"),
       price: formData.get("price"),
@@ -22,7 +22,7 @@ export default function CreateDishForm() {
       // console.log(results.error.issues)
       let errorMessage = "";
 
-      // If we werer to add toast goo way to incoparte error Message.
+      // If we we are to add toast, it be a good way to incoparte error Message.
       results.error.issues.forEach((issue) => {
         errorMessage =
           errorMessage + issue.path[0] + ": " + issue.message + ". ";
@@ -59,6 +59,7 @@ export default function CreateDishForm() {
           <p className="text-red-500">{state.errors.businessId}</p>
         )}
       </div>
+
       <div>
         <label>Dish Name</label>
         <input
@@ -72,21 +73,21 @@ export default function CreateDishForm() {
           <p className="text-red-500">{state.errors.name}</p>
         )}
       </div>
+
       <div>
-        <label>Active?</label>
-        <input
-          type="checkbox"
-          name="isActive"
-          id="isActive"
-          defaultChecked={false}
-        />
+        <label>Dish Status: </label>
+        <select name="activeStatus" id="activeStatus">
+          <option value="active">Active - In Stock</option>
+          <option value="outStock">Out of Stock</option>
+          <option value="discontinued">Discontinued</option>
+        </select>
         {state?.errors?.active && (
           <p className="text-red-500">{state.errors.active}</p>
         )}
       </div>
 
       <div>
-        <label>description</label>
+        <label>Description</label>
         <textarea
           name="description"
           id="description"
@@ -99,7 +100,7 @@ export default function CreateDishForm() {
       </div>
 
       <div>
-        <label>Image Name</label>
+        <label>Image Link</label>
         <input
           type="text"
           name="image"

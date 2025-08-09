@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 
 
 export async function createDishForHandling(formData: FormData){
+    // formData.append('active', 'Active - In Stock', 'Discontinued', 'Out of Stock')
     // Include form validation with zod
     try{
      await db
@@ -14,7 +15,7 @@ export async function createDishForHandling(formData: FormData){
      .values({
         businessId: formData.get('business_id') as unknown as number,
         name: formData.get('name') as string,
-        active: formData.get('isActive') as ,
+        active: formData.get('active'),
         description: formData.get('description') as string,
         imageUrl: formData.get('image') as string,
         price: formData.get('price') as string

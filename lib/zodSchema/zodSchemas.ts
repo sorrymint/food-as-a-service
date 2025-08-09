@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { dishStatusValues } from "../db/schema";
 
+const dishStatusSchema = z.enum(dishStatusValues);
+
 export const dishFormSchema = z.object({
     id: z
     .number()
@@ -15,8 +17,7 @@ export const dishFormSchema = z.object({
     .string()
     .min(1, "Name field can't be empty"),
  
-    isActive: z.enum
-    (dishStatusValues),
+    active: dishStatusSchema,
  
     description: z
     .string()
