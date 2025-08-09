@@ -25,10 +25,13 @@ export const dishFormSchema = z.object({
     .max(500, "description must be at most 500 characters"),
  
     //making this into a URl(add .url())
-    image: z
+    imageName: z
     .string()
     .nullable(),
-    
+
+    imageUrl: z
+    .string()
+    .nullable(),
  
     price: z.coerce
     .string({message: "Price is required"})

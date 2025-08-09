@@ -75,14 +75,16 @@ export default function CreateDishForm() {
       </div>
 
       <div>
-        <label>Dish Status: </label>
-        <select name="activeStatus" id="activeStatus">
-          <option value="active">Active - In Stock</option>
-          <option value="outStock">Out of Stock</option>
-          <option value="discontinued">Discontinued</option>
-        </select>
-        {state?.errors?.active && (
-          <p className="text-red-500">{state.errors.active}</p>
+        <label>Price</label>
+        <input
+          type="text"
+          name="price"
+          id="price"
+          className="w-full p-2 border rounded"
+          placeholder="Product Price"
+        />
+        {state?.errors?.price && (
+          <p className="text-red-500">{state.errors.price}</p>
         )}
       </div>
 
@@ -100,30 +102,42 @@ export default function CreateDishForm() {
       </div>
 
       <div>
-        <label>Image Link</label>
-        <input
-          type="text"
-          name="image"
-          id="image"
-          className="w-full p-2 border rounded"
-          placeholder="Name the Image is Saved as"
-        />
-        {state?.errors?.image && (
-          <p className="text-red-500">{state.errors.image}</p>
+        <label>Dish Status: </label>
+        <select name="activeStatus" id="activeStatus">
+          <option value="active">Active - In Stock</option>
+          <option value="outStock">Out of Stock</option>
+          <option value="discontinued">Discontinued</option>
+        </select>
+        {state?.errors?.active && (
+          <p className="text-red-500">{state.errors.active}</p>
         )}
       </div>
 
       <div>
-        <label>Price</label>
+        <label>Image Name</label>
         <input
           type="text"
-          name="price"
-          id="price"
+          name="imageName"
+          id="imageName"
           className="w-full p-2 border rounded"
-          placeholder="Product Price"
+          placeholder="Name the Image is Saved as"
         />
-        {state?.errors?.price && (
-          <p className="text-red-500">{state.errors.price}</p>
+        {state?.errors?.imageName && (
+          <p className="text-red-500">{state.errors.imageName}</p>
+        )}
+      </div>
+
+      <div>
+        <label>Image Link</label>
+        <input
+          type="url"
+          name="imageLink"
+          id="imageLink"
+          className="w-full p-2 border rounded"
+          placeholder="Link to Image"
+        />
+        {state?.errors?.imageUrl && (
+          <p className="text-red-500">{state.errors.imageUrl}</p>
         )}
       </div>
 
