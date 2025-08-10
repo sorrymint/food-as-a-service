@@ -5,11 +5,12 @@ import {
   StringMap,
   StringToBooleanMap,
 } from "@/app/actions/DishHelpers";
-import { createDishAction } from "@/app/Admin/create/actions";
+import { createDishAction } from "@/app/admin/create/actions";
 import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { convertZodErrors } from "@/app/actions/errors";
+import { UpdateDishAction } from "../actions";
 
 const initialDish = {
   businessId: 0,
@@ -31,9 +32,14 @@ export default function CreateDishForm({ prevData }: { prevData: DishType }) {
   const [blurs, setBlurs] = useState<StringToBooleanMap>({});
   // Tracking dish Data
 
+  const dishId: number = Number(prevData.id);
+
+  const boundAction = UpdateDishAction.bind(null, dishId);
+  console.log("Dish Id ", prevData.id);
+
   const [state, action, isPending] = useActionState(
-    createDishAction,
-    initState
+    boundAction,
+    initState,
   );
 
   const [dish, setDish] = useState<DishType>(state.data || prevData);
@@ -54,9 +60,27 @@ export default function CreateDishForm({ prevData }: { prevData: DishType }) {
     setBlurs((prev) => ({ ...prev, [name]: true }));
   };
 
+  const handleOnChangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    // console.log("Raw event:", { name, value, type, checked }); // Check if event fires correctly
+
+    setDish((prev) => {
+      // Handle checkboxes vs. other inputs
+      const newValue = type === "checkbox" ? checked : value;
+      // console.log("Updating:", { [name]: newValue }); // Verify the new value
+
+      const updateData = { ...prev, [name]: newValue };
+
+      // Reusable validation
+      // console.log("Updated active Status", updateData.isActive);
+      return updateData;
+    });
+  };
+
   // Take the whatever data is currently in the the input feild and try to parse them, if an error occurs then it its it thrown
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setDish((prev) => {
       console.log(prev);
       const updateData = { ...prev, [name]: value };
@@ -117,7 +141,7 @@ export default function CreateDishForm({ prevData }: { prevData: DishType }) {
           name="isActive"
           id="isActive"
           onBlur={handleOnBlur}
-          onChange={handleOnChange}
+          onChange={handleOnChangeChecked}
           defaultChecked={false}
         />
         <div className="min-h-8">
@@ -187,7 +211,7 @@ export default function CreateDishForm({ prevData }: { prevData: DishType }) {
         className="bg-blue-500
             text-white px-4 py-2 rounded"
       >
-        {isPending ? "Loading" : "Create Item"}
+        {isPending ? "Loading" : "Update Item"}
       </button>
     </form>
   );

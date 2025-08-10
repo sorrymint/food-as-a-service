@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS "public";
+
 CREATE TABLE "activity_logs" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"team_id" integer NOT NULL,
@@ -57,13 +59,13 @@ CREATE TABLE "delivery" (
 );
 --> statement-breakpoint
 CREATE TABLE "dish_ingredients" (
-	"id" serial PRIMARY KEY NOT NULL,
 	"dish_name" varchar(100) NOT NULL,
-	"dish_id" integer NOT NULL,
+	"dish_id" serial NOT NULL,
 	"ingredient_name" varchar(100) NOT NULL,
-	"ingredient_id" integer NOT NULL,
-	"quantity" varchar,
-	"unit" varchar(20) NOT NULL
+	"ingredient_id" serial NOT NULL,
+	"quantity" numeric,
+	"unit" varchar(20) NOT NULL,
+	CONSTRAINT "dish_ingredients_dish_id_ingredient_id_pk" PRIMARY KEY("dish_id","ingredient_id")
 );
 --> statement-breakpoint
 CREATE TABLE "dishes" (
@@ -73,7 +75,11 @@ CREATE TABLE "dishes" (
 	"description" varchar(500) NOT NULL,
 	"active" boolean,
 	"image_url" text,
+<<<<<<<< HEAD:lib/db/migrations/0000_charming_marauders.sql
 	"price" numeric NOT NULL,
+========
+	"price" numeric,
+>>>>>>>> ecc7f187123b8a3877d7336ce419e0080f4c2cee:lib/db/migrations/0000_great_ender_wiggin.sql
 	"tags" varchar(255),
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now(),

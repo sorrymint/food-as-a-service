@@ -16,7 +16,7 @@ export async function IngredientsListing(props: { dishId: number }) {
 
   return (
     <div>
-      {JoinIngredients.map((Ingredient) => (
+      {JoinIngredients.length > 0 ? JoinIngredients.map((Ingredient) => (
         <li key={Ingredient.id} className="list-none py-3">
           <p>
             <span className="font-semibold">{Ingredient.name}</span> -{" "}
@@ -24,7 +24,9 @@ export async function IngredientsListing(props: { dishId: number }) {
           </p>
           <p className=" text-sm text-gray-600">{Ingredient.des}</p>
         </li>
-      ))}
+      ))
+    :
+    <p>Sorry Ingredients are not available, try another item</p>}
     </div>
   );
 }

@@ -14,7 +14,7 @@ export const dishFormSchema = z.object({
     .string()
     .min(1, "Name field can't be empty"),
 
-    active: z.coerce
+    isActive: z.coerce
     .boolean()
     .nullable(),
 

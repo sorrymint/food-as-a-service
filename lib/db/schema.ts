@@ -9,11 +9,13 @@ import {
   boolean,
   numeric,
   primaryKey,
-  PgNumeric
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 
+// CREATE SCHEMA IF NOT EXISTS "public";
+// grant usage on schema public to public;
+// grant create on schema public to public;
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -100,7 +102,7 @@ export const dishes = pgTable('dishes', {
     // Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
   description: varchar('description', {length: 500})
     .notNull(),
-  active: boolean('active'),
+  isActive: boolean('active'),
   image: text('image_url'),
   price: numeric('price').notNull(),
   tags: varchar('tags', { length: 255 }),
@@ -309,12 +311,14 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type InsertDish = typeof dishes.$inferSelect;
 export type dish_ingredients = typeof dish_ingredients.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
+export type dish = typeof dishes.$inferSelect;
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',
