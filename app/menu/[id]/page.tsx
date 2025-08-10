@@ -38,10 +38,9 @@ export default async function ProductsPage({
           <button className="cursor-pointer ">Update Item</button>
         </Link>
         <DeleteDishButton dishId={item.id} />
-
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center ">
         <article className="flex flex-col-reverse gap-6 items-center md:flex-row-reverse md:mt-30 md:gap-10 ">
           <div className="w-[505px] space-y-2">
             <div className="flex flex-row justify-between items-center ">
@@ -73,47 +72,10 @@ export default async function ProductsPage({
           />
         </article>
       </div>
-      <Link
-        href={`/Admin/update/${item.id}`}
-        className="bg-blue-500 px-4 py-2 max-w-20 "
-      >
-        <button className="cursor-pointer ">Update Item</button>
-      </Link>
-      <div className="flex flex-col items-center justify-center gap-20">
-        <div className="flex items-center justify-center ">
-          <article className="flex flex-col-reverse gap-6 items-center md:flex-row-reverse md:mt-30 md:gap-10 ">
-            <div className="w-[505px] space-y-2">
-              <div className="flex flex-row justify-between items-center ">
-                <h2 className="text-2xl font-bold ">{item.name}</h2>
-                <HeartIcon fill="black" />
-              </div>
-              {item.active ? activeStatus() : unactiveStatus()}
-              <div className="flex flex-row justify-between items-center">
-                <p className=" w-fit h-fit p-2 bg-amber-400 text-xs m-0">
-                  Rating Component (0)
-                </p>
-                <p className="font-extrabold text-2xl"> ${item.price}</p>
-              </div>
-              <p className="text-gray-600 text-[16px] mt-12 mb-6">
-                {item.description}
-              </p>
-              <div className=" flex justify-center items-center mb-6">
-                <Button className="w-[400px] py-6">Order Now</Button>
-              </div>
-            </div>
-            <Image
-              src={item.image! || "/Placeholder.png"}
-              width={200}
-              height={200}
-              alt="Some type of images"
-              className="max-w-[510px] w-full h-auto rounded-sm"
-              priority={false}
-            />
-          </article>
-        </div>
+      <div className="flex mt-24 items-center flex-col gap-12">
         <h2 className="text-2xl font-bold ">Ingredients</h2>
         <div>
-          <IngredientsListing dishId={id} />
+          <IngredientsListing dishId={item.id} />
         </div>
       </div>
     </div>
