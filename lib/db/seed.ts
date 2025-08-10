@@ -15,6 +15,8 @@ import {
   delivery,
   customerOrder,
   businessWebsite,
+  dishStatusValues,
+  deliveryStatusValues,
 } from "@/lib/db/schema";
 import { hashPassword } from "@/lib/auth/session";
 import { eq, inArray } from "drizzle-orm";
@@ -115,10 +117,12 @@ async function seed() {
       businessId: 1,
       name: "Peanut Stew",
       description: "A spicy aromatic peanut stew. Add your choice of meat.",
-      active: true,
-      image: "/PlaceHolder.png",
+      active: dishStatusValues[2],
+      imageName: " Placeholder image",
+      imageUrl: "/PlaceHolder.png",
       tags: "hearthy, stew, soup",
       price: "10.00",
+      inStockQty: 10,
       createdAt: new Date(),
       updatedAt: new Date(+3),
     },
@@ -127,10 +131,12 @@ async function seed() {
       name: "Broccoli Dish",
       description:
         "This vibrant and wholesome dish brings together the goodness of fresh broccoli, creamy cheese, fluffy rice, crunchy carrots, and tender cabbage. Each ingredient contributes to a delightful medley of flavors and textures, making it not only nutritious but also satisfying. To elevate the dining experience, a selection of complementary side options and an array of flavorful sauces are included, allowing you to customize each bite to your liking. ",
-      active: true,
-      image: "/PlaceHolder.png",
+      active: dishStatusValues[1],
+      imageName: " Placeholder image",
+      imageUrl: "/PlaceHolder.png",
       price: "12.34",
       tags: "health, fresh",
+      inStockQty: 10,
       createdAt: new Date(),
       updatedAt: new Date(+3),
     },
@@ -139,10 +145,12 @@ async function seed() {
       name: "Chicken Soup",
       description:
         "This is a light, aromatic, and richly flavorful soup, perfect for those dreary, rainy days when comfort is key. This dish is a beloved staple across many Middle Eastern countries, celebrated for its warmth and heartiness. It comes with a delightful array of variations and additions, allowing for endless customization to suit every palate. Enjoying this soup is not just about nourishment; it's an experience that warms both body and soul.",
-      active: true,
-      image: "/PlaceHolder.png",
+      active: dishStatusValues[0],
+      imageName: " Placeholder image",
+      imageUrl: "/PlaceHolder.png",
       price: "10.50",
       tags: "chicken, healthy",
+      inStockQty: 10,
       createdAt: new Date(),
       updatedAt: new Date(+3),
     },
@@ -151,9 +159,11 @@ async function seed() {
       name: "Infamous Burger",
       description:
         "This burger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide an immense flavor-packed burger ",
-      active: true,
-      image: "/Burger2.jpg",
+      active: dishStatusValues[2],
+      imageName: " Burger image",
+      imageUrl: "/Burger2.jpg",
       price: "12.34",
+      inStockQty: 10,
       tags: "spicy, beef",
       createdAt: new Date(),
       updatedAt: new Date(+3),
@@ -198,11 +208,11 @@ async function seed() {
   const [business] = await db
     .insert(businesses)
     .values({
+      numCustomers: 6,
       name: "African Wonders",
-      num_of_customers: 2,
       active: true,
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date(+3),
     })
     .returning();
 
@@ -229,17 +239,6 @@ async function seed() {
     })
     .returning();
 
-  //Order
-  const [order] = await db
-    .insert(orders)
-    .values({
-      businessId: business.id,
-      customerId: cust.id,
-      quantity: 1,
-      deliveryStatus: "Cooking",
-    })
-    .returning();
-
   // Drivers
   const [driver] = await db
     .insert(drivers)
@@ -249,13 +248,25 @@ async function seed() {
     })
     .returning();
 
+  
+  //Order
+  const [order] = await db
+    .insert(orders)
+    .values({
+      businessId: business.id,
+      customerId: cust.id,
+      quantity: 1,
+      deliveryStatus: deliveryStatusValues[2],
+    })
+    .returning();
+
   // Delivery
   const [deliveryItem] = await db
     .insert(delivery)
     .values({
-      ordersId: order.id,
+      customerOrderId: customerOrder.id,
       driverId: driver.id,
-      status: "Picked up", // use valid enum value
+      status: deliveryStatusValues[0], // use valid enum value
     })
     .returning();
 

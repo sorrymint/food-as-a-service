@@ -31,9 +31,10 @@ export async function createDish(newDish: unknown) {
     await db.insert(dishes).values({
       businessId: businessIdInt,
       name: results.data.name,
-      active: true,
+      active: results.data.active,
       description: results.data.description,
-      image: results.data.image,
+      imageName: results.data.imageName,
+      imageUrl: results.data.imageUrl,
       price: results.data.price,
     });
   } catch (err) {
