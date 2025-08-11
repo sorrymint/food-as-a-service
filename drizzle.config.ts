@@ -4,6 +4,9 @@ export default {
   schema: '@/lib/db/schema',
   out: '@/lib/db/migrations',
   dialect: 'postgresql',
+    migrations: {
+    schema: "public", // Specify the schema for the migration log table
+  },
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },

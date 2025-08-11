@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import AddToCartButton from "./AddToCartButton";
 import { DishType } from "@/lib/zodSchema/zodSchemas";
 
 //TODO: items are the varaible that are returned from the database
@@ -89,9 +90,10 @@ export default function Menulist({items} : {items : DishType[] }) {
                   </span>
                 </div>
                 <p className="font-bold mt-1">${item.price}</p>
-                <Button className="mt-auto bg-green-600 hover:bg-green-700 text-white w-full">
+                <AddToCartButton name={item.name}/>
+                {/* <Button className="mt-auto bg-green-600 hover:bg-green-700 text-white w-full">
                   Add to Cart
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </li>
