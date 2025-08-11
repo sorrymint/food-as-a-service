@@ -124,6 +124,12 @@ async function seed() {
     websiteUrl: businessWebsite.url
   });
 
+    // Website reviews
+  await db.insert(websiteReviews).values({
+      websiteId: businessWebsite.id,
+      name: "Spicy Order"
+  })
+
   // dish table
   // Array of all the value that are getting inserting into the database with the seeding command.
   const dishArray = [
@@ -219,39 +225,27 @@ async function seed() {
     });
   }
   // Businesses
-  const [business] = await db
-    .insert(businesses)
-    .values({
-      numCustomers: 6,
-      name: "African Wonders",
-      active: true,
-      createdAt: new Date(),
-      updatedAt: new Date(+3),
-    })
-    .returning();
+  // const [business] = await db
+  //   .insert(businesses)
+  //   .values({
+  //     numCustomers: 6,
+  //     name: "African Wonders",
+  //     active: true,
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(+3),
+  //   })
+  //   .returning();
 
   // Customer
-  const [cust] = await db
-    .insert(customer)
-    .values({
+  await db.insert(customer).values({
       businessId: businesses.id,
       username: "spicyfan",
       name: "Spicy Fan",
       email: "spicy@fan.com",
       phone: "1234567890",
+      active: true,
       createdAt: new Date()
-    })
-    .onConflictDoNothing()
-    .returning();
-
-  // Website reviews
-  const [review] = await db
-    .insert(websiteReviews)
-    .values({
-      websiteId: businessWebsite.id,
-      name: "Spicy Order",
-    })
-    .returning();
+  })
 
   // Drivers
   const [driver] = await db
@@ -264,15 +258,15 @@ async function seed() {
 
   
   //Order
-  const [order] = await db
-    .insert(orders)
-    .values({
-      businessId: business.id,
-      customerId: cust.id,
-      quantity: 1,
-      deliveryStatus: deliveryStatusValues[2],
-    })
-    .returning();
+  const [order] = await db.insert(orders).values({
+    businessId: businesses.id,
+    customerId: customer.id,
+    createdAt: new Date(),
+    deliveryStatus: deliveryStatusValues[2],
+    quantity: 1,
+    specialInstructions: "None"
+  })
+  .returning();
 
   // Delivery
   const [deliveryItem] = await db
@@ -296,7 +290,7 @@ async function seed() {
       id: 1,
       ordersId: order.id,
       name: "Spicy Chicken",
-      customerId: cust.id,
+      customerId: customer.id,
       menuItem: dish.id,
       deliveryStatus: deliveryItem.id,
     });

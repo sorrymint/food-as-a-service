@@ -114,9 +114,11 @@ export const users = pgTable("users", {
 export const businessWebsite = pgTable("business_website", {
 	id: serial().primaryKey().notNull(),
 	businessId: serial("business_id").notNull(),
+	title: varchar('title', {length: 50}).notNull(),
 	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
 	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
 	status: websiteStatus().default('Created - Started').notNull(),
+	logo_image: varchar('description', {length: 500}).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => [
@@ -153,6 +155,7 @@ export const customer = pgTable("customer", {
 	name: varchar({ length: 100 }).notNull(),
 	email: varchar({ length: 20 }).notNull(),
 	phone: varchar({ length: 14 }).notNull(),
+	active: boolean('active').notNull(),
 	createdAt: timestamp("joined_at").defaultNow(),
 }, (table) => [
 	foreignKey({
@@ -183,7 +186,7 @@ export const teamMembers = pgTable('team_members', {
     .references(() => users.id),
   teamId: integer('team_id')
     .notNull()
-    .references(() => teams.id),
+	.references(() => teams.id),
   role: varchar('role', { length: 50 }).notNull(),
   joinedAt: timestamp('joined_at').notNull().defaultNow(),
 });
@@ -224,10 +227,12 @@ export const orders = pgTable("orders", {
 export const dishes = pgTable("dishes", {
 	id: serial().primaryKey().notNull(),
 	businessId: serial("business_id").notNull(),
-	name: varchar({ length: 100 }).notNull(),
+	name: varchar({ length: 100 }).notNull().unique(),
+	// Add on a slug(This is what will allows user to provide or share the URL to other more easier very similar to a title but URL do not render spacea ans other characters.)
 	description: varchar({ length: 500 }).notNull(),
 	imageUrl: text("image_url"),
 	price: numeric(),
+	tags: varchar('tags', { length: 255 }),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow(),
 	imageName: text("image_name"),
@@ -289,6 +294,69 @@ export const ingredients = pgTable("ingredients", {
 	unique("ingredients_is_allogenic_key").on(table.isAllogenic),
 ]);
 
+
+export const websiteReviews = pgTable("website_reviews", {
+	id: serial().primaryKey().notNull(),
+	businessId: serial("business_id").notNull(),
+	websiteId: serial("website_id").notNull(),
+	name: varchar({ length: 100 }).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.websiteId],
+			foreignColumns: [businessWebsite.id],
+			name: "website_reviews_business_id_businesses_id_fk"
+		}),
+	foreignKey({
+			columns: [table.businessId],
+			foreignColumns: [businesses.id],
+			name: "website_reviews_business_id_businesses_id_fk"
+	}),
+]);
+
+//orders
+export const orders = pgTable("orders", {
+	id: serial().primaryKey().notNull(),
+	businessId: serial("business_id"),
+	customerId: serial("customer_id"),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	deliveryStatus: varchar("delivery_status", { length: 50 }),
+	quantity: integer(),
+	specialInstructions: text("special_instructions"),
+}, (table) => [
+	foreignKey({
+			columns: [table.businessId],
+			foreignColumns: [businesses.id],
+			name: "orders_business_id_businesses_id_fk"
+		}),
+	foreignKey({
+			columns: [table.customerId],
+			foreignColumns: [customer.id],
+			name: "orders_customer_id_customer_id_fk"
+		}),
+]);
+
+//order items
+export const customer_order = pgTable('customer_order', {
+  id: serial('id').primaryKey(),
+  ordersId: serial('orders_id')
+    .notNull()
+    .references(() => orders.id),
+  name: varchar('name', {length: 100})
+    .notNull(),
+  customerId: serial('customer_id')
+    .notNull()
+    .references(() => customer.id),
+  menuItem: serial('menu_item')
+    .notNull()
+    .references(() => dishes.id),
+  createdAt: timestamp('created_at')
+    .notNull()
+    .defaultNow(),
+  deliveryStatus: serial('delivery_status')
+    .notNull()
+    .references(() => delivery.id)
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Team = typeof teams.$inferSelect;
@@ -298,6 +366,7 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type InsertDish = typeof dishes.$inferSelect;
 export type TeamDataWithMembers = Team & {
   teamMembers: (NewTeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;

@@ -61,21 +61,22 @@ export default function ProfileSettings() {
 
     return (
         <Card className="w-full max-w-xl mx-auto mt-20">
-            <CardHeader>
+            <CardHeader className="flex flex-col gap-4">
                 <CardTitle className="text-3xl font-bold">Profile</CardTitle>
-                <CardDescription>
-                    View or update your profile.
-                </CardDescription>
-                <CardAction>
-                    <Link href="/account/changePassword">
-                        <Button variant="link">Change Password</Button>
-                    </Link>
-
+                
+                <CardDescription>View or update your profile.</CardDescription>
+                
+                <div className="flex flex-wrap gap-2">
                     <Link href="/account/manageAccount">
                         <Button variant="link">Manage Account</Button>
                     </Link>
-                </CardAction>
+                    <Link href="/account/changePassword">
+                        <Button variant="link">Change Password</Button>
+                    </Link>
+                </div>
             </CardHeader>
+
+
             <CardContent>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-6">
