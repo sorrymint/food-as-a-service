@@ -33,23 +33,23 @@ export const UpdateDishAction = async (
     console.error('Validation Error:', error);
   }
 
-      const activeRaw = formData.get('active');
-    const activeString = typeof activeRaw === 'string' ? activeRaw : ''; // Handle null/File by defaulting to empty string or other suitable value
+  const activeRaw = formData.get('active');
+  const activeString = typeof activeRaw === 'string' ? activeRaw : ''; // Handle null/File by defaulting to empty string or other suitable value
 
-    let active: "Active - In Stock" | "Discontinued" | "Out of Stock";
+  let active: "Active - In Stock" | "Discontinued" | "Out of Stock";
 
-    switch (activeString) {
-        case "Active - In Stock":
-            active = "Active - In Stock";
-            break;
-        case "Discontinued":
-            active = "Discontinued";
-            break;
-        case "Out of Stock":
-            active = "Out of Stock";
-            break;
-        default:
-            active = "Out of Stock"; // Default value for unexpected inputs
+  switch (activeString) {
+    case "Active - In Stock":
+      active = "Active - In Stock";
+      break;
+    case "Discontinued":
+      active = "Discontinued";
+      break;
+    case "Out of Stock":
+      active = "Out of Stock";
+      break;
+    default:
+      active = "Out of Stock"; // Default value for unexpected inputs
     }
 
   // Checking for any errors
