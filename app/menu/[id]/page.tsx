@@ -1,10 +1,10 @@
 import { IngredientsListing } from "@/components/ingredientsListing";
 import { GetDishById } from "@/app/actions/database_Resquest";
-import DeleteDishButton from "@/components/ui/DeleteDishButton";
 import OrderNowButton from "@/components/OrderNowButton";
-import { HeartIcon } from "lucide-react";
+import { HeartIcon, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import AdminMenu from "@/components/ui/adminMenu";
 
 export default async function ProductsPage({
   params,
@@ -24,20 +24,24 @@ export default async function ProductsPage({
     return <p>Dish Not Found</p>;
   }
 
+
   return (
     <div>
+      <div className="flex flex-row justify-between mr-54">
       <Link href={"/menu"} className="text-blue-500 mb-4 inline-block">
         <span className="text-xl mr-2">←</span>
         Menu{" "}
       </Link>
       <div className=" mr-6 space-x-5">
-        <Link
-          href={`/Admin/update/${item.id}`}
+        {/* <Link
+          href={`/admin/update/${item.id}`}
           className="bg-blue-500 px-4 py-2 max-w-20 "
         >
           <button className="cursor-pointer ">Update Item</button>
         </Link>
-        <DeleteDishButton dishId={item.id} />
+         */}
+        <AdminMenu item={item}/>
+      </div>
       </div>
 
       <div className="flex items-center justify-center ">
@@ -102,4 +106,7 @@ export default async function ProductsPage({
       </div>
     );
   }
+
+  
+
 }
