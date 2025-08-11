@@ -204,7 +204,7 @@ export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
 	businessId: integer("business_id"),
 	customerId: integer("customer_id"),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
 	deliveryStatus: varchar("delivery_status", { length: 50 }),
 	quantity: integer(),
 	specialInstructions: text("special_instructions"),
