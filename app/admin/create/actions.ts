@@ -32,7 +32,6 @@ export const createDishAction = async(
     console.error('Validation Error:', error);
   }
 
-  
   const activeRaw = formData.get('active');
   const activeString = typeof activeRaw === 'string' ? activeRaw : ''; // Handle null/File by defaulting to empty string or other suitable value
 
@@ -52,12 +51,10 @@ export const createDishAction = async(
       active = "Out of Stock"; // Default value for unexpected inputs
   }
 
-
   // Checking for any errors
   if (!validatedDish.success) {
     // if so converts into more readable error of the field name and its message
     const errors = convertZodErrors(validatedDish.error);
-
 
     const dishData = {
       businessId: Number(formData.get("businessId")) || 1,
@@ -85,7 +82,7 @@ export const createDishAction = async(
     //     image: "",
     //   },
     // };
-    // console.log("validated data: ", validatedDish.data.active, "and the type", typeof validatedDish.data.active);
+    console.log("validated data: ", validatedDish.data.active, "and the type", typeof validatedDish.data.active);
 
     // For Database
     try {

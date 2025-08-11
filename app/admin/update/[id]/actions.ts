@@ -16,7 +16,6 @@ export const UpdateDishAction = async (
 
   const initialId = dishId;
 
-
   const unvalidatedDish: StringMap = {
     businessId: formData.get("businessId") as string,
     name: formData.get("name") as string,
@@ -81,8 +80,6 @@ export const UpdateDishAction = async (
 
     // For Database
     try {
-
-
       await db
         .update(dishes)
         .set(updateData)
