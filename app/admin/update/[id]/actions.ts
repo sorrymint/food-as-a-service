@@ -3,8 +3,8 @@
 import { DishFormState, StringMap } from "@/app/actions/DishHelpers";
 import { convertZodErrors } from "@/app/actions/errors";
 import { db } from "@/lib/db/drizzle";
-import { dishes } from "@/lib/db/schema";
-import { dishFormSchema, DishType } from "@/lib/zodSchema/zodSchemas";
+import { dishes,  dishStatusValues} from "@/lib/db/schema";
+import { dishFormSchema, DishType, dishStatusSchema } from "@/lib/zodSchema/zodSchemas";
 import { eq } from 'drizzle-orm';
 import { redirect } from "next/navigation";
 
@@ -20,13 +20,37 @@ export const UpdateDishAction = async (
   const unvalidatedDish: StringMap = {
     businessId: formData.get("businessId") as string,
     name: formData.get("name") as string,
-    isActive: formData.get("isActive") === null ? "false" : "true",
     description: formData.get("description") as string,
     image: formData.get("image") as string,
     price: formData.get("price") as string,
   };
 
   const validatedDish = dishFormSchema.safeParse(unvalidatedDish);
+  try {
+    const validatedStatus = dishStatusSchema.parse(dishStatusValues);
+    console.log('Validated Dish Status:', validatedStatus);
+  } catch (error) {
+    console.error('Validation Error:', error);
+  }
+
+      const activeRaw = formData.get('active');
+    const activeString = typeof activeRaw === 'string' ? activeRaw : ''; // Handle null/File by defaulting to empty string or other suitable value
+
+    let active: "Active - In Stock" | "Discontinued" | "Out of Stock";
+
+    switch (activeString) {
+        case "Active - In Stock":
+            active = "Active - In Stock";
+            break;
+        case "Discontinued":
+            active = "Discontinued";
+            break;
+        case "Out of Stock":
+            active = "Out of Stock";
+            break;
+        default:
+            active = "Out of Stock"; // Default value for unexpected inputs
+    }
 
   // Checking for any errors
   if (!validatedDish.success) {
@@ -36,9 +60,10 @@ export const UpdateDishAction = async (
     const dishData = {
       businessId: Number(formData.get("businessId")) || 1,
       name: formData.get("name") as string,
-      isActive: formData.get("isActive") === null ? false : true,
+      active: active,
       description: formData.get("description") as string,
-      image: formData.get("image") as string,
+      imageName: formData.get("imageName") as string,
+      imageUrl: formData.get("imageUrl") as string,
       price: formData.get("price") as string,
     };
     return { errors, data: dishData };
@@ -46,9 +71,10 @@ export const UpdateDishAction = async (
     const updateData = {
       business_id: validatedDish.data.businessId,
       name: validatedDish.data.name,
-      active: validatedDish.data.isActive,
+      active: validatedDish.data.active,
       description: validatedDish.data.description ?? null, // Fallback to null
-      image_url: validatedDish.data.image ?? "/Placeholder.png", // Default image
+      imageName: validatedDish.data.imageName ?? "Default Pic",
+      imageUrl: validatedDish.data.imageUrl ?? "/Placeholder.png", // Default image
       price: validatedDish.data.price,
       updated_at: new Date(),
     };
