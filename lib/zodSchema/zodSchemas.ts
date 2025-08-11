@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { dishStatusValues } from "../db/schema";
 
-const dishStatusSchema = z.enum(dishStatusValues);
+export const dishStatusSchema = z.enum(dishStatusValues);
 
 export const dishFormSchema = z.object({
     id: z
@@ -21,8 +21,8 @@ export const dishFormSchema = z.object({
  
     description: z
     .string()
-    .min(10, "description must be at least 10 characters")
-    .max(500, "description must be at most 500 characters"),
+    .min(10, "Description must be at least 10 characters")
+    .max(500, "Description cannot be more than 500 characters"),
  
     //making this into a URl(add .url())
     imageName: z

@@ -17,6 +17,7 @@ import {
   businessWebsite,
   dishStatusValues,
   deliveryStatusValues,
+  websiteStatusValues
 } from "@/lib/db/schema";
 import { hashPassword } from "@/lib/auth/session";
 import { eq, inArray } from "drizzle-orm";
@@ -102,12 +103,25 @@ async function seed() {
 
   await createStripeProducts();
 
-  await db.insert(businesses).values({
-    name: "African Wonders",
-    num_of_customers: 2,
-    active: true,
+  await db.insert(businessWebsite).values({
+    businessId: businesses.id,
+    url: 'https://food-as-a-service.vercel.app/',
+    description: "A traditional African resturant website",
+    status: websiteStatusValues[0],
     createdAt: new Date(),
     updatedAt: new Date(+2),
+  })
+
+
+  await db.insert(businesses).values({
+    name: "African Wonders",
+    numCustomers: 3,
+    active: true,
+    status: websiteStatusValues[0],
+    createdAt: new Date(),
+    updatedAt: new Date(+2),
+    description: "A traditional African resturant",
+    websiteUrl: businessWebsite.url
   });
 
   // dish table
