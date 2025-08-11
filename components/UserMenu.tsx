@@ -33,12 +33,6 @@ export default function UserMenu() {
   if (!user) {
     return (
       <>
-        <Link
-          href="/pricing"
-          className="text-sm font-medium text-gray-900 md:hover:bg-gray-200 md:px-3 md:py-2 rounded-2xl"
-        >
-          Pricing
-        </Link>
         <Button asChild className="rounded-full">
           <Link href="/sign-up">Sign Up</Link>
         </Button>

@@ -40,7 +40,7 @@ export default function Menulist({items} : {items : DishType[] }) {
           <li key={item.id}>
 
             <Card
-              className="bg-yellow-100 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"
+              className="bg-gray-200/80 text-black rounded-lg shadow flex flex-col items-center text-center w-full h-[420px]"
             >
               <CardContent className="p-4 flex flex-col items-center w-full h-full">
                 <img
