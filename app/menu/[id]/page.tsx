@@ -1,5 +1,5 @@
 import { GetDishById } from "@/app/actions/database_Resquest";
-import DeleteDishButton from "@/app/admin/delete/DeleteDishButton";
+import DeleteDishButton from "@/components/ui/DeleteDishButton";
 import OrderNowButton from "@/components/OrderNowButton";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";

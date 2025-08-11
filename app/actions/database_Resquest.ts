@@ -49,3 +49,35 @@ export async function GetDishById( id : number ) {
         throw err;
     };
 }
+
+export type DeleteDishState = {
+  success?: boolean;
+  error?: string;
+  message?: string;
+};
+export const DeleteDishAction = async (
+  dishId: number,
+  prevState: DeleteDishState
+): Promise<DeleteDishState> => {
+  try {
+    const initialId = dishId;
+
+    await db
+    .delete(dishes)
+    .where(eq(dishes.id, initialId));
+
+    console.log(`Deleted dish with ID: ${dishId}`);
+
+    return {
+      success: true,
+      message: "Delete was Sucessfull"
+    };
+  } catch (error) {
+    console.error("Delete failed:", error);
+
+    return {
+      error: 'Failed to delete dish', 
+      message: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}
