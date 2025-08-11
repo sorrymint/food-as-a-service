@@ -2,28 +2,37 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/drizzle";
-import { dishes, dishStatusValues } from "@/lib/db/schema";
+import { dishes, DishEnum, dishStatusValues } from "@/lib/db/schema";
 import { redirect } from "next/navigation";
 
-
 export async function createDishForHandling(formData: FormData){
+
     // Include form validation with zod
     try{
-     await db
-     .insert(dishes)
-     .values({
-        businessId: formData.get('business_id') as unknown as number,
-        name: formData.get('name') as string,
-        active: formData.get('isActive') as ,
-        description: formData.get('description') as string,
-        imageUrl: formData.get('image') as string,
-        price: formData.get('price') as string
-    });
+        await db
+        .insert(dishes)
+        .values({
+            businessId: formData.get('business_id') as unknown as number,
+            name: formData.get('name') as string,
+            description: formData.get('description') as string,
+            imageUrl: formData.get('image') as string,
+            price: formData.get('price') as string
+        });
+
+        const dishStatus = formData.get("active")?.toString();
+        if (!Object.values(dishStatusValues).includes(dishStatus as DishEnum)) {
+            console.error(`Invalid status: ${dishStatus}`);
+            return null;
+        }
+        return {
+            active: dishStatus as DishEnum,
+        };
     }
     catch (err) {
         console.log(err);
     };
     redirect("/menu");
+    
 }
 
 export async function GetAllDishes() {

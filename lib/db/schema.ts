@@ -1,5 +1,6 @@
 import { pgTable, type AnyPgColumn, foreignKey, serial, varchar, timestamp, unique, text, integer, boolean, check, numeric, smallint, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+import { timestamptz } from "drizzle-orm/gel-core"
 
 export const deliveryStatus = pgEnum("Delivery_Status", ['Picked Up', 'On the Way', 'Delivered'])
 export const dishStatus = pgEnum("Dish_Status", ['Active - In Stock', 'Discontinued', 'Out of Stock'])
@@ -13,41 +14,11 @@ export type DeliveryEnum = typeof deliveryStatusValues[number];
 export type DishEnum = typeof dishStatusValues[number];
 export type WebsiteEnum = typeof websiteStatusValues[number];
 
-
-export const businesses = pgTable("businesses", {
+export const drivers = pgTable("drivers", {
 	id: serial().primaryKey().notNull(),
-	name: text().notNull(),
-	numCustomers: integer("num_customers").notNull(),
-	active: boolean().notNull(),
-	status: websiteStatus(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }),
-	description: text(),
-	websiteUrl: text("website_url"),
-}, (table) => [
-	foreignKey({
-			columns: [table.websiteUrl],
-			foreignColumns: [businessWebsite.url],
-			name: "businesses_website_url_fkey"
-		}),
-]);
-
-export const businessWebsite = pgTable("business_website", {
-	id: serial().primaryKey().notNull(),
-	businessId: serial("business_id").notNull(),
-	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
-	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
-	status: websiteStatus().default('Created - Started').notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
-}, (table) => [
-	foreignKey({
-			columns: [table.businessId],
-			foreignColumns: [businesses.id],
-			name: "business_website_business_id_businesses_id_fk"
-		}),
-	unique("business_website_title_key").on(table.url),
-]);
+	firstName: varchar("first_name", { length: 100 }).notNull(),
+	lastName: varchar("last_name", { length: 100 }).notNull(),
+});
 
 export const delivery = pgTable("delivery", {
 	id: serial().primaryKey().notNull(),
@@ -76,7 +47,7 @@ export const customerOrder = pgTable("customer_order", {
 	name: varchar({ length: 100 }).notNull(),
 	customerId: serial("customer_id").notNull(),
 	menuItem: serial("menu_item").notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
 	deliveryStatus: deliveryStatus("delivery_status").default('Picked Up'),
 }, (table) => [
 	foreignKey({
@@ -133,11 +104,46 @@ export const users = pgTable("users", {
 	email: varchar({ length: 255 }).notNull(),
 	passwordHash: text("password_hash").notNull(),
 	role: varchar({ length: 20 }).default('member').notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-	deletedAt: timestamp("deleted_at", { mode: 'string' }),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+	deletedAt: timestamp("deleted_at"),
 }, (table) => [
 	unique("users_email_unique").on(table.email),
+]);
+
+export const businessWebsite = pgTable("business_website", {
+	id: serial().primaryKey().notNull(),
+	businessId: serial("business_id").notNull(),
+	url: text().default('https://food-as-a-service.vercel.app/').notNull(),
+	description: varchar({ length: 500 }).default('This is a restaurant description. Please update later.').notNull(),
+	status: websiteStatus().default('Created - Started').notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+	foreignKey({
+			columns: [table.businessId],
+			foreignColumns: [businesses.id],
+			name: "business_website_business_id_businesses_id_fk"
+		}),
+	unique("business_website_title_key").on(table.url),
+]);
+
+export const businesses = pgTable("businesses", {
+	id: serial().primaryKey().notNull(),
+	name: text().notNull(),
+	numCustomers: integer("num_customers").notNull(),
+	active: boolean().notNull(),
+	status: websiteStatus(),
+	createdAt: timestamp("created_at", { withTimezone: true}).notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true}),
+	description: text(),
+	websiteUrl: text("website_url"),
+}, (table) => [
+	foreignKey({
+			columns: [table.websiteUrl],
+			foreignColumns: [businessWebsite.url],
+			name: "businesses_website_url_fkey"
+		}),
 ]);
 
 export const customer = pgTable("customer", {
@@ -146,8 +152,8 @@ export const customer = pgTable("customer", {
 	username: varchar({ length: 20 }).notNull(),
 	name: varchar({ length: 100 }).notNull(),
 	email: varchar({ length: 20 }).notNull(),
-	phone: varchar({ length: 14 }),
-	createdAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
+	phone: varchar({ length: 14 }).notNull(),
+	createdAt: timestamp("joined_at").defaultNow(),
 }, (table) => [
 	foreignKey({
 			columns: [table.businessId],
@@ -155,12 +161,6 @@ export const customer = pgTable("customer", {
 			name: "customer_business_id_businesses_id_fk"
 		}),
 ]);
-
-export const drivers = pgTable("drivers", {
-	id: serial().primaryKey().notNull(),
-	firstName: varchar("first_name", { length: 100 }).notNull(),
-	lastName: varchar("last_name", { length: 100 }).notNull(),
-});
 
 export const invitations = pgTable('invitations', {
   id: serial('id').primaryKey(),
@@ -200,8 +200,6 @@ export const websiteReviews = pgTable("website_reviews", {
 		}),
 ]);
 
-
-
 export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
 	businessId: integer("business_id"),
@@ -230,8 +228,8 @@ export const dishes = pgTable("dishes", {
 	description: varchar({ length: 500 }).notNull(),
 	imageUrl: text("image_url"),
 	price: numeric(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at").defaultNow(),
 	imageName: text("image_name"),
 	inStockQty: smallint("in_stock_qty").default(sql`'1'`).notNull(),
 	active: dishStatus().default('Active - In Stock').notNull(),

@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { dishStatusValues } from "../db/schema";
 
+export const dishStatusSchema = z.enum(dishStatusValues);
+
 export const dishFormSchema = z.object({
     id: z
     .number()
@@ -15,19 +17,21 @@ export const dishFormSchema = z.object({
     .string()
     .min(1, "Name field can't be empty"),
  
-    isActive: z.enum
-    (dishStatusValues),
+    active: dishStatusSchema,
  
     description: z
     .string()
-    .min(10, "description must be at least 10 characters")
-    .max(500, "description must be at most 500 characters"),
+    .min(10, "Description must be at least 10 characters")
+    .max(500, "Description cannot be more than 500 characters"),
  
     //making this into a URl(add .url())
-    image: z
+    imageName: z
     .string()
     .nullable(),
-    
+
+    imageUrl: z
+    .string()
+    .nullable(),
  
     price: z.coerce
     .string({message: "Price is required"})
