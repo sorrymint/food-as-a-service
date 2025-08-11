@@ -25,7 +25,7 @@ const items = [
   },
   {
     title: "Location",
-    url: "#",
+    url: "/Location",
     icon: MapPin,
   },
   {
