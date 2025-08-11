@@ -75,7 +75,7 @@ export const customerOrder = pgTable("customer_order", {
 export const teams = pgTable("teams", {
 	id: serial().primaryKey().notNull(),
 	name: varchar({ length: 100 }).notNull(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
+	createdAt: timestamp("created_at" ).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	stripeCustomerId: text("stripe_customer_id"),
 	stripeSubscriptionId: text("stripe_subscription_id"),
@@ -191,39 +191,6 @@ export const teamMembers = pgTable('team_members', {
   joinedAt: timestamp('joined_at').notNull().defaultNow(),
 });
 
-export const websiteReviews = pgTable("website_reviews", {
-	id: serial().primaryKey().notNull(),
-	websiteId: serial("website_id").notNull(),
-	name: varchar({ length: 100 }).notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.websiteId],
-			foreignColumns: [businessWebsite.id],
-			name: "website_reviews_business_id_businesses_id_fk"
-		}),
-]);
-
-export const orders = pgTable("orders", {
-	id: serial().primaryKey().notNull(),
-	businessId: integer("business_id"),
-	customerId: integer("customer_id"),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	deliveryStatus: varchar("delivery_status", { length: 50 }),
-	quantity: integer(),
-	specialInstructions: text("special_instructions"),
-}, (table) => [
-	foreignKey({
-			columns: [table.businessId],
-			foreignColumns: [businesses.id],
-			name: "orders_business_id_businesses_id_fk"
-		}),
-	foreignKey({
-			columns: [table.customerId],
-			foreignColumns: [customer.id],
-			name: "orders_customer_id_customer_id_fk"
-		}),
-]);
-
 export const dishes = pgTable("dishes", {
 	id: serial().primaryKey().notNull(),
 	businessId: serial("business_id").notNull(),
@@ -318,7 +285,7 @@ export const orders = pgTable("orders", {
 	id: serial().primaryKey().notNull(),
 	businessId: serial("business_id"),
 	customerId: serial("customer_id"),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
 	deliveryStatus: varchar("delivery_status", { length: 50 }),
 	quantity: integer(),
 	specialInstructions: text("special_instructions"),
