@@ -24,9 +24,9 @@ export const delivery = pgTable("delivery", {
 	id: serial().primaryKey().notNull(),
 	customerOrderId: serial("customer_order_id").notNull(),
 	driverId: serial("driver_id").notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
 	status: deliveryStatus().default('Picked Up'),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
+	updatedAt: timestamp("updated_at", { withTimezone: true}).default(sql`(now() AT TIME ZONE 'utc'::text)`),
 }, (table) => [
 	foreignKey({
 			columns: [table.customerOrderId],
@@ -75,8 +75,8 @@ export const customerOrder = pgTable("customer_order", {
 export const teams = pgTable("teams", {
 	id: serial().primaryKey().notNull(),
 	name: varchar({ length: 100 }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	stripeCustomerId: text("stripe_customer_id"),
 	stripeSubscriptionId: text("stripe_subscription_id"),
 	stripeProductId: text("stripe_product_id"),
