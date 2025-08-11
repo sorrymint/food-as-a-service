@@ -17,7 +17,7 @@ import {
   businessWebsite,
   dishStatusValues,
   deliveryStatusValues,
-  websiteStatusValues,
+  websiteStatusValues
 } from "@/lib/db/schema";
 import { hashPassword } from "@/lib/auth/session";
 import { eq, inArray } from "drizzle-orm";
@@ -112,6 +112,7 @@ async function seed() {
     updatedAt: new Date(+2),
   })
 
+
   await db.insert(businesses).values({
     name: "African Wonders",
     numCustomers: 3,
@@ -122,34 +123,6 @@ async function seed() {
     description: "A traditional African resturant",
     websiteUrl: businessWebsite.url
   });
-
-    // Website reviews
-  await db.insert(websiteReviews).values({
-      websiteId: businessWebsite.id,
-      name: "Spicy Order",
-  })
-
-  // Customer
-  const [cust] = await db.insert(customer).values({
-      businessId: businesses.id,
-      username: "spicyfan",
-      name: "Spicy Fan",
-      email: "spicy@fan.com",
-      phone: "1234567890",
-      createdAt: new Date()
-  })
-  .onConflictDoNothing()
-  .returning();
-
-  //Order
-  const [order] = await db.insert(orders).values({
-      businessId: businesses.id,
-      customerId: cust.id,
-      quantity: 1,
-      deliveryStatus: deliveryStatusValues[2],
-  })
-  .returning();
-
 
   // dish table
   // Array of all the value that are getting inserting into the database with the seeding command.
@@ -172,7 +145,7 @@ async function seed() {
       name: "Broccoli Dish",
       description:
         "This vibrant and wholesome dish brings together the goodness of fresh broccoli, creamy cheese, fluffy rice, crunchy carrots, and tender cabbage. Each ingredient contributes to a delightful medley of flavors and textures, making it not only nutritious but also satisfying. To elevate the dining experience, a selection of complementary side options and an array of flavorful sauces are included, allowing you to customize each bite to your liking. ",
-      active: dishStatusValues[0],
+      active: dishStatusValues[1],
       imageName: " Placeholder image",
       imageUrl: "/PlaceHolder.png",
       price: "12.34",
@@ -200,7 +173,7 @@ async function seed() {
       name: "Infamous Burger",
       description:
         "This burger is know for it unforgiving spice levels, It had numerous different peppers and many other ingredients that provide an immense flavor-packed burger ",
-      active: dishStatusValues[0],
+      active: dishStatusValues[2],
       imageName: " Burger image",
       imageUrl: "/Burger2.jpg",
       price: "12.34",
@@ -245,6 +218,40 @@ async function seed() {
       isAllogenic: true
     });
   }
+  // Businesses
+  const [business] = await db
+    .insert(businesses)
+    .values({
+      numCustomers: 6,
+      name: "African Wonders",
+      active: true,
+      createdAt: new Date(),
+      updatedAt: new Date(+3),
+    })
+    .returning();
+
+  // Customer
+  const [cust] = await db
+    .insert(customer)
+    .values({
+      businessId: businesses.id,
+      username: "spicyfan",
+      name: "Spicy Fan",
+      email: "spicy@fan.com",
+      phone: "1234567890",
+      createdAt: new Date()
+    })
+    .onConflictDoNothing()
+    .returning();
+
+  // Website reviews
+  const [review] = await db
+    .insert(websiteReviews)
+    .values({
+      websiteId: businessWebsite.id,
+      name: "Spicy Order",
+    })
+    .returning();
 
   // Drivers
   const [driver] = await db
@@ -252,6 +259,18 @@ async function seed() {
     .values({
       firstName: "Delivery",
       lastName: "Driver",
+    })
+    .returning();
+
+  
+  //Order
+  const [order] = await db
+    .insert(orders)
+    .values({
+      businessId: business.id,
+      customerId: cust.id,
+      quantity: 1,
+      deliveryStatus: deliveryStatusValues[2],
     })
     .returning();
 
