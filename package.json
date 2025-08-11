@@ -25,6 +25,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@tabler/icons-react": "^3.34.0",
     "@tailwindcss/postcss": "4.1.7",
+    "@tanstack/react-table": "^8.21.3",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",

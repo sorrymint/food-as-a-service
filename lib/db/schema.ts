@@ -110,27 +110,7 @@ export const dishes = pgTable('dishes', {
   updatedAt: timestamp('updated_at').defaultNow()
 });
 
-//dish_ingredients
-export const dish_ingredients = pgTable('dish_ingredients',{
-  dishName: varchar('dish_name', {length: 100})
-    .notNull()
-    .references(() => dishes.name),
-  dishId: serial('dish_id')
-    .notNull()
-    .references(() => dishes.id),
-  ingredientName: varchar('ingredient_name', {length: 100})
-    .notNull()
-    .references(() => ingredients.name),
-  ingredientId: serial('ingredient_id')
-    .notNull()
-    .references(() => ingredients.id),
-  quantity: numeric('quantity'),
-  unit: varchar('unit', {length: 20})
-    .notNull(),
-}, (dish_ingredients) =>[
-   primaryKey({columns: [dish_ingredients.dishId, dish_ingredients.ingredientId]})
-]
-);
+
 
 //ingredient
 export const ingredients = pgTable('ingredients',{
@@ -165,6 +145,30 @@ export const customer = pgTable('customer', {
   joinedAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+//dish_ingredients
+export const dish_ingredients = pgTable('dish_ingredients',{
+  id: serial('id').primaryKey(),
+  dishName: varchar('dish_name', {length: 100})
+    .notNull()
+    .references(() => dishes.name),
+  dishId: integer('dish_id')
+    .notNull()
+    .references(() => dishes.id),
+  ingredientName: varchar('ingredient_name', {length: 100})
+    .notNull()
+    .references(() => ingredients.name),
+  ingredientId: integer('ingredient_id')
+    .notNull()
+    .references(() => ingredients.id),
+  quantity: varchar('quantity'),
+  unit: varchar('unit', {length: 20})
+    .notNull(),
+}
+);
+
+//   deliveryStatus: serial('delivery_status')
+    // .notNull()
+    // .references(() => delivery.id)
 //business website
 export const business_website = pgTable('business_website', {
   id: serial('id').primaryKey(),
@@ -308,6 +312,7 @@ export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
 export type InsertDish = typeof dishes.$inferSelect;
+export type dish_ingredients = typeof dish_ingredients.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
