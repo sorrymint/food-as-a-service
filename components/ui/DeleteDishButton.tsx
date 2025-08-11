@@ -30,7 +30,7 @@ export default function DeleteDishButton({ dishId }: { dishId: number }) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:opacity-50"
+      className=" text-white disabled:opacity-50"
     >
       {isPending ? "Deleting..." : "Delete Dish"}
     </button>

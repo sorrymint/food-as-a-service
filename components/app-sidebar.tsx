@@ -1,4 +1,4 @@
-import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings, UserCircle, ReceiptText } from "lucide-react"
+import { BookOpenCheck, Calendar, Home, Inbox, MapPin, Search, Settings, UserCircle, ReceiptText, Icon } from "lucide-react"
 
 import {
   Sidebar,
@@ -16,6 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { title } from "process"
 
 // Menu items.
 const items = [
@@ -31,17 +32,12 @@ const items = [
   },
   {
     title: "Location",
-    url: "#",
+    url: "/footerLinks/locations",
     icon: MapPin,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
   {
@@ -62,6 +58,25 @@ const items = [
     title: "Orders",
     url: "/orders",
     icon: ReceiptText,
+  },
+]
+
+const Admin = [
+  {
+    title: "Dashbord",
+    url: "/admin/dashboard",
+  },
+  {
+    title: "Add Item",
+    url: "/admin/create",
+  },
+  {
+    title: "See Other Work",
+    url: "/admin/see-our-work",
+  },
+  {
+    title: "Admin Profile",
+    url: "/admin",
   },
 ]
 
@@ -105,6 +120,21 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel>Admin</SidebarGroupLabel>
+      <SidebarMenu>
+        {Admin.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <a href={item.url} title={item.title}>
+                {/* <span>{item.emoji}</span> */}
+                <span>{item.title}</span>
+              </a>          
+              </SidebarMenuButton>
+        </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   )

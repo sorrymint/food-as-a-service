@@ -177,36 +177,325 @@ async function seed() {
     [dish] = await db.insert(dishes).values(dishArray).returning();
   }
 
-  // ingredients
-  const existingIngredient = await db
-    .select()
-    .from(ingredients)
-    .where(eq(ingredients.name, "Peanuts"))
-    .then((res) => res[0]);
 
-  if (existingIngredient) {
-    console.log("Ingredient already exists.");
-  } else {
-    await db.insert(ingredients).values({
-      name: "Peanuts",
-      description: "",
-      is_optional: true,
-      is_allogenic: true,
-      createdAt: new Date(),
-      updatedAt: new Date(+2),
-    });
+    // ingredients
+
+    const ingredientArray = [
+      {
+        id: 1,
+        name: "Tomato",
+        description:
+          "South unit trade so Congress picture trip report role artist she over fast.",
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 2,
+        name: "Lettuce",
+        description: null,
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 3,
+        name: "Onion",
+        description:
+          "Know ground grow answer question now send executive lawyer movement.",
+        is_optional: true,
+        is_allogenic: false,
+      },
+      {
+        id: 4,
+        name: "Garlic",
+        description:
+          "Produce thousand if lawyer watch service degree for region staff task example.",
+        is_optional: true,
+        is_allogenic: true,
+      },
+      {
+        id: 5,
+        name: "Olive Oil",
+        description: "Condition place including growth ago live.",
+        is_optional: true,
+        is_allogenic: true,
+      },
+      {
+        id: 6,
+        name: "Salt",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 7,
+        name: "Black Pepper",
+        description:
+          "Guess nation start share modern fill yeah memory word series.",
+        is_optional: true,
+        is_allogenic: false,
+      },
+      {
+        id: 8,
+        name: "Butter",
+        description: "Prove wish a crime live major fall affect.",
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 9,
+        name: "Cheese",
+        description: null,
+        is_optional: true,
+        is_allogenic: true,
+      },
+      {
+        id: 10,
+        name: "Chicken Breast",
+        description: "Can else short less later agent against walk until kid.",
+        is_optional: true,
+        is_allogenic: true,
+      },
+      {
+        id: 11,
+        name: "Beef",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 12,
+        name: "Bacon",
+        description:
+          "Space magazine among you suggest chair ten get individual project show two.",
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 13,
+        name: "Egg",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 14,
+        name: "Milk",
+        description:
+          "Individual compare analysis attorney we wide brother fall simply floor.",
+        is_optional: true,
+        is_allogenic: true,
+      },
+      {
+        id: 15,
+        name: "Flour",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 16,
+        name: "Sugar",
+        description: null,
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 17,
+        name: "Parsley",
+        description:
+          "Save class young similar tax benefit guy range remain law tough reality couple.",
+        is_optional: true,
+        is_allogenic: false,
+      },
+      {
+        id: 18,
+        name: "Basil",
+        description: "Firm wide close chance consumer cup over.",
+        is_optional: true,
+        is_allogenic: false,
+      },
+      {
+        id: 19,
+        name: "Mushroom",
+        description:
+          "Through good interest six into painting month small play everything.",
+        is_optional: false,
+        is_allogenic: false,
+      },
+      {
+        id: 20,
+        name: "Spinach",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 21,
+        name: "Peanut Powder",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+      {
+        id: 22,
+        name: "Broccoli",
+        description: null,
+        is_optional: false,
+        is_allogenic: true,
+      },
+    ];
+
+    const ingredientNames = ingredientArray.map((e) => e.name);
+    
+    const existingIngredient = await db
+        .select()
+        .from(ingredients)
+        .where(inArray(ingredients.name, ingredientNames))
+        .then(res => res[0]);
+
+    if (existingIngredient) {
+        console.log('Ingredient already exists.');
+    } else {
+        await db
+            .insert(ingredients)
+            .values(ingredientArray)
+            .returning();
+    }
+
+    
+const dish_ingredientsArray: dish_ingredients[] = [
+  {
+    id: 1,
+    dishName: "Peanut Stew",
+    ingredientName: "Peanut Powder",
+    unit: "6",
+    dishId: 1,
+    ingredientId: 21,
+    quantity: "2 oz",
+  },
+  {
+    id: 2,
+    dishName: "Peanut Stew",
+    ingredientName: "Onion",
+    unit: "6",
+    dishId: 1,
+    ingredientId: 3,
+    quantity: "1 cup",
+  },
+  {
+    id: 3,
+    dishName: "Peanut Stew",
+    ingredientName: "Garlic",
+    unit: "6",
+    dishId: 1,
+    ingredientId: 4,
+    quantity: "3 cloves",
+  },
+  {
+    id: 4,
+    dishName: "Peanut Stew",
+    ingredientName: "Chicken Breast",
+    unit: "6",
+    dishId: 1,
+    ingredientId: 10,
+    quantity: "1 lb",
+  },
+  {
+    id: 5,
+    dishName: "Peanut Stew",
+    ingredientName: "Black Pepper",
+    unit: "6",
+    dishId: 1,
+    ingredientId: 7,
+    quantity: "1 tsp",
+  },
+
+  {
+    id: 6,
+    dishName: "Broccoli Dish",
+    ingredientName: "Broccoli",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 22,
+    quantity: "1 lb"
+  },
+  {
+    id: 7,
+    dishName: "Broccoli Dish",
+    ingredientName: "Cheese",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 9,
+    quantity: "1 cup"
+  },
+  {
+    id: 8,
+    dishName: "Broccoli Dish",
+    ingredientName: "Butter",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 8,
+    quantity: "2 tbsp"
+  },
+  {
+    id: 9,
+    dishName: "Broccoli Dish",
+    ingredientName: "Garlic",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 4,
+    quantity: "3 cloves"
+  },
+  {
+    id: 10,
+    dishName: "Broccoli Dish",
+    ingredientName: "Salt",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 6,
+    quantity: "1 tsp"
+  },
+  {
+    id: 11,
+    dishName: "Broccoli Dish",
+    ingredientName: "Black Pepper",
+    unit: "20",
+    dishId: 2,
+    ingredientId: 7,
+    quantity: "½ tsp"
   }
-  // Businesses
-  const [business] = await db
-    .insert(businesses)
-    .values({
-      name: "African Wonders",
-      num_of_customers: 2,
-      active: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .returning();
+
+];
+
+const dish_ingredientsNames = dish_ingredientsArray.map((e) => e.ingredientName);
+
+const existingdish_Ingredient = await db
+  .select()
+  .from(dish_ingredients)
+  .where(inArray(dish_ingredients.ingredientName, dish_ingredientsNames))
+  .then((res) => res[0]);
+
+if (existingdish_Ingredient) {
+  console.log("dish_Ingredient already exists.");
+} else {
+  await db
+  .insert(dish_ingredients)
+  .values(dish_ingredientsArray)
+  .returning();
+}
+
+
+// Businesses
+    const [business] = await db
+        .insert(businesses)
+        .values({
+            name: 'African Wonders',
+            num_of_customers: 2,
+            active: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        })
+        .returning();
 
   // Customer
   const [cust] = await db
